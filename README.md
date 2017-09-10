@@ -1,0 +1,2 @@
+# ds-findbytags
+C / GTK+ 2 program, that searches in specified directories images with keywords (tags), specified in XMP or IPTC metadata and meet specified logical terms AND, OR, NOT. Optionally it’s possible to open found images in specified program. Along the way, in found images there is ability to massively add, remove or replace tags and to store references to these images to specified directory with original or random names.
