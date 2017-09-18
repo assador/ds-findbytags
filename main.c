@@ -69,11 +69,101 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
-#include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
+#include <string.h>
+#include <gtk/gtk.h>
+#include "main.h"
+#include "regexpmatch.h"
+#include "help.h"
 #include "gui.h"
 
-int main(int argc, char *argv[]) {
-	gui(&argc, argv);
+Opts *opts, *opts_v;
+Tags *tags;
+
+int main(int argc, char **argv) {
+	opts = structopts(argc, argv);
+	if(argc == 1) {
+		help(0);
+		return 0;
+	}
+	opts_v = (Opts*) malloc(sizeof(Opts));
+	if(!opts_v) {
+		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		exit(EXIT_FAILURE);
+	}
+	memcpy(opts_v, opts, sizeof(Opts));
+	for(int i = 0; i < opts_v->args_count; i++) {
+		opts_v->args[i] = realpath(opts->args[i], NULL);
+	}
+	tags = (Tags*) malloc(sizeof(Tags));
+	if(opts_v->g) {
+		gui(opts);
+	} else {
+		if(!opts_v->args_count) {
+			fprintf(stderr, "No paths to search in.\n");
+			exit(EXIT_SUCCESS);
+		}
+		begin();
+	}
 	return 0;
+}
+void begin() {
+	int count;
+	if(opts_v->a) {
+		tags->a = strsplit(opts_v->a, "\\s*,\\s*", 0, 8, &count);
+		tags->a_count = count;
+	}
+	if(opts_v->o) {
+		tags->o = strsplit(opts_v->o, "\\s*,\\s*", 0, 8, &count);
+		tags->o_count = count;
+	}
+	if(opts_v->n) {
+		tags->n = strsplit(opts_v->n, "\\s*,\\s*", 0, 8, &count);
+		tags->n_count = count;
+	}
+	if(opts_v->i) {
+		tags->i = strsplit(opts_v->i, "\\s*,\\s*", 0, 8, &count);
+		tags->i_count = count;
+	}
+	if(opts_v->d) {
+		tags->d = strsplit(opts_v->d, "\\s*,\\s*", 0, 8, &count);
+		tags->d_count = count;
+	}
+	if(opts_v->c) {
+		char **tags_c_tmp = (char**) malloc(sizeof(char*));
+		tags_c_tmp = strsplit(opts_v->c, "\\s*,\\s*", 0, 8, &count);
+		tags->c_count = count;
+		if(tags->c_count % 2) {
+			if(opts_v->g) {
+				show_message(
+					GTK_MESSAGE_ERROR, "Odd number of tags to replace."
+				);
+				return;
+			} else {
+				fprintf(
+					stderr, "Odd number of elements in the value of key -c.\n"
+				);
+				exit(EXIT_FAILURE);
+			}
+		}
+		tags->c = (char***) malloc(sizeof(char**));
+		for(int i = 0; i < tags->c_count; i += 2) {
+			tags->c[i / 2] = (char**) malloc(sizeof(char*));
+			tags->c[i / 2][0] = (char*) malloc(strlen(tags_c_tmp[i]) + 1);
+			tags->c[i / 2][1] = (char*) malloc(strlen(tags_c_tmp[i + 1]) + 1);
+			*tags->c[i / 2][0] = '\0';
+			*tags->c[i / 2][1] = '\0';
+			strncat(
+				tags->c[i / 2][0],
+				tags_c_tmp[i],
+				strlen(tags_c_tmp[i])
+			);
+			strncat(
+				tags->c[i / 2][1],
+				tags_c_tmp[i + 1],
+				strlen(tags_c_tmp[i + 1])
+			);
+		}
+		free(tags_c_tmp);
+	}
 }
