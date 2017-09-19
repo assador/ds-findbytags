@@ -110,9 +110,8 @@ int main(int argc, char **argv) {
 	return 0;
 }
 void begin() {
-	int count;
-	srand(time(NULL));
 /* Приведение строк тэгов в массивы */
+	int count;
 	if(opts_v->a) {
 		tags->a = strsplit(opts_v->a, "\\s*,\\s*", 0, 8, &count);
 		tags->a_count = count;
@@ -171,6 +170,7 @@ void begin() {
 		free(tags_c_tmp);
 	}
 /* Генерация случайного имени каталога для сохранения ссылок */
+	srand(time(NULL));
 	int tosave = 1;
 	if(!opts_v->s) {
 		tosave = 0;
@@ -188,6 +188,20 @@ void begin() {
 			opts_v->s[i] = (char) rand_char;
 		}
 	}
-}
-char** get_fileslist(char **dirs, int *listlength) {
+/* Создание списка путей ко всем анализируемым файлам */
+	char *command = "";
+	char **fileslist;
+	int listlength;
+	for(int i = 0; i < opts_v->args_count; i++) {
+		command = strconcat(command, strconcat(" ", opts_v->args[i]));
+	}
+	command = strconcat(strconcat(strconcat(strconcat(
+		"find",
+		command),
+		" -type f -regextype posix-extended -regex '.*\\.("),
+		EXTS),
+		")$'");
+	fileslist = command_output_lines(command, &listlength);
+	free(command);
+	listlength = 0;
 }
