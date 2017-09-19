@@ -71,7 +71,11 @@ Opts* structopts(int argc, char **argv) {
 	}
 	for(int i = optind, y = 0; i < argc; i++, y++) {
 		opts->args[y] = (char*) malloc(strlen(argv[i]) + 1);
-		if(opts->args[y]) opts->args[y] = argv[i];
+		if(!opts->args[y]) {
+			fprintf(stderr, "malloc() failed: insufficient memory.\n");
+			exit(EXIT_FAILURE);
+		}
+		strcpy(opts->args[y], argv[i]);
 		opts->args_count++;
 	}
 	return opts;

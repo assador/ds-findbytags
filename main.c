@@ -73,10 +73,12 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "main.h"
+#include "common.h"
 #include "regexpmatch.h"
 #include "help.h"
 #include "gui.h"
 
+#define EXTS "gif|jpe?g|pdf|png|tiff?"
 Opts *opts, *opts_v;
 Tags *tags;
 
@@ -109,6 +111,8 @@ int main(int argc, char **argv) {
 }
 void begin() {
 	int count;
+	srand(time(NULL));
+/* Приведение строк тэгов в массивы */
 	if(opts_v->a) {
 		tags->a = strsplit(opts_v->a, "\\s*,\\s*", 0, 8, &count);
 		tags->a_count = count;
@@ -166,4 +170,24 @@ void begin() {
 		}
 		free(tags_c_tmp);
 	}
+/* Генерация случайного имени каталога для сохранения ссылок */
+	int tosave = 1;
+	if(!opts_v->s) {
+		tosave = 0;
+		opts_v->s = (char*) malloc(63);
+		opts_v->s[62] = '\0';
+		unsigned int rand_char;
+		for(int i = 0; i < 16; i++) {
+			do {
+				rand_char = (unsigned int) rand() % 123;
+			} while(
+				rand_char < 48
+				|| rand_char > 57 && rand_char < 65
+				|| rand_char > 90 && rand_char < 97
+			);
+			opts_v->s[i] = (char) rand_char;
+		}
+	}
+}
+char** get_fileslist(char **dirs, int *listlength) {
 }

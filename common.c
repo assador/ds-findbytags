@@ -35,3 +35,30 @@ char* strconcat(const char *s1, const char *s2) {
 	memcpy(sr + len1, s2, len2 + 1);
 	return sr;
 }
+char** command_output_lines(const char *command, int *lineslength) {
+	char **lines = (char**) malloc(sizeof(char*));
+	if(!lines) {
+		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		exit(EXIT_FAILURE);
+	}
+	int idxc = 0, idxl = 0, bufsize = 256;
+	char *buffer = (char*) malloc(bufsize);
+	FILE *found;
+	found = popen(command, "r");
+	while((buffer[idxc] = getc(found)) != EOF) {
+		if(buffer[idxc] == '\n') {
+			lines = (char**) realloc(lines, sizeof(char*) * (idxl + 1));
+			if(!lines) {
+				fprintf(stderr, "malloc() failed: insufficient memory.\n");
+				exit(EXIT_FAILURE);
+			}
+			lines[idxl] = (char*) malloc(idxc + 1);
+			*lines[idxl] = '\0';
+			strncat(lines[idxl], buffer, idxc);
+			idxc = 0; idxl++;
+			*lineslength = idxl;
+		} else idxc++;
+	}
+	free(buffer);
+	return lines;
+}

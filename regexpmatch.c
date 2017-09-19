@@ -47,8 +47,7 @@ char** strsplit(
 	const int options, const int indexeslength, int *splitedcount
 ) {
 	int count = 0;
-	char** substrings;
-	substrings = (char**) malloc(sizeof(char*));
+	char** substrings = (char**) malloc(sizeof(char*));
 	if(!substrings) {
 		fprintf(stderr, "malloc() failed: insufficient memory.\n");
 		exit(EXIT_FAILURE);

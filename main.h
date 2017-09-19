@@ -7,3 +7,4 @@ typedef struct Tags {
 	char*** c; int c_count;
 } Tags;
 void begin();
+char** get_fileslist(char **dirs, int *listlength);

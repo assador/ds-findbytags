@@ -304,9 +304,6 @@ static void gtk_begin() {
 	opts_v->i = entry_text(GTK_ENTRY(action_i));
 	opts_v->d = entry_text(GTK_ENTRY(action_d));
 	opts_v->c = entry_text(GTK_ENTRY(action_c));
-	for(int i = 0; i < opts_v->args_count; i++) free(opts_v->args[i]);
-	opts_v->args_count = 0;
-	free(opts_v->args);
 	paths_from_buttons(opts_v);
 	if(opts_v->args_count > 0) begin();
 }
@@ -325,6 +322,9 @@ static char* entry_text(GtkEntry *entry) {
 static void paths_from_buttons(Opts *o) {
 	Wdgt *wdgt_b;
 	char *path;
+	for(int i = 0; i < o->args_count; i++) free(o->args[i]);
+	o->args_count = 0;
+	free(o->args);
 	if(findin_b_count > 0) {
 		o->args = (char**) malloc(sizeof(char*));
 		if(!o->args) {
@@ -336,7 +336,11 @@ static void paths_from_buttons(Opts *o) {
 		wdgt_b = wdgt_get_by_n(findin_b_head, i);
 		path = (char*) gtk_button_get_label(GTK_BUTTON(wdgt_b->widget));
 		o->args[i] = (char*) malloc(strlen(path) + 1);
-		if(o->args[i]) o->args[i] = path;
+		if(!o->args[i]) {
+			fprintf(stderr, "malloc() failed: insufficient memory.\n");
+			exit(EXIT_FAILURE);
+		}
+		strcpy(o->args[i], path);
 		o->args_count++;
 	}
 }
