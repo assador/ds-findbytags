@@ -1,3 +1,6 @@
+#include <ctype.h>
+#include <unistd.h>
+
 typedef struct Opts {
 	char** args;
 	int args_count;

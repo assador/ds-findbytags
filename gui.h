@@ -1,3 +1,4 @@
+#include <gtk/gtk.h>
 #include "structopts.h"
 
 typedef struct Wdgt {

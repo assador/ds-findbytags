@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <string.h>
+#include <locale.h>
 #include <pcre.h>
 
 typedef struct Reresult {
@@ -6,6 +9,10 @@ typedef struct Reresult {
 } Reresult;
 Reresult* regexpmatch(
 	const char *string, const char *pattern,
+	const int options, const int indexeslength
+);
+Reresult* regexpmatch_compiled(
+	const char *string, pcre *re,
 	const int options, const int indexeslength
 );
 char** strsplit(

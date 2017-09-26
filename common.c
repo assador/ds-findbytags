@@ -18,9 +18,6 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "common.h"
 
 char* strconcat(const char *s1, const char *s2) {
@@ -35,17 +32,44 @@ char* strconcat(const char *s1, const char *s2) {
 	memcpy(sr + len1, s2, len2 + 1);
 	return sr;
 }
+char* command_output(const char *command) {
+	int idxc = 0, bufsize_step = 256, bufsize = bufsize_step;
+	char *buffer = (char*) malloc(bufsize);
+	FILE *found = popen(command, "r");
+	if(!found) {
+		fprintf(stderr, "Cannot into popen.\n");
+		return NULL;
+	}
+	while((buffer[idxc] = getc(found)) != EOF) {
+		if(strlen(buffer) > bufsize - 8) {
+			buffer = (char*) realloc(buffer, bufsize += bufsize_step);
+		}
+		idxc++;
+	}
+	if(pclose(found) != 0) {
+		fprintf(stderr, "Cannot into pclose.\n");
+		return NULL;
+	}
+	buffer[idxc] = '\0';
+	return buffer;
+}
 char** command_output_lines(const char *command, int *lineslength) {
 	char **lines = (char**) malloc(sizeof(char*));
 	if(!lines) {
 		fprintf(stderr, "malloc() failed: insufficient memory.\n");
 		exit(EXIT_FAILURE);
 	}
-	int idxc = 0, idxl = 0, bufsize = 256;
+	int idxc = 0, idxl = 0, bufsize_step = 256, bufsize = bufsize_step;
 	char *buffer = (char*) malloc(bufsize);
-	FILE *found;
-	found = popen(command, "r");
+	FILE *found = popen(command, "r");
+	if(!found) {
+		fprintf(stderr, "Cannot into popen.\n");
+		return NULL;
+	}
 	while((buffer[idxc] = getc(found)) != EOF) {
+		if(strlen(buffer) > bufsize - 8) {
+			buffer = (char*) realloc(buffer, bufsize += bufsize_step);
+		}
 		if(buffer[idxc] == '\n') {
 			lines = (char**) realloc(lines, sizeof(char*) * (idxl + 1));
 			if(!lines) {
@@ -58,6 +82,10 @@ char** command_output_lines(const char *command, int *lineslength) {
 			idxc = 0; idxl++;
 			*lineslength = idxl;
 		} else idxc++;
+	}
+	if(pclose(found) != 0) {
+		fprintf(stderr, "Cannot into pclose.\n");
+		return NULL;
 	}
 	free(buffer);
 	return lines;

@@ -18,9 +18,6 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
-#include <stdio.h>
-#include <string.h>
-#include <locale.h>
 #include "regexpmatch.h"
 
 Reresult* regexpmatch(
@@ -34,12 +31,28 @@ Reresult* regexpmatch(
 	}
 	pcre *re;
 	if(!(re = regexpcompile(pattern, options))) return NULL;
-	reresult->indexes = (int*) malloc(sizeof(int*));
+	reresult->indexes = (int*) malloc(indexeslength);
 	reresult->count = pcre_exec(
 		re, NULL, string, strlen(string), 0, options,
 		reresult->indexes, indexeslength
 	);
 	pcre_free((void*) re);
+	return reresult;
+}
+Reresult* regexpmatch_compiled(
+	const char *string, pcre *re,
+	const int options, const int indexeslength
+) {
+	Reresult *reresult = (Reresult*) malloc(sizeof(Reresult));
+	if(!reresult) {
+		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		exit(EXIT_FAILURE);
+	}
+	reresult->indexes = (int*) malloc(indexeslength);
+	reresult->count = pcre_exec(
+		re, NULL, string, strlen(string), 0, options,
+		reresult->indexes, indexeslength
+	);
 	return reresult;
 }
 char** strsplit(
@@ -56,7 +69,7 @@ char** strsplit(
 	if(!(re = regexpcompile(pattern, options))) return NULL;
 	int next_dlmtr_count = 0;
 	int next_dlmtr_offset = 0;
-	int *next_dlmtr_indexes = (int*) malloc(sizeof(int*));
+	int *next_dlmtr_indexes = (int*) malloc(indexeslength);
 	do {
 		next_dlmtr_count = pcre_exec(
 			re, NULL, string, strlen(string), next_dlmtr_offset, options,

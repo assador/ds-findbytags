@@ -69,14 +69,7 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
-#include <stdlib.h>
-#include <string.h>
-#include <gtk/gtk.h>
 #include "main.h"
-#include "common.h"
-#include "regexpmatch.h"
-#include "help.h"
-#include "gui.h"
 
 #define EXTS "gif|jpe?g|pdf|png|tiff?"
 Opts *opts, *opts_v;
@@ -109,7 +102,7 @@ int main(int argc, char **argv) {
 	}
 	return 0;
 }
-void begin() {
+int begin() {
 /* Приведение строк тэгов в массивы */
 	int count;
 	if(opts_v->a) {
@@ -141,7 +134,7 @@ void begin() {
 				show_message(
 					GTK_MESSAGE_ERROR, "Odd number of tags to replace."
 				);
-				return;
+				return 0;
 			} else {
 				fprintf(
 					stderr, "Odd number of elements in the value of key -c.\n"
@@ -190,8 +183,6 @@ void begin() {
 	}
 /* Создание списка путей ко всем анализируемым файлам */
 	char *command = "";
-	char **fileslist;
-	int listlength;
 	for(int i = 0; i < opts_v->args_count; i++) {
 		command = strconcat(command, strconcat(" ", opts_v->args[i]));
 	}
@@ -201,7 +192,140 @@ void begin() {
 		" -type f -regextype posix-extended -regex '.*\\.("),
 		EXTS),
 		")$'");
-	fileslist = command_output_lines(command, &listlength);
+/* Анализ каждого файла */
+	unsigned int files_count = 0, reoffset = 0;
+	File **files = (File**) malloc(sizeof(File*));
+	char **filetags;
+	char *exiv_com, *exiv_out;
+	pcre *re_s = regexpcompile("^subject\\s*(?=\\S)(.+)$", PCRE_MULTILINE);
+	pcre *re_k = regexpcompile("^Keywords\\s*(?=\\S)(.+)$", PCRE_MULTILINE);
+	Reresult *reresult;
+	size_t filename_size_step = 256, filename_size = filename_size_step;
+	char *filename = (char*) malloc(filename_size);
+	FILE *found = popen(command, "r");
+	if(!found) {
+		fprintf(stderr, "Cannot into popen.\n");
+		return 0;
+	}
+	/* Для каждого анализируемого файла */
+	while(getline(&filename, &filename_size, found) != EOF) {
+		if(strlen(filename) > filename_size - 1) {
+			filename =
+				(char*) realloc(filename, filename_size += filename_size_step);
+		}
+		filename[strlen(filename) - 1] = '\0';
+		filetags = (char**) malloc(sizeof(char*));
+		/* Сбор тэгов в XMP-метаданных */
+		exiv_com = strconcat("exiv2 -PXnt ", filename);
+		exiv_out = command_output(exiv_com);
+		reresult = regexpmatch_compiled(
+			exiv_out, re_s, 0, sizeof(reresult->indexes)
+		);
+		if(reresult->count > 1) {
+			char tmp[reresult->indexes[3] - reresult->indexes[2]];
+			tmp[0] = '\0';
+			strncat(
+				tmp,
+				exiv_out + reresult->indexes[2],
+				reresult->indexes[3] - reresult->indexes[2]
+			);
+			filetags = strsplit(tmp, "\\s*,\\s*", 0, 8, &count);
+		} else {
+			/* Сбор тэгов в IPTC-метаданных, если не оказалось в XMP */
+			exiv_com = strconcat("exiv2 -PInt ", filename);
+			exiv_out = command_output(exiv_com);
+			reoffset = 0;
+			count = 0;
+			for(int i = 0; ; i++) {
+				reresult = regexpmatch_compiled(
+					exiv_out + reoffset, re_k, 0, sizeof(reresult->indexes)
+				);
+				if(reresult->count < 2) break;
+				filetags = (char**) realloc(filetags, sizeof(char*) * (i + 1));
+				filetags[i] = (char*) malloc(
+					reresult->indexes[3] - reresult->indexes[2] + 1
+				);
+				filetags[i][0] = '\0';
+				strncat(
+					filetags[i],
+					exiv_out + reoffset + reresult->indexes[2],
+					reresult->indexes[3] - reresult->indexes[2]
+				);
+				reoffset += reresult->indexes[1];
+				count++;
+			}
+		}
+		free(reresult->indexes);
+		free(reresult);
+		free(exiv_com);
+		free(exiv_out);
+		/* Проверка соответствия тэгов файла тэгам поиска */
+		if(suitable(
+			filetags, count, tags->a, tags->a_count,
+			tags->o, tags->o_count, tags->n, tags->n_count
+		)) {
+			files_count++;
+			files = (File**) realloc(files, sizeof(File*) * files_count);
+			files[files_count - 1] = (File*) malloc(sizeof(File));
+			files[files_count - 1]->fullpath = strdup(filename);
+			files[files_count - 1]->fullname = strdup(filename);
+			files[files_count - 1]->path =
+				dirname(files[files_count - 1]->fullpath);
+			files[files_count - 1]->name =
+				basename(files[files_count - 1]->fullname);
+		}
+		for(int i = 0; i < count; i++) free(filetags[i]);
+		free(filetags);
+	}
+	if(pclose(found) != 0) {
+		fprintf(stderr, "Cannot into pclose.\n");
+		return 0;
+	}
+	/* Очистка */
+	pcre_free((void*) re_s);
+	pcre_free((void*) re_k);
+	free(filename);
 	free(command);
-	listlength = 0;
+	for(int i = 0; i < files_count; i++) {
+		free(files[i]->fullpath);
+		free(files[i]->fullname);
+		free(files[i]);
+	}
+	free(files);
+	for(int i = 0; i < tags->a_count; i++) free(tags->a[i]);
+	for(int i = 0; i < tags->o_count; i++) free(tags->o[i]);
+	for(int i = 0; i < tags->n_count; i++) free(tags->n[i]);
+	for(int i = 0; i < tags->i_count; i++) free(tags->i[i]);
+	for(int i = 0; i < tags->d_count; i++) free(tags->d[i]);
+	for(int i = 0; i < tags->c_count; i++) free(tags->c[i]);
+	free(tags->a); free(tags->o); free(tags->n);
+	free(tags->i); free(tags->d); free(tags->c);
+	tags->a = tags->o = tags->n = tags->i = tags->d = NULL; tags->c = NULL;
+	tags->a_count = tags->o_count = tags->n_count =
+	tags->i_count = tags->d_count = tags->c_count = 0;
+}
+int suitable(
+	char **t, int tc, char **a, int ac, char **o, int oc, char **n, int nc
+) {
+	int s = 1;
+	for(int i = 0; i < ac; i++) {
+		s = 0;
+		for(int y = 0; y < tc; y++) {
+			if(strcmp(a[i], t[y]) == 0) {s = 1; break;}
+		}
+		if(!s) return(0);
+	}
+	for(int i = 0; i < oc; i++) {
+		s = 0;
+		for(int y = 0; y < tc; y++) {
+			if(strcmp(o[i], t[y]) == 0) {s = 1; break;}
+		}
+		if(s) break;
+	}
+	if(!s) return(0);
+	for(int i = 0; i < nc; i++) {
+		for(int y = 0; y < tc; y++) {
+			if(strcmp(n[i], t[y]) == 0) return(0);
+		}
+	}
 }

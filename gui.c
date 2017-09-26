@@ -21,9 +21,6 @@
  **/
 
 #include <malloc.h>
-#include <string.h>
-#include <gtk/gtk.h>
-#include <pcre.h>
 #include "gui.h"
 #include "help.h"
 #include "regexpmatch.h"

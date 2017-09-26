@@ -20,7 +20,7 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
-#include <stdio.h>
+#include "help.h"
 
 char *help_text =
 	"\n"
