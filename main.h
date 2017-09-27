@@ -1,4 +1,5 @@
 #include <libgen.h>
+#include <sys/stat.h>
 #include "common.h"
 #include "regexpmatch.h"
 #include "help.h"

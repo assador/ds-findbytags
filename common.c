@@ -32,6 +32,23 @@ char* strconcat(const char *s1, const char *s2) {
 	memcpy(sr + len1, s2, len2 + 1);
 	return sr;
 }
+/* Генерация случайной строки с заданным количеством символов */
+char* random_name(unsigned int len) {
+	char *str = (char*) malloc(len + 1);
+	str[len] = '\0';
+	unsigned int rand_char;
+	for(int i = 0; i < len; i++) {
+		do {
+			rand_char = (unsigned int) rand() % 123;
+		} while(
+			rand_char < 48
+			|| rand_char > 57 && rand_char < 65
+			|| rand_char > 90 && rand_char < 97
+		);
+		str[i] = (char) rand_char;
+	}
+	return(str);
+}
 char* command_output(const char *command) {
 	int idxc = 0, bufsize_step = 256, bufsize = bufsize_step;
 	char *buffer = (char*) malloc(bufsize);

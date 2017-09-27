@@ -284,6 +284,9 @@ void gui() {
 	}
 	if(!!opts_v->s) {
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(begin_savecb), TRUE);
+		gtk_file_chooser_set_current_folder(
+			GTK_FILE_CHOOSER(begin_savefc), opts_v->s
+		);
 	}
 /* Запустить всю эту петрушку */
 	gtk_widget_show_all(window);
@@ -292,9 +295,11 @@ void gui() {
 static void gtk_begin() {
 	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(begin_keepcb)))
 		opts_v->k = 1;
+	else opts_v->k = 0;
 	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(begin_savecb)))
 		opts_v->s =
 			gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(begin_savefc));
+	else opts_v->s = NULL;
 	opts_v->a = entry_text(GTK_ENTRY(search_a));
 	opts_v->o = entry_text(GTK_ENTRY(search_o));
 	opts_v->n = entry_text(GTK_ENTRY(search_n));

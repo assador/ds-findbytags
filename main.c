@@ -72,10 +72,17 @@
 #include "main.h"
 
 #define EXTS "gif|jpe?g|pdf|png|tiff?"
+const char *file_separator =
+	#ifdef _WIN32
+		"\\";
+	#else
+		"/";
+	#endif
 Opts *opts, *opts_v;
 Tags *tags;
 
 int main(int argc, char **argv) {
+	srand(time(NULL));
 	opts = structopts(argc, argv);
 	if(argc == 1) {
 		help(0);
@@ -163,23 +170,10 @@ int begin() {
 		free(tags_c_tmp);
 	}
 /* Генерация случайного имени каталога для сохранения ссылок */
-	srand(time(NULL));
 	int tosave = 1;
 	if(!opts_v->s) {
 		tosave = 0;
-		opts_v->s = (char*) malloc(63);
-		opts_v->s[62] = '\0';
-		unsigned int rand_char;
-		for(int i = 0; i < 16; i++) {
-			do {
-				rand_char = (unsigned int) rand() % 123;
-			} while(
-				rand_char < 48
-				|| rand_char > 57 && rand_char < 65
-				|| rand_char > 90 && rand_char < 97
-			);
-			opts_v->s[i] = (char) rand_char;
-		}
+		opts_v->s = random_name(16);
 	}
 /* Создание списка путей ко всем анализируемым файлам */
 	char *command = "";
@@ -281,11 +275,54 @@ int begin() {
 		fprintf(stderr, "Cannot into pclose.\n");
 		return 0;
 	}
-	/* Очистка */
 	pcre_free((void*) re_s);
 	pcre_free((void*) re_k);
-	free(filename);
 	free(command);
+	free(filename); filename = NULL;
+	/* Создание каталога, если его ещё нет, с указанным или случайным именем */
+	struct stat stat_buffer;
+	stat(opts_v->s, &stat_buffer);
+	if(!S_ISDIR(stat_buffer.st_mode) && mkdir(opts_v->s, 0755) == -1) {
+		fprintf(stderr, "Cannot create %s.\n", opts_v->s);
+	}
+	/* Создание символических ссылок отобранных файлов */
+	for(int i = 0; i < files_count; i++) {
+		if(opts_v->k) {
+			filename = strdup(files[i]->name);
+		} else {
+			char *filename_base = random_name(16);
+			Reresult *reresult = regexpmatch(
+				files[i]->name, "\\..*?$", 0, sizeof(reresult->indexes)
+			);
+			if(reresult->count != -1) {
+				filename = (char*) malloc(
+					17 + reresult->indexes[1] - reresult->indexes[0]
+				);
+				filename[0] = '\0';
+				strncat(filename, filename_base, 16);
+				strncat(
+					filename,
+					files[i]->name + reresult->indexes[0],
+					reresult->indexes[1] - reresult->indexes[0]
+				);
+				free(reresult->indexes);
+			} else {
+				filename = strdup(filename_base);
+			}
+			free(reresult);
+			free(filename_base);
+		}
+		char *fullname = strdup(opts_v->s);
+		fullname = (char*) realloc(
+			fullname,
+			strlen(fullname) + strlen(file_separator) + strlen(filename) + 1
+		);
+		strncat(fullname, file_separator, strlen(file_separator));
+		strncat(fullname, filename, strlen(filename));
+		symlink(files[i]->fullname, fullname);
+	}
+	free(filename); filename = NULL;
+	/* Очистка */
 	for(int i = 0; i < files_count; i++) {
 		free(files[i]->fullpath);
 		free(files[i]->fullname);
