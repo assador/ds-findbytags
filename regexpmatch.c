@@ -26,7 +26,10 @@ Reresult* regexpmatch(
 ) {
 	Reresult *reresult = (Reresult*) malloc(sizeof(Reresult));
 	if(!reresult) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(
+			stderr,
+			"regexpmatch(): malloc() failed: insufficient memory.\n"
+		);
 		exit(EXIT_FAILURE);
 	}
 	pcre *re;
@@ -45,7 +48,10 @@ Reresult* regexpmatch_compiled(
 ) {
 	Reresult *reresult = (Reresult*) malloc(sizeof(Reresult));
 	if(!reresult) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(
+			stderr,
+			"regexpmatch_compiled(): malloc() failed: insufficient memory.\n"
+		);
 		exit(EXIT_FAILURE);
 	}
 	reresult->indexes = (int*) malloc(indexeslength);
@@ -62,7 +68,7 @@ char** strsplit(
 	int count = 0;
 	char** substrings = (char**) malloc(sizeof(char*));
 	if(!substrings) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(stderr, "strsplit(): malloc() failed: insufficient memory.\n");
 		exit(EXIT_FAILURE);
 	}
 	pcre *re;
@@ -88,7 +94,10 @@ char** strsplit(
 			substrings =
 				(char**) realloc(substrings, (count + 2) * sizeof(char*));
 			if(!substrings) {
-				fprintf(stderr, "malloc() failed: insufficient memory.\n");
+				fprintf(
+					stderr,
+					"strsplit(): realloc() failed: insufficient memory.\n"
+				);
 				exit(EXIT_FAILURE);
 			}
 		} else {
@@ -117,7 +126,10 @@ pcre* regexpcompile(const char *pattern, const int options) {
 	re = pcre_compile(pattern, options, &error, &erroffset, NULL);
 	if(!re) {
 		fprintf(
-			stderr, "Regexp compile failed at offset %d: %s\n", erroffset, error
+			stderr,
+			"regexpcompile(): Regexp compile failed at offset %d: %s\n",
+			erroffset,
+			error
 		);
 		pcre_free((void*) re);
 		pcre_free((void*) tables);

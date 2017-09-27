@@ -25,7 +25,7 @@ char* strconcat(const char *s1, const char *s2) {
 	size_t len2 = strlen(s2);
 	char *sr = malloc(len1 + len2 + 1);
 	if(!sr) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(stderr, "strconcat(): malloc() failed: insufficient memory.\n");
 		return NULL;
 	}
 	memcpy(sr, s1, len1);
@@ -54,7 +54,7 @@ char* command_output(const char *command) {
 	char *buffer = (char*) malloc(bufsize);
 	FILE *found = popen(command, "r");
 	if(!found) {
-		fprintf(stderr, "Cannot into popen.\n");
+		fprintf(stderr, "command_output(): Cannot into popen.\n");
 		return NULL;
 	}
 	while((buffer[idxc] = getc(found)) != EOF) {
@@ -64,7 +64,7 @@ char* command_output(const char *command) {
 		idxc++;
 	}
 	if(pclose(found) != 0) {
-		fprintf(stderr, "Cannot into pclose.\n");
+		fprintf(stderr, "command_output(): Cannot into pclose.\n");
 		return NULL;
 	}
 	buffer[idxc] = '\0';
@@ -73,14 +73,17 @@ char* command_output(const char *command) {
 char** command_output_lines(const char *command, int *lineslength) {
 	char **lines = (char**) malloc(sizeof(char*));
 	if(!lines) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(
+			stderr,
+			"command_output_lines(): malloc() failed: insufficient memory.\n"
+		);
 		exit(EXIT_FAILURE);
 	}
 	int idxc = 0, idxl = 0, bufsize_step = 256, bufsize = bufsize_step;
 	char *buffer = (char*) malloc(bufsize);
 	FILE *found = popen(command, "r");
 	if(!found) {
-		fprintf(stderr, "Cannot into popen.\n");
+		fprintf(stderr, "command_output_lines(): Cannot into popen.\n");
 		return NULL;
 	}
 	while((buffer[idxc] = getc(found)) != EOF) {
@@ -90,7 +93,11 @@ char** command_output_lines(const char *command, int *lineslength) {
 		if(buffer[idxc] == '\n') {
 			lines = (char**) realloc(lines, sizeof(char*) * (idxl + 1));
 			if(!lines) {
-				fprintf(stderr, "malloc() failed: insufficient memory.\n");
+				fprintf(
+					stderr,
+					"command_output_lines(): realloc() failed: "
+					"insufficient memory.\n"
+				);
 				exit(EXIT_FAILURE);
 			}
 			lines[idxl] = (char*) malloc(idxc + 1);
@@ -101,7 +108,7 @@ char** command_output_lines(const char *command, int *lineslength) {
 		} else idxc++;
 	}
 	if(pclose(found) != 0) {
-		fprintf(stderr, "Cannot into pclose.\n");
+		fprintf(stderr, "command_output_lines(): Cannot into pclose.\n");
 		return NULL;
 	}
 	free(buffer);

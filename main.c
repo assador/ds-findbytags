@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
 	}
 	opts_v = (Opts*) malloc(sizeof(Opts));
 	if(!opts_v) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(stderr, "main(): malloc() failed: insufficient memory.\n");
 		exit(EXIT_FAILURE);
 	}
 	memcpy(opts_v, opts, sizeof(Opts));
@@ -102,7 +102,7 @@ int main(int argc, char **argv) {
 		gui(opts);
 	} else {
 		if(!opts_v->args_count) {
-			fprintf(stderr, "No paths to search in.\n");
+			fprintf(stderr, "main(): No paths to search in.\n");
 			exit(EXIT_SUCCESS);
 		}
 		begin();
@@ -144,7 +144,8 @@ int begin() {
 				return 0;
 			} else {
 				fprintf(
-					stderr, "Odd number of elements in the value of key -c.\n"
+					stderr,
+					"begin(): Odd number of elements in the value of key -c.\n"
 				);
 				exit(EXIT_FAILURE);
 			}
@@ -198,7 +199,7 @@ int begin() {
 	char *filename = (char*) malloc(filename_size);
 	FILE *found = popen(command, "r");
 	if(!found) {
-		fprintf(stderr, "Cannot into popen.\n");
+		fprintf(stderr, "begin(): Cannot into popen.\n");
 		return 0;
 	}
 	/* Для каждого анализируемого файла */
@@ -210,12 +211,15 @@ int begin() {
 		filename[strlen(filename) - 1] = '\0';
 		filetags = (char**) malloc(sizeof(char*));
 		/* Сбор тэгов в XMP-метаданных */
-		exiv_com = strconcat("exiv2 -PXnt ", filename);
+		exiv_com = strconcat("exiv2 -PXnt '", filename);
+		exiv_com = strconcat(exiv_com, "'");
 		exiv_out = command_output(exiv_com);
-		reresult = regexpmatch_compiled(
-			exiv_out, re_s, 0, sizeof(reresult->indexes)
-		);
-		if(reresult->count > 1) {
+		if(exiv_out) {
+			reresult = regexpmatch_compiled(
+				exiv_out, re_s, 0, sizeof(reresult->indexes)
+			);
+		}
+		if(exiv_out && reresult->count > 1) {
 			char tmp[reresult->indexes[3] - reresult->indexes[2]];
 			tmp[0] = '\0';
 			strncat(
@@ -226,53 +230,58 @@ int begin() {
 			filetags = strsplit(tmp, "\\s*,\\s*", 0, 8, &count);
 		} else {
 			/* Сбор тэгов в IPTC-метаданных, если не оказалось в XMP */
-			exiv_com = strconcat("exiv2 -PInt ", filename);
+			exiv_com = strconcat("exiv2 -PInt '", filename);
+			exiv_com = strconcat(exiv_com, "'");
 			exiv_out = command_output(exiv_com);
-			reoffset = 0;
-			count = 0;
-			for(int i = 0; ; i++) {
-				reresult = regexpmatch_compiled(
-					exiv_out + reoffset, re_k, 0, sizeof(reresult->indexes)
-				);
-				if(reresult->count < 2) break;
-				filetags = (char**) realloc(filetags, sizeof(char*) * (i + 1));
-				filetags[i] = (char*) malloc(
-					reresult->indexes[3] - reresult->indexes[2] + 1
-				);
-				filetags[i][0] = '\0';
-				strncat(
-					filetags[i],
-					exiv_out + reoffset + reresult->indexes[2],
-					reresult->indexes[3] - reresult->indexes[2]
-				);
-				reoffset += reresult->indexes[1];
-				count++;
+			if(exiv_out) {
+				reoffset = 0;
+				count = 0;
+				for(int i = 0; ; i++) {
+					reresult = regexpmatch_compiled(
+						exiv_out + reoffset, re_k, 0, sizeof(reresult->indexes)
+					);
+					if(reresult->count < 2) break;
+					filetags = (char**) realloc(filetags, sizeof(char*) * (i + 1));
+					filetags[i] = (char*) malloc(
+						reresult->indexes[3] - reresult->indexes[2] + 1
+					);
+					filetags[i][0] = '\0';
+					strncat(
+						filetags[i],
+						exiv_out + reoffset + reresult->indexes[2],
+						reresult->indexes[3] - reresult->indexes[2]
+					);
+					reoffset += reresult->indexes[1];
+					count++;
+				}
 			}
 		}
-		free(reresult->indexes);
-		free(reresult);
-		free(exiv_com);
-		free(exiv_out);
-		/* Проверка соответствия тэгов файла тэгам поиска */
-		if(suitable(
-			filetags, count, tags->a, tags->a_count,
-			tags->o, tags->o_count, tags->n, tags->n_count
-		)) {
-			files_count++;
-			files = (File**) realloc(files, sizeof(File*) * files_count);
-			files[files_count - 1] = (File*) malloc(sizeof(File));
-			files[files_count - 1]->fullpath = strdup(filename);
-			files[files_count - 1]->fullname = strdup(filename);
-			files[files_count - 1]->path =
-				dirname(files[files_count - 1]->fullpath);
-			files[files_count - 1]->name =
-				basename(files[files_count - 1]->fullname);
+		if(exiv_out) {
+			free(reresult->indexes);
+			free(reresult);
+			free(exiv_out);
+			/* Проверка соответствия тэгов файла тэгам поиска */
+			if(suitable(
+				filetags, count, tags->a, tags->a_count,
+				tags->o, tags->o_count, tags->n, tags->n_count
+			)) {
+				files_count++;
+				files = (File**) realloc(files, sizeof(File*) * files_count);
+				files[files_count - 1] = (File*) malloc(sizeof(File));
+				files[files_count - 1]->fullpath = strdup(filename);
+				files[files_count - 1]->fullname = strdup(filename);
+				files[files_count - 1]->path =
+					dirname(files[files_count - 1]->fullpath);
+				files[files_count - 1]->name =
+					basename(files[files_count - 1]->fullname);
+			}
+			for(int i = 0; i < count; i++) free(filetags[i]);
 		}
-		for(int i = 0; i < count; i++) free(filetags[i]);
 		free(filetags);
+		free(exiv_com);
 	}
 	if(pclose(found) != 0) {
-		fprintf(stderr, "Cannot into pclose.\n");
+		fprintf(stderr, "begin(): Cannot into pclose.\n");
 		return 0;
 	}
 	pcre_free((void*) re_s);
@@ -283,7 +292,7 @@ int begin() {
 	struct stat stat_buffer;
 	stat(opts_v->s, &stat_buffer);
 	if(!S_ISDIR(stat_buffer.st_mode) && mkdir(opts_v->s, 0755) == -1) {
-		fprintf(stderr, "Cannot create %s.\n", opts_v->s);
+		fprintf(stderr, "begin(): Cannot create %s.\n", opts_v->s);
 	}
 	/* Создание символических ссылок отобранных файлов */
 	for(int i = 0; i < files_count; i++) {

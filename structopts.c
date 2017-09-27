@@ -26,7 +26,10 @@
 Opts* structopts(int argc, char **argv) {
 	Opts *opts = (Opts*) malloc(sizeof(Opts));
 	if(!opts) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(
+			stderr,
+			"structopts(): malloc() failed: insufficient memory.\n"
+		);
 		exit(EXIT_FAILURE);
 	}
 	opts->e = "*";
@@ -50,10 +53,16 @@ Opts* structopts(int argc, char **argv) {
 			case 't' : opts->t = optarg; break;
 			case '?' :
 				if(isprint(optopt)) {
-					fprintf(stderr, "Unknown option `-%c'.\n", optopt);
+					fprintf(
+						stderr,
+						"structopts(): Unknown option `-%c'.\n",
+						optopt
+					);
 				} else {
 					fprintf(
-						stderr, "Unknown option character `\\x%x'.\n", optopt
+						stderr,
+						"structopts(): Unknown option character `\\x%x'.\n",
+						optopt
 					);
 				}
 		}
@@ -61,13 +70,19 @@ Opts* structopts(int argc, char **argv) {
 	opts->args_count = 0;
 	opts->args = (char**) malloc(sizeof(char*));
 	if(!opts->args) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(
+			stderr,
+			"structopts(): malloc() failed: insufficient memory.\n"
+		);
 		exit(EXIT_FAILURE);
 	}
 	for(int i = optind, y = 0; i < argc; i++, y++) {
 		opts->args[y] = (char*) malloc(strlen(argv[i]) + 1);
 		if(!opts->args[y]) {
-			fprintf(stderr, "malloc() failed: insufficient memory.\n");
+			fprintf(
+				stderr,
+				"structopts(): malloc() failed: insufficient memory.\n"
+			);
 			exit(EXIT_FAILURE);
 		}
 		strcpy(opts->args[y], argv[i]);

@@ -330,7 +330,10 @@ static void paths_from_buttons(Opts *o) {
 	if(findin_b_count > 0) {
 		o->args = (char**) malloc(sizeof(char*));
 		if(!o->args) {
-			fprintf(stderr, "malloc() failed: insufficient memory.\n");
+			fprintf(
+				stderr,
+				"paths_from_buttons(): malloc() failed: insufficient memory.\n"
+			);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -339,7 +342,10 @@ static void paths_from_buttons(Opts *o) {
 		path = (char*) gtk_button_get_label(GTK_BUTTON(wdgt_b->widget));
 		o->args[i] = (char*) malloc(strlen(path) + 1);
 		if(!o->args[i]) {
-			fprintf(stderr, "malloc() failed: insufficient memory.\n");
+			fprintf(
+				stderr,
+				"paths_from_buttons(): malloc() failed: insufficient memory.\n"
+			);
 			exit(EXIT_FAILURE);
 		}
 		strcpy(o->args[i], path);
@@ -487,7 +493,7 @@ void show_message(GtkMessageType type, gchar *message) {
 static Wdgt* wdgt_push(Wdgt **head, GtkWidget *widget, gchar* string) {
 	Wdgt *tmp = (Wdgt*) malloc(sizeof(Wdgt));
 	if(!tmp) {
-		fprintf(stderr, "malloc() failed: insufficient memory.\n");
+		fprintf(stderr, "wdgt_push(): malloc() failed: insufficient memory.\n");
 		return NULL;
 	}
 	tmp->widget = widget;
