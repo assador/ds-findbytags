@@ -179,14 +179,14 @@ int begin() {
 /* Создание списка путей ко всем анализируемым файлам */
 	char *command = "";
 	for(int i = 0; i < opts_v->args_count; i++) {
-		command = strconcat(command, strconcat(" ", opts_v->args[i]));
+		command = strconcat(command, " ");
+		command = strconcat(command, opts_v->args[i]);
 	}
-	command = strconcat(strconcat(strconcat(strconcat(
-		"find",
-		command),
-		" -type f -regextype posix-extended -regex '.*\\.("),
-		EXTS),
-		")$'");
+	command = strconcat("find", command);
+	command = strconcat(command,
+		" -type f -regextype posix-extended -regex '.*\\.(");
+	command = strconcat(command, EXTS);
+	command = strconcat(command, ")$'");
 /* Анализ каждого файла */
 	unsigned int files_count = 0, reoffset = 0;
 	File **files = (File**) malloc(sizeof(File*));
