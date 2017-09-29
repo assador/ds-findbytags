@@ -267,7 +267,7 @@ int begin() {
 			)) {
 				/* Действия над тэгами файла */
 				if(actions(
-					filetags, &count, tags->i, tags->i_count,
+					&filetags, &count, tags->i, tags->i_count,
 					tags->d, tags->d_count, tags->c, tags->c_count
 				) > 0) {
 					char *tmp = "exiv2 -M\"add Xmp.dc.subject\" "
@@ -403,20 +403,41 @@ int suitable(
 	return s;
 }
 int actions(
-	char **t, int *tc,
+	char ***t, int *tc,
 	char **in, int inc, char **de, int dec, char ***ch, int chc
 ) {
-	int changed = 0;
-	if(dec > 0 || chc > 0) {
-		for(int i = 0; i < *tc; i++) {
-			for(int y = 0; y < dec; y++) {
-				if(strcmp(t[i], de[y]) == 0) {
-					free(t[i]);
-					for(int z = i; z < *tc - 1; z++) t[z] = t[z + 1];
-					t = (char**) realloc(t, (--*tc) * sizeof(char*));
-					changed++;
-					if(y == dec - 1) i--;
-				}
+	int changed = 0, exists = 0;
+	for(int i = 0; i < inc; i++) {
+		for(int y = 0; y < *tc; y++) {
+			if(strcmp((*t)[y], in[i]) == 0) {exists = 1; break;}
+		}
+		if(!exists) {
+			*t = (char**) realloc(*t, (++*tc) * sizeof(char*));
+			(*t)[*tc - 1] = (char*) malloc(strlen(in[i]) + 1);
+			(*t)[*tc - 1][strlen(in[i])] = '\0';
+			strncpy((*t)[*tc - 1], in[i], strlen(in[i]));
+			changed++;
+		}
+		exists = 0;
+	}
+	for(int i = 0; i < dec; i++) {
+		for(int y = 0; y < *tc; y++) {
+			if(strcmp((*t)[y], de[i]) == 0) {
+				free((*t)[y]);
+				for(int z = y; z < *tc - 1; z++) (*t)[z] = (*t)[z + 1];
+				*t = (char**) realloc(*t, (--*tc) * sizeof(char*));
+				changed++;
+				y--;
+			}
+		}
+	}
+	for(int i = 0; i < chc; i++) {
+		for(int y = 0; y < *tc; y++) {
+			if(strcmp((*t)[y], ch[i][0]) == 0) {
+				(*t)[y] = (char*) realloc((*t)[y], strlen(ch[i][1]) + 1);
+				(*t)[y][strlen(ch[i][1])] = '\0';
+				strncpy((*t)[y], ch[i][1], strlen(ch[i][1]));
+				changed++;
 			}
 		}
 	}
