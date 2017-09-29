@@ -23,3 +23,7 @@ int begin();
 int suitable(
 	char **t, int tc, char **a, int ac, char **o, int oc, char **n, int nc
 );
+int actions(
+	char **t, int *tc,
+	char **in, int inc, char **de, int dec, char ***ch, int chc
+);

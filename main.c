@@ -135,8 +135,7 @@ int begin() {
 	if(opts_v->c) {
 		char **tags_c_tmp = (char**) malloc(sizeof(char*));
 		tags_c_tmp = strsplit(opts_v->c, "\\s*,\\s*", 0, 8, &count);
-		tags->c_count = count;
-		if(tags->c_count % 2) {
+		if(count % 2) {
 			if(opts_v->g) {
 				show_message(
 					GTK_MESSAGE_ERROR, "Odd number of tags to replace."
@@ -150,6 +149,7 @@ int begin() {
 				exit(EXIT_FAILURE);
 			}
 		}
+		tags->c_count = count / 2;
 		tags->c = (char***) malloc(sizeof(char**));
 		for(int i = 0; i < tags->c_count; i += 2) {
 			tags->c[i / 2] = (char**) malloc(sizeof(char*));
@@ -191,7 +191,7 @@ int begin() {
 	unsigned int files_count = 0, reoffset = 0;
 	File **files = (File**) malloc(sizeof(File*));
 	char **filetags;
-	char *exiv_com, *exiv_out;
+	char *exiv_com, *exiv_out, *filename_qtd;
 	pcre *re_s = regexpcompile("^subject\\s*(?=\\S)(.+)$", PCRE_MULTILINE);
 	pcre *re_k = regexpcompile("^Keywords\\s*(?=\\S)(.+)$", PCRE_MULTILINE);
 	Reresult *reresult;
@@ -209,10 +209,11 @@ int begin() {
 				(char*) realloc(filename, filename_size += filename_size_step);
 		}
 		filename[strlen(filename) - 1] = '\0';
+		filename_qtd = strconcat("'", filename);
+		filename_qtd = strconcat(filename_qtd, "'");
 		filetags = (char**) malloc(sizeof(char*));
 		/* Сбор тэгов в XMP-метаданных */
-		exiv_com = strconcat("exiv2 -PXnt '", filename);
-		exiv_com = strconcat(exiv_com, "'");
+		exiv_com = strconcat("exiv2 -PXnt ", filename_qtd);
 		exiv_out = command_output(exiv_com);
 		if(exiv_out) {
 			reresult = regexpmatch_compiled(
@@ -230,8 +231,7 @@ int begin() {
 			filetags = strsplit(tmp, "\\s*,\\s*", 0, 8, &count);
 		} else {
 			/* Сбор тэгов в IPTC-метаданных, если не оказалось в XMP */
-			exiv_com = strconcat("exiv2 -PInt '", filename);
-			exiv_com = strconcat(exiv_com, "'");
+			exiv_com = strconcat("exiv2 -PInt ", filename_qtd);
 			exiv_out = command_output(exiv_com);
 			if(exiv_out) {
 				reoffset = 0;
@@ -265,6 +265,28 @@ int begin() {
 				filetags, count, tags->a, tags->a_count,
 				tags->o, tags->o_count, tags->n, tags->n_count
 			)) {
+				/* Действия над тэгами файла */
+				if(actions(
+					filetags, &count, tags->i, tags->i_count,
+					tags->d, tags->d_count, tags->c, tags->c_count
+				) > 0) {
+					char *tmp = "exiv2 -M\"add Xmp.dc.subject\" "
+						"-M\"del Iptc.Application2.Keywords\" ";
+					tmp = strconcat(tmp, filename_qtd);
+					system(tmp);
+					for(int i = 0; i < count; i++) {
+						tmp = "exiv2 -M\"set Xmp.dc.subject XmpBag ";
+						tmp = strconcat(tmp, filetags[i]);
+						tmp = strconcat(tmp,
+							"\" -M\"add Iptc.Application2.Keywords String ");
+						tmp = strconcat(tmp, filetags[i]);
+						tmp = strconcat(tmp, "\" ");
+						tmp = strconcat(tmp, filename_qtd);
+						system(tmp);
+					}
+					free(tmp);
+				}
+				/* Создание массива отобранных файлов */
 				files_count++;
 				files = (File**) realloc(files, sizeof(File*) * files_count);
 				files[files_count - 1] = (File*) malloc(sizeof(File));
@@ -288,6 +310,7 @@ int begin() {
 	pcre_free((void*) re_k);
 	free(command);
 	free(filename); filename = NULL;
+	free(filename_qtd); filename_qtd = NULL;
 	/* Создание каталога, если его ещё нет, с указанным или случайным именем */
 	struct stat stat_buffer;
 	stat(opts_v->s, &stat_buffer);
@@ -343,7 +366,10 @@ int begin() {
 	for(int i = 0; i < tags->n_count; i++) free(tags->n[i]);
 	for(int i = 0; i < tags->i_count; i++) free(tags->i[i]);
 	for(int i = 0; i < tags->d_count; i++) free(tags->d[i]);
-	for(int i = 0; i < tags->c_count; i++) free(tags->c[i]);
+	for(int i = 0; i < tags->c_count; i++) {
+		for(int y = 0; y < 2; y++) free(tags->c[i][y]);
+		free(tags->c[i]);
+	}
 	free(tags->a); free(tags->o); free(tags->n);
 	free(tags->i); free(tags->d); free(tags->c);
 	tags->a = tags->o = tags->n = tags->i = tags->d = NULL; tags->c = NULL;
@@ -374,4 +400,25 @@ int suitable(
 			if(strcmp(n[i], t[y]) == 0) return(0);
 		}
 	}
+	return s;
+}
+int actions(
+	char **t, int *tc,
+	char **in, int inc, char **de, int dec, char ***ch, int chc
+) {
+	int changed = 0;
+	if(dec > 0 || chc > 0) {
+		for(int i = 0; i < *tc; i++) {
+			for(int y = 0; y < dec; y++) {
+				if(strcmp(t[i], de[y]) == 0) {
+					free(t[i]);
+					for(int z = i; z < *tc - 1; z++) t[z] = t[z + 1];
+					t = (char**) realloc(t, (--*tc) * sizeof(char*));
+					changed++;
+					if(y == dec - 1) i--;
+				}
+			}
+		}
+	}
+	return changed;
 }
