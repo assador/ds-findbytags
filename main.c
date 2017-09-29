@@ -270,15 +270,21 @@ int begin() {
 					&filetags, &count, tags->i, tags->i_count,
 					tags->d, tags->d_count, tags->c, tags->c_count
 				) > 0) {
-					char *tmp = "exiv2 -M\"add Xmp.dc.subject\" "
-						"-M\"del Iptc.Application2.Keywords\" ";
-					tmp = strconcat(tmp, filename_qtd);
+					char *tmp = strconcat(
+						"exiv2 -M\"add Xmp.dc.subject\" "
+							"-M\"del Iptc.Application2.Keywords\" ",
+						filename_qtd
+					);
 					system(tmp);
 					for(int i = 0; i < count; i++) {
-						tmp = "exiv2 -M\"set Xmp.dc.subject XmpBag ";
-						tmp = strconcat(tmp, filetags[i]);
-						tmp = strconcat(tmp,
-							"\" -M\"add Iptc.Application2.Keywords String ");
+						tmp = strconcat(
+							"exiv2 -M\"set Xmp.dc.subject XmpBag ",
+							filetags[i]
+						);
+						tmp = strconcat(
+							tmp,
+							"\" -M\"add Iptc.Application2.Keywords String "
+						);
 						tmp = strconcat(tmp, filetags[i]);
 						tmp = strconcat(tmp, "\" ");
 						tmp = strconcat(tmp, filename_qtd);
@@ -354,6 +360,19 @@ int begin() {
 		symlink(files[i]->fullname, fullname);
 	}
 	free(filename); filename = NULL;
+	/* Запуск указанной программы в каталоге с символическими ссылками */
+	if(opts_v->l && strcmp(opts_v->l, "no") != 0) {
+		char *tmp = strconcat(opts_v->l, " ");
+		tmp = strconcat(tmp, opts_v->s);
+		system(tmp);
+		free(tmp);
+	}
+	/* Удаление временного каталога с символическими ссылками */
+	if(!tosave) {
+		char *tmp = strconcat("rm -rf ", opts_v->s);
+		system(tmp);
+		free(tmp);
+	}
 	/* Очистка */
 	for(int i = 0; i < files_count; i++) {
 		free(files[i]->fullpath);
@@ -376,10 +395,12 @@ int begin() {
 	tags->a_count = tags->o_count = tags->n_count =
 	tags->i_count = tags->d_count = tags->c_count = 0;
 }
+/* Проверка соответствия тэгов файла тэгам поиска */
 int suitable(
 	char **t, int tc, char **a, int ac, char **o, int oc, char **n, int nc
 ) {
 	int s = 1;
+	/* Проверка соответствия тэгам И */
 	for(int i = 0; i < ac; i++) {
 		s = 0;
 		for(int y = 0; y < tc; y++) {
@@ -387,6 +408,7 @@ int suitable(
 		}
 		if(!s) return(0);
 	}
+	/* Проверка соответствия тэгам ИЛИ */
 	for(int i = 0; i < oc; i++) {
 		s = 0;
 		for(int y = 0; y < tc; y++) {
@@ -395,6 +417,7 @@ int suitable(
 		if(s) break;
 	}
 	if(!s) return(0);
+	/* Проверка соответствия тэгам НЕ */
 	for(int i = 0; i < nc; i++) {
 		for(int y = 0; y < tc; y++) {
 			if(strcmp(n[i], t[y]) == 0) return(0);
@@ -402,11 +425,13 @@ int suitable(
 	}
 	return s;
 }
+/* Действия над тэгами файла */
 int actions(
 	char ***t, int *tc,
 	char **in, int inc, char **de, int dec, char ***ch, int chc
 ) {
 	int changed = 0, exists = 0;
+	/* Добавление новых тэгов */
 	for(int i = 0; i < inc; i++) {
 		for(int y = 0; y < *tc; y++) {
 			if(strcmp((*t)[y], in[i]) == 0) {exists = 1; break;}
@@ -420,6 +445,7 @@ int actions(
 		}
 		exists = 0;
 	}
+	/* Удаление существующих тэгов */
 	for(int i = 0; i < dec; i++) {
 		for(int y = 0; y < *tc; y++) {
 			if(strcmp((*t)[y], de[i]) == 0) {
@@ -431,6 +457,7 @@ int actions(
 			}
 		}
 	}
+	/* Замена существующих тэгов */
 	for(int i = 0; i < chc; i++) {
 		for(int y = 0; y < *tc; y++) {
 			if(strcmp((*t)[y], ch[i][0]) == 0) {
