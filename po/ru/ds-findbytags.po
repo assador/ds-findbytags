@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ds-findbytags, v2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-03 07:48+0300\n"
+"POT-Creation-Date: 2017-10-03 21:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Sokolov <dmitry@sokolov.website>\n"
 "Language-Team: Russian\n"
@@ -16,22 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/structopts.c:31 src/structopts.c:75 src/structopts.c:94
+#: src/structopts.c:31 src/structopts.c:82 src/structopts.c:101
 #, c-format
 msgid "structopts(): malloc() failed: insufficient memory.\n"
 msgstr "structopts(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/structopts.c:58
+#: src/structopts.c:65
 #, c-format
 msgid "structopts(): Unknown option `-%c'.\n"
 msgstr "structopts(): Неизвестная опция `-%c'.\n"
 
-#: src/structopts.c:64
+#: src/structopts.c:71
 #, c-format
 msgid "structopts(): Unknown option character `\\x%x'.\n"
 msgstr "structopts(): Неизвестный символ опции `\\x%x'.\n"
 
-#: src/structopts.c:85
+#: src/structopts.c:92
 #, c-format
 msgid "structopts(): %s does not exist or is not a directory.\n"
 msgstr "structopts(): %s не существует, или не является каталогом.\n"
@@ -98,29 +98,29 @@ msgstr "command_output_lines(): ошибка realloc(): недостаточно
 msgid "command_output_lines(): Cannot into pclose.\n"
 msgstr "command_output_lines(): pclose(): не могу закрыть поток.\n"
 
-#: src/gui.c:73
+#: src/gui.c:76
 msgid "ds-findbytags — Search images by tags and modify tags of found images"
 msgstr ""
 "ds-findbytags — Поиск картинок по тэгам и операции с тэгами найденных "
 "картинок"
 
-#: src/gui.c:90
+#: src/gui.c:93
 msgid " Search in "
 msgstr " Искать в "
 
-#: src/gui.c:100
+#: src/gui.c:103
 msgid "Add new path to search"
 msgstr "Добавить новый путь для поиска"
 
-#: src/gui.c:110
+#: src/gui.c:113
 msgid " Search by tags "
 msgstr " Поиск по тэгам "
 
-#: src/gui.c:119
+#: src/gui.c:122
 msgid "Contain all of these tags:"
 msgstr "Присутствуют все тэги из:"
 
-#: src/gui.c:129
+#: src/gui.c:132
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN ALL\n"
@@ -130,11 +130,11 @@ msgstr ""
 "ПРИСУТСТВУЮТ ВСЕ\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:138
+#: src/gui.c:141
 msgid "Contain at least one of these tags:"
 msgstr "Присутствует хотя бы один тэг из:"
 
-#: src/gui.c:148
+#: src/gui.c:151
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN AT LEAST ONE\n"
@@ -144,11 +144,11 @@ msgstr ""
 "ПРИСУТСТВУЕТ ХОТЯ БЫ ОДИН\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:157
+#: src/gui.c:160
 msgid "Contain no one of these tags:"
 msgstr "Нет ни одного тэга из:"
 
-#: src/gui.c:167
+#: src/gui.c:170
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN NO ONE\n"
@@ -158,33 +158,33 @@ msgstr ""
 "НЕТ НИ ОДНОГО\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:176
+#: src/gui.c:179
 msgid " Actions with found "
 msgstr " Действия с найденным "
 
-#: src/gui.c:185
+#: src/gui.c:188
 msgid "Add these tags to found files:"
 msgstr "Добавить тэги в найденные файлы:"
 
-#: src/gui.c:195
+#: src/gui.c:198
 msgid "ADD these tags (separated by commas) to found files"
 msgstr ""
 "ДОБАВИТЬ в найденные файлы перечисленные здесь тэги (разделённые запятыми)"
 
-#: src/gui.c:203
+#: src/gui.c:206
 msgid "Delete these tags from found files:"
 msgstr "Удалить тэги из найденных файлов:"
 
-#: src/gui.c:213
+#: src/gui.c:216
 msgid "DELETE these tags (separated by commas) from found files"
 msgstr ""
 "УДАЛИТЬ из найденных файлов перечисленные здесь тэги (разделённые запятыми)"
 
-#: src/gui.c:221
+#: src/gui.c:224
 msgid "Replace tags in found files:"
 msgstr "Заменить тэги в найденных файлах:"
 
-#: src/gui.c:231
+#: src/gui.c:234
 msgid ""
 "REPLACE in found files some tags with others. Tags in this field are listed "
 "pairs with commas. For example, if you enter in this field [sushi, meat, "
@@ -196,11 +196,11 @@ msgstr ""
 "[овсянка, борщ, лада калина, мотоцикл], то в найденных файлах тэг «овсянка» "
 "заменится на «борщ», а тэг «лада калина» заменится на «мотоцикл»."
 
-#: src/gui.c:246
+#: src/gui.c:249
 msgid "Save symlinks to:"
 msgstr "Сохранять ссылки в:"
 
-#: src/gui.c:253
+#: src/gui.c:256
 msgid ""
 "If checked, symlinks to found files are saved to the directory, selected "
 "righter. It can be useful for albums compilation."
@@ -208,20 +208,20 @@ msgstr ""
 "Если отмечено, в выбранном правее каталоге сохраняются символические ссылки "
 "на найденные файлы. Это может быть удобно для составления альбомов."
 
-#: src/gui.c:259
+#: src/gui.c:262
 msgid "Save symlinks to…"
 msgstr "Сохранять ссылки в…"
 
-#: src/gui.c:266
+#: src/gui.c:269
 msgid "Directory in which the symlinks to found files are saved"
 msgstr ""
 "Каталог, в котором сохраняются символические ссылки на найденные файлы."
 
-#: src/gui.c:269
+#: src/gui.c:272
 msgid "Save names"
 msgstr "Сохранять имена"
 
-#: src/gui.c:272
+#: src/gui.c:275
 msgid ""
 "If checked, symlinks to found files are saved with names of files "
 "themselves. Otherwise symlinks get random names. Set this option only if you "
@@ -232,11 +232,11 @@ msgstr ""
 "эту галочку только если уверены, что все найденные файлы имеют уникальные "
 "имена."
 
-#: src/gui.c:282
+#: src/gui.c:285
 msgid "Start"
 msgstr "Начать"
 
-#: src/gui.c:285
+#: src/gui.c:288
 msgid ""
 "Start search (and operations with found files if they are specified). "
 "The search can take quite a long time, if there is a large number of files."
@@ -244,28 +244,33 @@ msgstr ""
 "Начать поиск (и операции с найденными файлами, если они заданы). Поиск может "
 "продолжаться довольно долго, если происходит по большому количеству файлов."
 
-#: src/gui.c:347 src/gui.c:360
+#: src/gui.c:352 src/gui.c:365
 #, c-format
 msgid "paths_from_buttons(): malloc() failed: insufficient memory.\n"
 msgstr "paths_from_buttons(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:433
+#: src/gui.c:427
+#, c-format
+msgid "tree(): Cannot open %s.\n"
+msgstr "tree(): Не могу открыть %s.\n"
+
+#: src/gui.c:475
 msgid "Search in…"
 msgstr "Искать в…"
 
-#: src/gui.c:452
+#: src/gui.c:494
 msgid "This path is already added. Choose another."
 msgstr "Этот путь уже добавлен. Выберите другой."
 
-#: src/gui.c:484
+#: src/gui.c:526
 msgid "Change the path to search"
 msgstr "Изменить путь для поиска"
 
-#: src/gui.c:485
+#: src/gui.c:527
 msgid "Remove the path to search"
 msgstr "Удалить путь для поиска"
 
-#: src/gui.c:512
+#: src/gui.c:554
 #, c-format
 msgid "wdgt_push(): malloc() failed: insufficient memory.\n"
 msgstr "wdgt_push(): ошибка malloc(): недостаточно памяти.\n"

@@ -22,7 +22,7 @@
 
 Reresult* regexpmatch(
 	const char *string, const char *pattern,
-	const int options, const int indexeslength
+	const int options, int reoptions, const int indexeslength
 ) {
 	Reresult *reresult = (Reresult*) malloc(sizeof(Reresult));
 	if(!reresult) {
@@ -33,7 +33,7 @@ Reresult* regexpmatch(
 		exit(EXIT_FAILURE);
 	}
 	pcre *re;
-	if(!(re = regexpcompile(pattern, options))) return NULL;
+	if(!(re = regexpcompile(pattern, reoptions))) return NULL;
 	reresult->indexes = (int*) malloc(indexeslength);
 	reresult->count = pcre_exec(
 		re, NULL, string, strlen(string), 0, options,
@@ -63,7 +63,7 @@ Reresult* regexpmatch_compiled(
 }
 char** strsplit(
 	const char *string, const char *pattern,
-	const int options, const int indexeslength, int *splitedcount
+	const int options, const int reoptions, const int indexeslength, int *splitedcount
 ) {
 	int count = 0;
 	char** substrings = (char**) malloc(sizeof(char*));
@@ -75,7 +75,7 @@ char** strsplit(
 		exit(EXIT_FAILURE);
 	}
 	pcre *re;
-	if(!(re = regexpcompile(pattern, options))) return NULL;
+	if(!(re = regexpcompile(pattern, reoptions))) return NULL;
 	int next_dlmtr_count = 0;
 	int next_dlmtr_offset = 0;
 	int *next_dlmtr_indexes = (int*) malloc(indexeslength);
@@ -119,14 +119,14 @@ char** strsplit(
 	*splitedcount = count;
 	return substrings;
 }
-pcre* regexpcompile(const char *pattern, const int options) {
+pcre* regexpcompile(const char *pattern, const int reoptions) {
 	const unsigned char *tables = NULL;
 	setlocale(LC_CTYPE, (const char*) "ru.");
 	tables = pcre_maketables();
 	pcre *re;
 	const char *error;
 	int erroffset;
-	re = pcre_compile(pattern, options, &error, &erroffset, NULL);
+	re = pcre_compile(pattern, reoptions, &error, &erroffset, NULL);
 	if(!re) {
 		fprintf(
 			stderr,

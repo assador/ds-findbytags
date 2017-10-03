@@ -11,7 +11,7 @@ typedef struct Reresult {
 } Reresult;
 Reresult* regexpmatch(
 	const char *string, const char *pattern,
-	const int options, const int indexeslength
+	const int options, const int reoptions, const int indexeslength
 );
 Reresult* regexpmatch_compiled(
 	const char *string, pcre *re,
@@ -19,6 +19,6 @@ Reresult* regexpmatch_compiled(
 );
 char** strsplit(
 	const char *string, const char *pattern,
-	const int options, const int indexeslength, int *count
+	const int options, const int reoptions, const int indexeslength, int *count
 );
-pcre* regexpcompile(const char *pattern, const int options);
+pcre* regexpcompile(const char *pattern, const int reoptions);

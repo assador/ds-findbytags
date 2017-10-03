@@ -5,10 +5,10 @@ SHELL = /bin/sh
 CC = gcc
 CFLAGS = -g -c -Wall
 LDFLAGS =
-CFLAGS += `pkg-config --cflags gtk+-2.0`
-CFLAGS += `pkg-config --cflags libpcre`
-LDLIBS += `pkg-config --libs gtk+-2.0`
-LDLIBS += `pkg-config --libs libpcre`
+CFLAGS += `pkg-config --cflags gtk+-2.0 libpcre`
+CFLAGS += `xml2-config --cflags`
+LDLIBS += `pkg-config --libs gtk+-2.0 libpcre`
+LDLIBS += `xml2-config --libs`
 
 TARGET = ds-findbytags
 SRCDIR = src

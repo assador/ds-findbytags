@@ -50,7 +50,14 @@ Opts* structopts(int argc, char **argv) {
 			case 'e' : opts->e = optarg; break;
 			case 'l' : opts->l = optarg; break;
 			case 's' : opts->s = optarg; break;
-			case 't' : opts->t = optarg; break;
+			case 't' :
+				opts->t = optarg;
+				int i = 0;
+				while(opts->t[i] == ' ') i++;
+				if(opts->t[i] == '~') {
+					opts->t = strconcat(getenv("HOME"), opts->t + 1);
+				}
+				break;
 			case '?' :
 				if(isprint(optopt)) {
 					fprintf(

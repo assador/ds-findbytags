@@ -1,6 +1,6 @@
 #include <libintl.h>
-#define _(String) gettext(String)
 #include <locale.h>
+#define _(String) gettext(String)
 #include <ctype.h>
 #include <unistd.h>
 #include <sys/stat.h>

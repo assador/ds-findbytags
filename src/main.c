@@ -116,28 +116,28 @@ int begin() {
 /* Приведение строк тэгов в массивы */
 	int count;
 	if(opts_v->a) {
-		tags->a = strsplit(opts_v->a, "\\s*,\\s*", 0, 8, &count);
+		tags->a = strsplit(opts_v->a, "\\s*,\\s*", 0, 0, 8, &count);
 		tags->a_count = count;
 	}
 	if(opts_v->o) {
-		tags->o = strsplit(opts_v->o, "\\s*,\\s*", 0, 8, &count);
+		tags->o = strsplit(opts_v->o, "\\s*,\\s*", 0, 0, 8, &count);
 		tags->o_count = count;
 	}
 	if(opts_v->n) {
-		tags->n = strsplit(opts_v->n, "\\s*,\\s*", 0, 8, &count);
+		tags->n = strsplit(opts_v->n, "\\s*,\\s*", 0, 0, 8, &count);
 		tags->n_count = count;
 	}
 	if(opts_v->i) {
-		tags->i = strsplit(opts_v->i, "\\s*,\\s*", 0, 8, &count);
+		tags->i = strsplit(opts_v->i, "\\s*,\\s*", 0, 0, 8, &count);
 		tags->i_count = count;
 	}
 	if(opts_v->d) {
-		tags->d = strsplit(opts_v->d, "\\s*,\\s*", 0, 8, &count);
+		tags->d = strsplit(opts_v->d, "\\s*,\\s*", 0, 0, 8, &count);
 		tags->d_count = count;
 	}
 	if(opts_v->c) {
 		char **tags_c_tmp = (char**) malloc(sizeof(char*));
-		tags_c_tmp = strsplit(opts_v->c, "\\s*,\\s*", 0, 8, &count);
+		tags_c_tmp = strsplit(opts_v->c, "\\s*,\\s*", 0, 0, 8, &count);
 		if(count % 2) {
 			if(opts_v->g) {
 				show_message(
@@ -234,7 +234,7 @@ int begin() {
 				exiv_out + reresult->indexes[2],
 				reresult->indexes[3] - reresult->indexes[2]
 			);
-			filetags = strsplit(tmp, "\\s*,\\s*", 0, 8, &count);
+			filetags = strsplit(tmp, "\\s*,\\s*", 0, 0, 8, &count);
 		} else {
 			/* Сбор тэгов в IPTC-метаданных, если не оказалось в XMP */
 			exiv_com = strconcat("exiv2 -PInt ", filename_qtd);
@@ -336,7 +336,7 @@ int begin() {
 		} else {
 			char *filename_base = random_name(16);
 			Reresult *reresult = regexpmatch(
-				files[i]->name, "\\..*?$", 0, sizeof(reresult->indexes)
+				files[i]->name, "\\..*?$", 0, 0, sizeof(reresult->indexes)
 			);
 			if(reresult->count != -1) {
 				filename = (char*) malloc(

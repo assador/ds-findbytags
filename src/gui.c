@@ -21,6 +21,8 @@
  **/
 
 #include <malloc.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include "gui.h"
 #include "help.h"
 #include "regexpmatch.h"
@@ -37,6 +39,7 @@ static void findin_m_clicked(GtkWidget *b, GtkWidget *m);
 static gchar* choose_path(gchar *initial);
 static void add_path(gchar *path);
 static Wdgt* was_path(Wdgt *head, gchar *path);
+static int tree(char *path, char *root);
 static void entry_drag_data_received();
 static void paths_from_buttons(Opts *o);
 static void begin_savecb_toggled(GtkWidget *widget);
@@ -300,6 +303,8 @@ void gui() {
 			GTK_FILE_CHOOSER(begin_savefc), opts_v->s
 		);
 	}
+//assador
+	tree(opts_v->t, "keyword_tree");
 /* Запустить всю эту петрушку */
 	gtk_widget_show_all(window);
 	gtk_main();
@@ -323,7 +328,7 @@ static void gtk_begin() {
 }
 static char* entry_text(GtkEntry *entry) {
 	char *entry_text = (char*) gtk_entry_get_text(GTK_ENTRY(entry));
-	Reresult *reresult = regexpmatch(entry_text, "\\S", 0, 8);
+	Reresult *reresult = regexpmatch(entry_text, "\\S", 0, 0, 8);
 	if(reresult->count != -1) {
 		free(reresult->indexes);
 		free(reresult);
@@ -415,6 +420,43 @@ static void findin_m_clicked(GtkWidget *m, GtkWidget *b) {
 	if(findin_b_count > 0) {
 		gtk_table_resize(GTK_TABLE(findin_table), findin_b_count, 3);
 	}
+}
+static int tree(char *path, char *root) {
+	FILE *xml_file = fopen(path, "rt");
+	if(!xml_file) {
+		fprintf(stderr, _("tree(): Cannot open %s.\n"), path);
+		return 0;
+	}
+	size_t xml_text_size_step = 256, xml_text_size = xml_text_size_step, i = 0;
+	char *xml_text = (char*) malloc(xml_text_size);
+	while((xml_text[i++] = fgetc(xml_file)) != EOF) {
+		if(strlen(xml_text) > xml_text_size - 1) {
+			xml_text =
+				(char*) realloc(xml_text, xml_text_size += xml_text_size_step);
+		}
+	}
+	xml_text[i] = '\0';
+	fclose(xml_file);
+	char *re = (char*) malloc(strlen(root) * 2 + 9);
+	re[0] = '\0';
+	strcat(re, "<");
+	strcat(re, root);
+	strcat(re, ">.*?</");
+	strcat(re, root);
+	strcat(re, ">\0");
+	Reresult *reresult =
+		regexpmatch(xml_text, re, 0, PCRE_DOTALL | PCRE_MULTILINE, 8);
+	if(reresult->count != -1) {
+		free(re);
+		xml_text += reresult->indexes[0];
+		xml_text[reresult->indexes[1] - reresult->indexes[0]] = '\0';
+		free(reresult->indexes);
+		free(reresult);
+	} else {
+		free(reresult);
+		return 0;
+	}
+	return 1;
 }
 static void entry_drag_data_received() {//assador
 }
