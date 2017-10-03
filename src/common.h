@@ -1,3 +1,6 @@
+#include <libintl.h>
+#include <locale.h>
+#define _(String) gettext(String)
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

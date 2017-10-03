@@ -25,7 +25,10 @@ char* strconcat(const char *s1, const char *s2) {
 	size_t len2 = strlen(s2);
 	char *sr = malloc(len1 + len2 + 1);
 	if(!sr) {
-		fprintf(stderr, "strconcat(): malloc() failed: insufficient memory.\n");
+		fprintf(
+			stderr,
+			_("strconcat(): malloc() failed: insufficient memory.\n")
+		);
 		return NULL;
 	}
 	memcpy(sr, s1, len1);
@@ -42,8 +45,8 @@ char* random_name(unsigned int len) {
 			rand_char = (unsigned int) rand() % 123;
 		} while(
 			rand_char < 48
-			|| rand_char > 57 && rand_char < 65
-			|| rand_char > 90 && rand_char < 97
+			|| (rand_char > 57 && rand_char < 65)
+			|| (rand_char > 90 && rand_char < 97)
 		);
 		str[i] = (char) rand_char;
 	}
@@ -54,7 +57,7 @@ char* command_output(const char *command) {
 	char *buffer = (char*) malloc(bufsize);
 	FILE *found = popen(command, "r");
 	if(!found) {
-		fprintf(stderr, "command_output(): Cannot into popen.\n");
+		fprintf(stderr, _("command_output(): Cannot into popen.\n"));
 		return NULL;
 	}
 	while((buffer[idxc] = getc(found)) != EOF) {
@@ -64,7 +67,7 @@ char* command_output(const char *command) {
 		idxc++;
 	}
 	if(pclose(found) != 0) {
-		fprintf(stderr, "command_output(): Cannot into pclose.\n");
+		fprintf(stderr, _("command_output(): Cannot into pclose.\n"));
 		return NULL;
 	}
 	buffer[idxc] = '\0';
@@ -75,7 +78,7 @@ char** command_output_lines(const char *command, int *lineslength) {
 	if(!lines) {
 		fprintf(
 			stderr,
-			"command_output_lines(): malloc() failed: insufficient memory.\n"
+			_("command_output_lines(): malloc() failed: insufficient memory.\n")
 		);
 		exit(EXIT_FAILURE);
 	}
@@ -83,7 +86,7 @@ char** command_output_lines(const char *command, int *lineslength) {
 	char *buffer = (char*) malloc(bufsize);
 	FILE *found = popen(command, "r");
 	if(!found) {
-		fprintf(stderr, "command_output_lines(): Cannot into popen.\n");
+		fprintf(stderr, _("command_output_lines(): Cannot into popen.\n"));
 		return NULL;
 	}
 	while((buffer[idxc] = getc(found)) != EOF) {
@@ -95,8 +98,8 @@ char** command_output_lines(const char *command, int *lineslength) {
 			if(!lines) {
 				fprintf(
 					stderr,
-					"command_output_lines(): realloc() failed: "
-					"insufficient memory.\n"
+					_("command_output_lines(): realloc() failed: "
+					"insufficient memory.\n")
 				);
 				exit(EXIT_FAILURE);
 			}
@@ -108,7 +111,7 @@ char** command_output_lines(const char *command, int *lineslength) {
 		} else idxc++;
 	}
 	if(pclose(found) != 0) {
-		fprintf(stderr, "command_output_lines(): Cannot into pclose.\n");
+		fprintf(stderr, _("command_output_lines(): Cannot into pclose.\n"));
 		return NULL;
 	}
 	free(buffer);

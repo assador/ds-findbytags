@@ -1,6 +1,8 @@
+#include <libintl.h>
+#include <locale.h>
+#define _(String) gettext(String)
 #include <stdio.h>
 #include <string.h>
-#include <locale.h>
 #include <pcre.h>
 
 typedef struct Reresult {

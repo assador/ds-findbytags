@@ -1,5 +1,9 @@
+#include <libintl.h>
+#define _(String) gettext(String)
+#include <locale.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 typedef struct Opts {
 	char** args;

@@ -25,6 +25,23 @@
 #include "help.h"
 #include "regexpmatch.h"
 
+static Wdgt* wdgt_push(Wdgt **head, GtkWidget *widget, gchar* string);
+static int wdgt_remove_by_widget(Wdgt **head, GtkWidget *widget);
+static Wdgt* wdgt_get_by_n(Wdgt *head, int n);
+static Wdgt* wdgt_get_by_widget(Wdgt *head, GtkWidget *widget);
+
+static char* entry_text(GtkEntry *entry);
+static void findin_p_clicked(void);
+static void findin_b_clicked(GtkWidget *b);
+static void findin_m_clicked(GtkWidget *b, GtkWidget *m);
+static gchar* choose_path(gchar *initial);
+static void add_path(gchar *path);
+static Wdgt* was_path(Wdgt *head, gchar *path);
+static void entry_drag_data_received();
+static void paths_from_buttons(Opts *o);
+static void begin_savecb_toggled(GtkWidget *widget);
+static void gtk_begin();
+
 extern Opts *opts;
 extern Opts *opts_v;
 extern void begin();
@@ -53,8 +70,8 @@ void gui() {
 	);
 	gtk_window_set_title(
 		GTK_WINDOW(window),
-		"FindByTags — "
-		"Поиск картинок по тэгам и операции с тэгами найденных картинок"
+		_("ds-findbytags — "
+		"Search images by tags and modify tags of found images")
 	);
 	gtk_window_set_default_size(GTK_WINDOW(window), 700, 100);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 5);
@@ -70,7 +87,7 @@ void gui() {
 		gtk_paned_pack1(GTK_PANED(hpaned), vbox, TRUE, FALSE);
 	}
 /* Фрэйм «Искать в» */
-	findin_frame = gtk_frame_new(" Искать в ");
+	findin_frame = gtk_frame_new(_(" Search in "));
 	gtk_box_pack_start(GTK_BOX(vbox), findin_frame, FALSE, TRUE, 0);
 /* Таблица с кнопками путей для поиска */
 	findin_table = gtk_table_new(1, 3, FALSE);
@@ -80,7 +97,7 @@ void gui() {
 	gtk_container_add(GTK_CONTAINER(findin_frame), findin_table);
 /* Кнопка добавления пути для поиска */
 	findin_p = gtk_button_new_with_label("+");
-	gtk_widget_set_tooltip_text(findin_p, "Добавить новый путь для поиска");
+	gtk_widget_set_tooltip_text(findin_p, _("Add new path to search"));
 	g_signal_connect(findin_p, "clicked", G_CALLBACK(findin_p_clicked), NULL);
 	gtk_table_attach(
 		GTK_TABLE(findin_table),
@@ -90,7 +107,7 @@ void gui() {
 		0, 0
 	);
 /* Поиск по тэгам */
-	search_frame = gtk_frame_new(" Поиск по тэгам ");
+	search_frame = gtk_frame_new(_(" Search by tags "));
 	gtk_box_pack_start(GTK_BOX(vbox), search_frame, FALSE, TRUE, 0);
 /* Таблица с полями ввода тэгов для поиска */
 	search_table = gtk_table_new(3, 2, FALSE);
@@ -99,7 +116,7 @@ void gui() {
 	gtk_table_set_col_spacing(GTK_TABLE(search_table), 1, 5);
 	gtk_container_add(GTK_CONTAINER(search_frame), search_table);
 /* Строка ввода тэгов для поиска И */
-	search_a_l = gtk_label_new("Присутствуют все тэги из:");
+	search_a_l = gtk_label_new(_("Contain all of these tags:"));
 	gtk_misc_set_alignment(GTK_MISC(search_a_l), 1, 0.5);
 	gtk_table_attach(
 		GTK_TABLE(search_table), search_a_l,
@@ -109,8 +126,8 @@ void gui() {
 	if(opts_v->a) gtk_entry_set_text(GTK_ENTRY(search_a), opts_v->a);
 	gtk_widget_set_tooltip_text(
 		search_a,
-		"Поиск ведётся по файлам, в которых\nПРИСУТСТВУЮТ ВСЕ\n"
-		"из перечисленных здесь тэгов (разделённых запятыми)"
+		_("The search is performed for files, which\nCONTAIN ALL\n"
+		"of these tags (separated by commas)")
 	);
 	g_signal_connect(
 		search_a, "drag-data-received",
@@ -118,7 +135,7 @@ void gui() {
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_a, 1, 2, 0, 1);
 /* Строка ввода тэгов для поиска ИЛИ */
-	search_o_l = gtk_label_new("Присутствует хотя бы один тэг из:");
+	search_o_l = gtk_label_new(_("Contain at least one of these tags:"));
 	gtk_misc_set_alignment(GTK_MISC(search_o_l), 1, 0.5);
 	gtk_table_attach(
 		GTK_TABLE(search_table), search_o_l,
@@ -128,8 +145,8 @@ void gui() {
 	if(opts_v->o) gtk_entry_set_text(GTK_ENTRY(search_o), opts_v->o);
 	gtk_widget_set_tooltip_text(
 		search_o,
-		"Поиск ведётся по файлам, в которых\nПРИСУТСТВУЕТ ХОТЯ БЫ ОДИН\n"
-		"из перечисленных здесь тэгов (разделённых запятыми)"
+		_("The search is performed for files, which\nCONTAIN AT LEAST ONE\n"
+		"of these tags (separated by commas)")
 	);
 	g_signal_connect(
 		search_o, "drag-data-received",
@@ -137,7 +154,7 @@ void gui() {
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_o, 1, 2, 1, 2);
 /* Строка ввода тэгов для поиска НЕ */
-	search_n_l = gtk_label_new("Нет ни одного тэга из:");
+	search_n_l = gtk_label_new(_("Contain no one of these tags:"));
 	gtk_misc_set_alignment(GTK_MISC(search_n_l), 1, 0.5);
 	gtk_table_attach(
 		GTK_TABLE(search_table), search_n_l,
@@ -147,8 +164,8 @@ void gui() {
 	if(opts_v->n) gtk_entry_set_text(GTK_ENTRY(search_n), opts_v->n);
 	gtk_widget_set_tooltip_text(
 		search_n,
-		"Поиск ведётся по файлам, в которых\nНЕТ НИ ОДНОГО\n"
-		"из перечисленных здесь тэгов (разделённых запятыми)"
+		_("The search is performed for files, which\nCONTAIN NO ONE\n"
+		"of these tags (separated by commas)")
 	);
 	g_signal_connect(
 		search_n, "drag-data-received",
@@ -156,7 +173,7 @@ void gui() {
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_n, 1, 2, 2, 3);
 /* Действия с найденным */
-	action_frame = gtk_frame_new(" Действия с найденным ");
+	action_frame = gtk_frame_new(_(" Actions with found "));
 	gtk_box_pack_start(GTK_BOX(vbox), action_frame, FALSE, TRUE, 0);
 /* Таблица с полями ввода тэгов для поиска */
 	action_table = gtk_table_new(3, 2, FALSE);
@@ -165,7 +182,7 @@ void gui() {
 	gtk_table_set_col_spacing(GTK_TABLE(action_table), 1, 5);
 	gtk_container_add(GTK_CONTAINER(action_frame), action_table);
 /* Строка ввода тэгов для добавления */
-	action_i_l = gtk_label_new("Добавить тэги в найденные файлы:");
+	action_i_l = gtk_label_new(_("Add these tags to found files:"));
 	gtk_misc_set_alignment(GTK_MISC(action_i_l), 1, 0.5);
 	gtk_table_attach(
 		GTK_TABLE(action_table), action_i_l,
@@ -175,8 +192,7 @@ void gui() {
 	if(opts_v->i) gtk_entry_set_text(GTK_ENTRY(action_i), opts_v->i);
 	gtk_widget_set_tooltip_text(
 		action_i,
-		"ДОБАВИТЬ в найденные файлы перечисленные здесь тэги "
-		"(разделённые запятыми)"
+		_("ADD these tags (separated by commas) to found files")
 	);
 	g_signal_connect(
 		action_i, "drag-data-received",
@@ -184,7 +200,7 @@ void gui() {
 	);
 	gtk_table_attach_defaults(GTK_TABLE(action_table), action_i, 1, 2, 0, 1);
 /* Строка ввода тэгов для удаления */
-	action_d_l = gtk_label_new("Удалить тэги из найденных файлов:");
+	action_d_l = gtk_label_new(_("Delete these tags from found files:"));
 	gtk_misc_set_alignment(GTK_MISC(action_d_l), 1, 0.5);
 	gtk_table_attach(
 		GTK_TABLE(action_table), action_d_l,
@@ -194,8 +210,7 @@ void gui() {
 	if(opts_v->d) gtk_entry_set_text(GTK_ENTRY(action_d), opts_v->d);
 	gtk_widget_set_tooltip_text(
 		action_d,
-		"УДАЛИТЬ из найденных файлов перечисленные здесь тэги "
-		"(разделённые запятыми)"
+		_("DELETE these tags (separated by commas) from found files")
 	);
 	g_signal_connect(
 		action_d, "drag-data-received",
@@ -203,7 +218,7 @@ void gui() {
 	);
 	gtk_table_attach_defaults(GTK_TABLE(action_table), action_d, 1, 2, 1, 2);
 /* Строка ввода тэгов для замены */
-	action_c_l = gtk_label_new("Заменить тэги в найденных файлах:");
+	action_c_l = gtk_label_new(_("Replace tags in found files:"));
 	gtk_misc_set_alignment(GTK_MISC(action_c_l), 1, 0.5);
 	gtk_table_attach(
 		GTK_TABLE(action_table), action_c_l,
@@ -213,11 +228,11 @@ void gui() {
 	if(opts_v->c) gtk_entry_set_text(GTK_ENTRY(action_c), opts_v->c);
 	gtk_widget_set_tooltip_text(
 		action_c,
-		"ЗАМЕНИТЬ в найденных файлах одни тэги на другие. Тэги перечисляются "
-		"в этом поле попарно через запятые. Например, если ввести в это поле "
-		"[овсянка, борщ, лада калина, мотоцикл], то в найденных файлах "
-		"тэг «овсянка» заменится на «борщ», а тэг «лада калина» заменится "
-		"на «мотоцикл»."
+		_("REPLACE in found files some tags with others. Tags in this field "
+		"are listed pairs with commas. For example, if you enter in this field "
+		"[sushi, meat, cadillac, motorcycle], then in found files tag “sushi” "
+		"will be replaced with tag “meat” and tag “cadillac” will be replaced "
+		"with tag “motorcycle”.")
 	);
 	g_signal_connect(
 		action_c, "drag-data-received",
@@ -228,38 +243,35 @@ void gui() {
 	hbox2 = gtk_hbox_new(FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(vbox), hbox2, FALSE, TRUE, 0);
 /* Сохранять ссылки в (CheckButton) */
-	begin_savecb = gtk_check_button_new_with_label("Сохранять ссылки в:");
+	begin_savecb = gtk_check_button_new_with_label(_("Save symlinks to:"));
 	g_signal_connect(
 		GTK_CHECK_BUTTON(begin_savecb), "toggled",
 		G_CALLBACK(begin_savecb_toggled), NULL
 	);
 	gtk_widget_set_tooltip_text(
 		begin_savecb,
-		"Если отмечено, в выбранном правее каталоге сохраняются "
-		"символические ссылки на найденные файлы. Это может быть удобно "
-		"для составления альбомов."
+		_("If checked, symlinks to found files are saved to the directory, "
+		"selected righter. It can be useful for albums compilation.")
 	);
 	gtk_box_pack_start(GTK_BOX(hbox2), begin_savecb, FALSE, FALSE, 0);
 /* Сохранять ссылки в (FileChooserButton) */
 	begin_savefc = gtk_file_chooser_button_new(
-		"Сохранять ссылки в…",
+		_("Save symlinks to…"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
 	);
 	gtk_widget_set_sensitive(begin_savefc, FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox2), begin_savefc, FALSE, FALSE, 0);
 	gtk_widget_set_tooltip_text(
 		begin_savefc,
-		"Каталог, в котором сохраняются "
-		"символические ссылки на найденные файлы."
+		_("Directory in which the symlinks to found files are saved")
 	);
 /* Сохранять имена (CheckButton) */
-	begin_keepcb = gtk_check_button_new_with_label("Сохранять имена");
+	begin_keepcb = gtk_check_button_new_with_label(_("Save names"));
 	gtk_widget_set_tooltip_text(
 		begin_keepcb,
-		"Если отмечено, символические ссылки на найденные файлы сохраняются "
-		"с именами самих файлов. В противном случае ссылки получают "
-		"случайные имена. Ставьте эту галочку только если уверены, "
-		"что все найденные файлы имеют уникальные имена."
+		_("If checked, symlinks to found files are saved with names of files "
+		"themselves. Otherwise symlinks get random names. Set this option only "
+		"if you are sure that all the files have unique names.")
 	);
 	if(opts_v->k) {
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(begin_keepcb), TRUE);
@@ -267,12 +279,12 @@ void gui() {
 	gtk_widget_set_sensitive(begin_keepcb, FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox2), begin_keepcb, FALSE, FALSE, 0);
 /* Кнопка «Начать» */
-	begin_button = gtk_button_new_with_label("Начать");
+	begin_button = gtk_button_new_with_label(_("Start"));
 	gtk_widget_set_tooltip_text(
 		begin_button,
-		"Начать поиск (и операции с найденными файлами, если они заданы). "
-		"Поиск может продолжаться довольно долго, если происходит "
-		"по большому количеству файлов."
+		_("Start search (and operations with found files if they "
+		"are specified). The search can take quite a long time, "
+		"if there is a large number of files.")
 	);
 	g_signal_connect(
 		begin_button, "clicked", G_CALLBACK(gtk_begin), NULL
@@ -332,7 +344,8 @@ static void paths_from_buttons(Opts *o) {
 		if(!o->args) {
 			fprintf(
 				stderr,
-				"paths_from_buttons(): malloc() failed: insufficient memory.\n"
+				_("paths_from_buttons(): malloc() failed: "
+				"insufficient memory.\n")
 			);
 			exit(EXIT_FAILURE);
 		}
@@ -344,7 +357,8 @@ static void paths_from_buttons(Opts *o) {
 		if(!o->args[i]) {
 			fprintf(
 				stderr,
-				"paths_from_buttons(): malloc() failed: insufficient memory.\n"
+				_("paths_from_buttons(): malloc() failed: "
+				"insufficient memory.\n")
 			);
 			exit(EXIT_FAILURE);
 		}
@@ -416,7 +430,7 @@ static void begin_savecb_toggled(GtkWidget *widget) {
 static gchar* choose_path(gchar *initial) {
 	gchar *path;
 	GtkWidget *c = gtk_file_chooser_dialog_new(
-		"Искать в…", NULL,
+		_("Search in…"), NULL,
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -435,7 +449,7 @@ static void add_path(gchar *path) {
 	if(was_path(findin_b_head, path)) {
 		show_message(
 			GTK_MESSAGE_ERROR,
-			"Этот путь уже добавлен. Выберите другой."
+			_("This path is already added. Choose another.")
 		);
 		return;
 	}
@@ -467,8 +481,8 @@ static void add_path(gchar *path) {
 		GTK_SHRINK, GTK_FILL,
 		0, 0
 	);
-	gtk_widget_set_tooltip_text(n_findin_b, "Изменить путь для поиска");
-	gtk_widget_set_tooltip_text(n_findin_m, "Удалить путь для поиска");
+	gtk_widget_set_tooltip_text(n_findin_b, _("Change the path to search"));
+	gtk_widget_set_tooltip_text(n_findin_m, _("Remove the path to search"));
 	gtk_widget_show(n_findin_b);
 	gtk_widget_show(n_findin_m);
 }
@@ -493,7 +507,10 @@ void show_message(GtkMessageType type, gchar *message) {
 static Wdgt* wdgt_push(Wdgt **head, GtkWidget *widget, gchar* string) {
 	Wdgt *tmp = (Wdgt*) malloc(sizeof(Wdgt));
 	if(!tmp) {
-		fprintf(stderr, "wdgt_push(): malloc() failed: insufficient memory.\n");
+		fprintf(
+			stderr,
+			_("wdgt_push(): malloc() failed: insufficient memory.\n")
+		);
 		return NULL;
 	}
 	tmp->widget = widget;

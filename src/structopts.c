@@ -28,7 +28,7 @@ Opts* structopts(int argc, char **argv) {
 	if(!opts) {
 		fprintf(
 			stderr,
-			"structopts(): malloc() failed: insufficient memory.\n"
+			_("structopts(): malloc() failed: insufficient memory.\n")
 		);
 		exit(EXIT_FAILURE);
 	}
@@ -55,13 +55,13 @@ Opts* structopts(int argc, char **argv) {
 				if(isprint(optopt)) {
 					fprintf(
 						stderr,
-						"structopts(): Unknown option `-%c'.\n",
+						_("structopts(): Unknown option `-%c'.\n"),
 						optopt
 					);
 				} else {
 					fprintf(
 						stderr,
-						"structopts(): Unknown option character `\\x%x'.\n",
+						_("structopts(): Unknown option character `\\x%x'.\n"),
 						optopt
 					);
 				}
@@ -72,16 +72,26 @@ Opts* structopts(int argc, char **argv) {
 	if(!opts->args) {
 		fprintf(
 			stderr,
-			"structopts(): malloc() failed: insufficient memory.\n"
+			_("structopts(): malloc() failed: insufficient memory.\n")
 		);
 		exit(EXIT_FAILURE);
 	}
+	struct stat stat_buffer;
 	for(int i = optind, y = 0; i < argc; i++, y++) {
+		stat(argv[i], &stat_buffer);
+		if(!S_ISDIR(stat_buffer.st_mode)) {
+			fprintf(
+				stderr,
+				_("structopts(): %s does not exist or is not a directory.\n"),
+				argv[i]
+			);
+			continue;
+		}
 		opts->args[y] = (char*) malloc(strlen(argv[i]) + 1);
 		if(!opts->args[y]) {
 			fprintf(
 				stderr,
-				"structopts(): malloc() failed: insufficient memory.\n"
+				_("structopts(): malloc() failed: insufficient memory.\n")
 			);
 			exit(EXIT_FAILURE);
 		}

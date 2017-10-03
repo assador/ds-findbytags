@@ -82,6 +82,9 @@ Opts *opts, *opts_v;
 Tags *tags;
 
 int main(int argc, char **argv) {
+	setlocale(LC_ALL, "");
+	bindtextdomain("ds-findbytags", "/usr/share/locale/");
+	textdomain("ds-findbytags");
 	srand(time(NULL));
 	opts = structopts(argc, argv);
 	if(argc == 1) {
@@ -90,7 +93,7 @@ int main(int argc, char **argv) {
 	}
 	opts_v = (Opts*) malloc(sizeof(Opts));
 	if(!opts_v) {
-		fprintf(stderr, "main(): malloc() failed: insufficient memory.\n");
+		fprintf(stderr, _("main(): malloc() failed: insufficient memory.\n"));
 		exit(EXIT_FAILURE);
 	}
 	memcpy(opts_v, opts, sizeof(Opts));
@@ -102,7 +105,7 @@ int main(int argc, char **argv) {
 		gui(opts);
 	} else {
 		if(!opts_v->args_count) {
-			fprintf(stderr, "main(): No paths to search in.\n");
+			fprintf(stderr, _("main(): No paths to search in.\n"));
 			exit(EXIT_SUCCESS);
 		}
 		begin();
@@ -138,13 +141,16 @@ int begin() {
 		if(count % 2) {
 			if(opts_v->g) {
 				show_message(
-					GTK_MESSAGE_ERROR, "Odd number of tags to replace."
+					GTK_MESSAGE_ERROR, _("Odd number of tags to replace.")
 				);
 				return 0;
 			} else {
 				fprintf(
 					stderr,
-					"begin(): Odd number of elements in the value of key -c.\n"
+					_(
+						"begin(): Odd number of elements "
+						"in the value of key -c.\n"
+					)
 				);
 				exit(EXIT_FAILURE);
 			}
@@ -199,7 +205,7 @@ int begin() {
 	char *filename = (char*) malloc(filename_size);
 	FILE *found = popen(command, "r");
 	if(!found) {
-		fprintf(stderr, "begin(): Cannot into popen.\n");
+		fprintf(stderr, _("begin(): Cannot into popen.\n"));
 		return 0;
 	}
 	/* Для каждого анализируемого файла */
@@ -309,7 +315,7 @@ int begin() {
 		free(exiv_com);
 	}
 	if(pclose(found) != 0) {
-		fprintf(stderr, "begin(): Cannot into pclose.\n");
+		fprintf(stderr, _("begin(): Cannot into pclose.\n"));
 		return 0;
 	}
 	pcre_free((void*) re_s);
@@ -321,7 +327,7 @@ int begin() {
 	struct stat stat_buffer;
 	stat(opts_v->s, &stat_buffer);
 	if(!S_ISDIR(stat_buffer.st_mode) && mkdir(opts_v->s, 0755) == -1) {
-		fprintf(stderr, "begin(): Cannot create %s.\n", opts_v->s);
+		fprintf(stderr, _("begin(): Cannot create %s.\n"), opts_v->s);
 	}
 	/* Создание символических ссылок отобранных файлов */
 	for(int i = 0; i < files_count; i++) {
@@ -394,6 +400,7 @@ int begin() {
 	tags->a = tags->o = tags->n = tags->i = tags->d = NULL; tags->c = NULL;
 	tags->a_count = tags->o_count = tags->n_count =
 	tags->i_count = tags->d_count = tags->c_count = 0;
+	return 1;
 }
 /* Проверка соответствия тэгов файла тэгам поиска */
 int suitable(
