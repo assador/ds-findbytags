@@ -24,8 +24,16 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include "gui.h"
+#include "common.h"
 #include "help.h"
 #include "regexpmatch.h"
+
+typedef struct Widget_aa {
+	GtkWidget *widget;
+	char *action;
+	int append;
+	GtkWidget *recipient;
+} Widget_aa;
 
 static Wdgt* wdgt_push(Wdgt **head, GtkWidget *widget, gchar* string);
 static int wdgt_remove_by_widget(Wdgt **head, GtkWidget *widget);
@@ -39,8 +47,37 @@ static void findin_m_clicked(GtkWidget *b, GtkWidget *m);
 static gchar* choose_path(gchar *initial);
 static void add_path(gchar *path);
 static Wdgt* was_path(Wdgt *head, gchar *path);
-static int tree(char *path, char *root);
-static void entry_drag_data_received();
+static xmlDoc* tree(char *path, char *root);
+static GtkWidget* build_tree(xmlDoc* tree);
+static int treeview_clicked(GtkWidget *widget, GdkEventButton *event);
+static void append_children(
+	GtkTreeModel *model,
+	xmlNodePtr child,
+	GtkTreeIter *parent,
+	int columns_count
+);
+static void entry_drag_data_received(
+	GtkWidget *widget,
+	GdkDragContext *context,
+	gint x,
+	gint y,
+	GtkSelectionData *data,
+	guint info,
+	guint time,
+	gpointer user_data
+);
+static void entry_drag_data(
+	GtkWidget *widget,
+	char *action,
+	int append,
+	GtkWidget *recipient
+);
+static void treeview_foreach_selected(
+	GtkTreeModel *model,
+	GtkTreePath *path,
+	GtkTreeIter *iter,
+	gpointer data
+);
 static void paths_from_buttons(Opts *o);
 static void begin_savecb_toggled(GtkWidget *widget);
 static void gtk_begin();
@@ -59,7 +96,7 @@ static GtkWidget
 	*search_n_l, *search_n, *action_frame, *action_table, *action_i_l,
 	*action_i, *action_d_l, *action_d, *action_c_l, *action_c,
 	*begin_savecb, *begin_savefc, *begin_keepcb, *begin_button,
-	*scrolledwindow;
+	*scrolledwindow, *treeview;
 
 void gui() {
 	gtk_init(NULL, NULL);
@@ -83,11 +120,34 @@ void gui() {
 	gtk_container_add(GTK_CONTAINER(window), hpaned);
 /* Левый контейнер */
 	vbox = gtk_vbox_new(FALSE, 5);
-	gtk_widget_set_size_request(vbox, 370, -1);
-	GtkTreeView *treeview;//assador
-	if(0) {//assador
-	} else {
-		gtk_paned_pack1(GTK_PANED(hpaned), vbox, TRUE, FALSE);
+	gtk_widget_set_size_request(vbox, 385, -1);
+	gtk_paned_pack1(GTK_PANED(hpaned), vbox, TRUE, FALSE);
+/* Правый контейнер */
+	treeview = build_tree(tree(opts_v->t, "keyword_tree"));
+	if(treeview) {
+		static GtkTargetEntry entries[] = {{"text/plain", 0, 0}};
+		gtk_tree_view_enable_model_drag_source(
+			GTK_TREE_VIEW(treeview),
+			GDK_BUTTON1_MASK,
+			entries,
+			G_N_ELEMENTS(entries),
+			GDK_ACTION_COPY
+		);
+		g_signal_connect(
+			treeview,
+			"button-press-event",
+			G_CALLBACK(treeview_clicked),
+			NULL
+		);
+		scrolledwindow = gtk_scrolled_window_new(NULL, NULL);
+		gtk_widget_set_size_request(scrolledwindow, 130, -1);
+		gtk_scrolled_window_set_policy(
+			GTK_SCROLLED_WINDOW(scrolledwindow),
+			GTK_POLICY_AUTOMATIC,
+			GTK_POLICY_AUTOMATIC
+		);
+		gtk_container_add(GTK_CONTAINER(scrolledwindow), treeview);
+		gtk_paned_pack2(GTK_PANED(hpaned), scrolledwindow, TRUE, FALSE);
 	}
 /* Фрэйм «Искать в» */
 	findin_frame = gtk_frame_new(_(" Search in "));
@@ -134,7 +194,7 @@ void gui() {
 	);
 	g_signal_connect(
 		search_a, "drag-data-received",
-		G_CALLBACK(entry_drag_data_received), treeview
+		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_a, 1, 2, 0, 1);
 /* Строка ввода тэгов для поиска ИЛИ */
@@ -153,7 +213,7 @@ void gui() {
 	);
 	g_signal_connect(
 		search_o, "drag-data-received",
-		G_CALLBACK(entry_drag_data_received), treeview
+		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_o, 1, 2, 1, 2);
 /* Строка ввода тэгов для поиска НЕ */
@@ -172,7 +232,7 @@ void gui() {
 	);
 	g_signal_connect(
 		search_n, "drag-data-received",
-		G_CALLBACK(entry_drag_data_received), treeview
+		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_n, 1, 2, 2, 3);
 /* Действия с найденным */
@@ -199,7 +259,7 @@ void gui() {
 	);
 	g_signal_connect(
 		action_i, "drag-data-received",
-		G_CALLBACK(entry_drag_data_received), treeview
+		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(action_table), action_i, 1, 2, 0, 1);
 /* Строка ввода тэгов для удаления */
@@ -217,7 +277,7 @@ void gui() {
 	);
 	g_signal_connect(
 		action_d, "drag-data-received",
-		G_CALLBACK(entry_drag_data_received), treeview
+		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(action_table), action_d, 1, 2, 1, 2);
 /* Строка ввода тэгов для замены */
@@ -239,7 +299,7 @@ void gui() {
 	);
 	g_signal_connect(
 		action_c, "drag-data-received",
-		G_CALLBACK(entry_drag_data_received), treeview
+		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(action_table), action_c, 1, 2, 2, 3);
 /* Нижняя строка с флагами и пр. */
@@ -303,8 +363,6 @@ void gui() {
 			GTK_FILE_CHOOSER(begin_savefc), opts_v->s
 		);
 	}
-//assador
-	tree(opts_v->t, "keyword_tree");
 /* Запустить всю эту петрушку */
 	gtk_widget_show_all(window);
 	gtk_main();
@@ -421,11 +479,11 @@ static void findin_m_clicked(GtkWidget *m, GtkWidget *b) {
 		gtk_table_resize(GTK_TABLE(findin_table), findin_b_count, 3);
 	}
 }
-static int tree(char *path, char *root) {
+static xmlDoc* tree(char *path, char *root) {
 	FILE *xml_file = fopen(path, "rt");
 	if(!xml_file) {
 		fprintf(stderr, _("tree(): Cannot open %s.\n"), path);
-		return 0;
+		return NULL;
 	}
 	size_t xml_text_size_step = 256, xml_text_size = xml_text_size_step, i = 0;
 	char *xml_text = (char*) malloc(xml_text_size);
@@ -446,19 +504,155 @@ static int tree(char *path, char *root) {
 	strcat(re, ">\0");
 	Reresult *reresult =
 		regexpmatch(xml_text, re, 0, PCRE_DOTALL | PCRE_MULTILINE, 8);
-	if(reresult->count != -1) {
-		free(re);
-		xml_text += reresult->indexes[0];
-		xml_text[reresult->indexes[1] - reresult->indexes[0]] = '\0';
-		free(reresult->indexes);
+	if(reresult->count < 1) {
 		free(reresult);
-	} else {
-		free(reresult);
-		return 0;
+		fprintf(stderr, _("tree(): Cannot find tags tree in %s.\n"), path);
+		return NULL;
 	}
-	return 1;
+	free(re);
+	xml_text += reresult->indexes[0];
+	xml_text[reresult->indexes[1] - reresult->indexes[0]] = '\0';
+	free(reresult->indexes);
+	free(reresult);
+	xmlDoc *tree = xmlParseDoc((xmlChar*) xml_text);
+	return tree;
 }
-static void entry_drag_data_received() {//assador
+static GtkWidget* build_tree(xmlDoc* tree) {
+	if(!tree) return NULL;
+	int columns_count = 2;
+	char *column_names[] = {"name", "kw"};
+	GtkTreeViewColumn *columns[columns_count];
+	GtkTreeStore *treestore =
+		gtk_tree_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+	GtkWidget *treeview =
+		gtk_tree_view_new_with_model(GTK_TREE_MODEL(treestore));
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview), FALSE);
+	for(int i = 0; i < columns_count; i++) {
+		columns[i] = gtk_tree_view_column_new_with_attributes(
+			column_names[i],
+			gtk_cell_renderer_text_new(),
+			"text", i,
+			NULL
+		);
+		gtk_tree_view_append_column(
+			GTK_TREE_VIEW(treeview),
+			columns[i]
+		);
+	}
+	gtk_tree_view_column_set_visible(columns[1], FALSE);
+	for(
+		xmlNodePtr node = xmlDocGetRootElement(tree)->children;
+		node;
+		node = node->next
+	) {
+		append_children(
+			gtk_tree_view_get_model(GTK_TREE_VIEW(treeview)),
+			node,
+			NULL,
+			columns_count
+		);
+	}
+	return treeview;
+}
+static void append_children(
+	GtkTreeModel *model,
+	xmlNodePtr child,
+	GtkTreeIter *parent,
+	int columns_count
+) {
+	if(child->properties) {
+		GtkTreeIter iter;
+		gtk_tree_store_append(GTK_TREE_STORE(model), &iter, parent);
+		parent = &iter;
+		gtk_tree_store_set(
+			GTK_TREE_STORE(model),
+			&iter,
+			0, child->properties->children->content,
+			1, child->properties->next->children->content,
+			-1
+		);
+		for(child = child->children; child; child = child->next) {
+			append_children(model, child, parent, columns_count);
+		}
+	}
+}
+static int treeview_clicked(GtkWidget *widget, GdkEventButton *event) {
+	if(event->type == GDK_2BUTTON_PRESS && event->button == 1) {
+		entry_drag_data(widget, "expand", 0, NULL);
+	}
+	if(event->type == GDK_2BUTTON_PRESS && event->button == 3) {
+		entry_drag_data(widget, NULL, 1, search_a);
+	}
+	return 0;
+}
+static void entry_drag_data_received(
+	GtkWidget *widget,
+	GdkDragContext *context,
+	gint x,
+	gint y,
+	GtkSelectionData *data,
+	guint info,
+	guint time,
+	gpointer user_data
+) {
+	Widget_aa d;
+	if(user_data) {
+		d = *(Widget_aa*) data;
+	} else {
+		d.widget = treeview;
+		d.action = NULL;
+		d.append = 1;
+		d.recipient = widget;
+	}
+	entry_drag_data(d.widget, d.action, d.append, d.recipient);
+}
+static void entry_drag_data(
+	GtkWidget *widget,
+	char *action,
+	int append,
+	GtkWidget *recipient
+) {
+	Widget_aa d;
+	d.widget = widget;
+	d.action = action;
+	d.append = append;
+	d.recipient = recipient;
+	gtk_tree_selection_selected_foreach(
+		gtk_tree_view_get_selection(GTK_TREE_VIEW(d.widget)),
+		treeview_foreach_selected,
+		&d
+	);
+}
+static void treeview_foreach_selected(
+	GtkTreeModel *model,
+	GtkTreePath *path,
+	GtkTreeIter *iter,
+	gpointer data
+) {
+	Widget_aa *d = (Widget_aa*) data;
+	if(d->action && strcmp(d->action, "expand") == 0) {
+		gtk_tree_view_row_expanded(GTK_TREE_VIEW(d->widget), path)
+			? gtk_tree_view_collapse_row(GTK_TREE_VIEW(d->widget), path)
+			: gtk_tree_view_expand_row(GTK_TREE_VIEW(d->widget), path, FALSE);
+	} else {
+		gchar *tagname, *involved;
+		gtk_tree_model_get(model, iter, 0, &tagname, 1, &involved, -1);
+		if(strcmp(involved, "true") == 0) {
+			gchar *new;
+			if(d->append) {
+				new = entry_text(GTK_ENTRY(d->recipient));
+				new = new ? strconcat(new, ", ") : "";
+			} else {
+				new = "";
+			}
+			gtk_entry_set_text(
+				GTK_ENTRY(d->recipient),
+				strconcat(new, tagname)
+			);
+		}
+		free(tagname);
+		free(involved);
+	}
 }
 static void begin_savecb_toggled(GtkWidget *widget) {
 	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) {
