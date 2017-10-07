@@ -82,7 +82,6 @@ static void paths_from_buttons(Opts *o);
 static void begin_savecb_toggled(GtkWidget *widget);
 static void gtk_begin();
 
-extern Opts *opts;
 extern Opts *opts_v;
 extern void begin();
 
@@ -487,15 +486,33 @@ static xmlDoc* tree(char *path, char *root) {
 	}
 	size_t xml_text_size_step = 256, xml_text_size = xml_text_size_step, i = 0;
 	char *xml_text = (char*) malloc(xml_text_size);
+	if(!xml_text) {
+		fprintf(
+			stderr,
+			_("tree(): malloc() failed: insufficient memory.\n")
+		);
+		return NULL;
+	}
 	while((xml_text[i++] = fgetc(xml_file)) != EOF) {
 		if(strlen(xml_text) > xml_text_size - 1) {
 			xml_text =
 				(char*) realloc(xml_text, xml_text_size += xml_text_size_step);
+			if(!xml_text) {
+				fprintf(
+					stderr,
+					_("tree(): realloc() failed: insufficient memory.\n")
+				);
+				return NULL;
+			}
 		}
 	}
 	xml_text[i] = '\0';
 	fclose(xml_file);
 	char *re = (char*) malloc(strlen(root) * 2 + 9);
+	if(!re) {
+		fprintf(stderr, _("tree(): malloc() failed: insufficient memory.\n"));
+		return NULL;
+	}
 	re[0] = '\0';
 	strcat(re, "<");
 	strcat(re, root);

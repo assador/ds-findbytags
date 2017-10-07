@@ -38,6 +38,13 @@ char* strconcat(const char *s1, const char *s2) {
 /* Генерация случайной строки с заданным количеством символов */
 char* random_name(unsigned int len) {
 	char *str = (char*) malloc(len + 1);
+	if(!str) {
+		fprintf(
+			stderr,
+			_("random_name(): malloc() failed: insufficient memory.\n")
+		);
+		return NULL;
+	}
 	str[len] = '\0';
 	unsigned int rand_char;
 	for(int i = 0; i < len; i++) {
@@ -55,6 +62,13 @@ char* random_name(unsigned int len) {
 char* command_output(const char *command) {
 	int idxc = 0, bufsize_step = 256, bufsize = bufsize_step;
 	char *buffer = (char*) malloc(bufsize);
+	if(!buffer) {
+		fprintf(
+			stderr,
+			_("command_output(): malloc() failed: insufficient memory.\n")
+		);
+		return NULL;
+	}
 	FILE *found = popen(command, "r");
 	if(!found) {
 		fprintf(stderr, _("command_output(): Cannot into popen.\n"));
@@ -63,6 +77,14 @@ char* command_output(const char *command) {
 	while((buffer[idxc] = getc(found)) != EOF) {
 		if(strlen(buffer) > bufsize - 8) {
 			buffer = (char*) realloc(buffer, bufsize += bufsize_step);
+			if(!buffer) {
+				fprintf(
+					stderr,
+					_("command_output(): realloc() failed: "
+					"insufficient memory.\n")
+				);
+				return NULL;
+			}
 		}
 		idxc++;
 	}
@@ -82,8 +104,15 @@ char** command_output_lines(const char *command, int *lineslength) {
 		);
 		exit(EXIT_FAILURE);
 	}
-	int idxc = 0, idxl = 0, bufsize_step = 256, bufsize = bufsize_step;
+	int idxc = 0, idxl = 0, bufsize_step = 4096, bufsize = bufsize_step;
 	char *buffer = (char*) malloc(bufsize);
+	if(!buffer) {
+		fprintf(
+			stderr,
+			_("command_output_lines(): malloc() failed: insufficient memory.\n")
+		);
+		return NULL;
+	}
 	FILE *found = popen(command, "r");
 	if(!found) {
 		fprintf(stderr, _("command_output_lines(): Cannot into popen.\n"));
@@ -92,6 +121,14 @@ char** command_output_lines(const char *command, int *lineslength) {
 	while((buffer[idxc] = getc(found)) != EOF) {
 		if(strlen(buffer) > bufsize - 8) {
 			buffer = (char*) realloc(buffer, bufsize += bufsize_step);
+			if(!buffer) {
+				fprintf(
+					stderr,
+					_("command_output_lines(): realloc() failed: "
+					"insufficient memory.\n")
+				);
+				return NULL;
+			}
 		}
 		if(buffer[idxc] == '\n') {
 			lines = (char**) realloc(lines, sizeof(char*) * (idxl + 1));
@@ -104,6 +141,14 @@ char** command_output_lines(const char *command, int *lineslength) {
 				exit(EXIT_FAILURE);
 			}
 			lines[idxl] = (char*) malloc(idxc + 1);
+			if(!lines[idxl]) {
+				fprintf(
+					stderr,
+					_("command_output_lines(): malloc() failed: "
+					"insufficient memory.\n")
+				);
+				return NULL;
+			}
 			*lines[idxl] = '\0';
 			strncat(lines[idxl], buffer, idxc);
 			idxc = 0; idxl++;

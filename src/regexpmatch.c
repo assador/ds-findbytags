@@ -35,6 +35,13 @@ Reresult* regexpmatch(
 	pcre *re;
 	if(!(re = regexpcompile(pattern, reoptions))) return NULL;
 	reresult->indexes = (int*) malloc(indexeslength);
+	if(!reresult->indexes) {
+		fprintf(
+			stderr,
+			_("regexpmatch(): malloc() failed: insufficient memory.\n")
+		);
+		exit(EXIT_FAILURE);
+	}
 	reresult->count = pcre_exec(
 		re, NULL, string, strlen(string), 0, options,
 		reresult->indexes, indexeslength
@@ -55,6 +62,13 @@ Reresult* regexpmatch_compiled(
 		exit(EXIT_FAILURE);
 	}
 	reresult->indexes = (int*) malloc(indexeslength);
+	if(!reresult->indexes) {
+		fprintf(
+			stderr,
+			_("regexpmatch_compiled(): malloc() failed: insufficient memory.\n")
+		);
+		exit(EXIT_FAILURE);
+	}
 	reresult->count = pcre_exec(
 		re, NULL, string, strlen(string), 0, options,
 		reresult->indexes, indexeslength
@@ -79,6 +93,13 @@ char** strsplit(
 	int next_dlmtr_count = 0;
 	int next_dlmtr_offset = 0;
 	int *next_dlmtr_indexes = (int*) malloc(indexeslength);
+	if(!next_dlmtr_indexes) {
+		fprintf(
+			stderr,
+			_("strsplit(): malloc() failed: insufficient memory.\n")
+		);
+		exit(EXIT_FAILURE);
+	}
 	do {
 		next_dlmtr_count = pcre_exec(
 			re, NULL, string, strlen(string), next_dlmtr_offset, options,
@@ -87,6 +108,13 @@ char** strsplit(
 		if(next_dlmtr_count != -1) {
 			substrings[count] =
 				(char*) malloc(next_dlmtr_indexes[0] - next_dlmtr_offset + 1);
+			if(!substrings[count]) {
+				fprintf(
+					stderr,
+					_("strsplit(): malloc() failed: insufficient memory.\n")
+				);
+				exit(EXIT_FAILURE);
+			}
 			*substrings[count] = '\0';
 			strncat(
 				substrings[count],
@@ -106,6 +134,13 @@ char** strsplit(
 		} else {
 			substrings[count] =
 				(char*) malloc(strlen(string) - next_dlmtr_offset + 1);
+			if(!substrings[count]) {
+				fprintf(
+					stderr,
+					_("strsplit(): malloc() failed: insufficient memory.\n")
+				);
+				exit(EXIT_FAILURE);
+			}
 			*substrings[count] = '\0';
 			strncat(
 				substrings[count],
@@ -117,6 +152,7 @@ char** strsplit(
 	} while(next_dlmtr_count != -1);
 	free(next_dlmtr_indexes);
 	*splitedcount = count;
+	pcre_free((void*) re);
 	return substrings;
 }
 pcre* regexpcompile(const char *pattern, const int reoptions) {

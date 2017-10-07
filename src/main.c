@@ -101,8 +101,12 @@ int main(int argc, char **argv) {
 		opts_v->args[i] = realpath(opts->args[i], NULL);
 	}
 	tags = (Tags*) malloc(sizeof(Tags));
+	if(!tags) {
+		fprintf(stderr, _("main(): malloc() failed: insufficient memory.\n"));
+		exit(EXIT_FAILURE);
+	}
 	if(opts_v->g) {
-		gui(opts);
+		gui();
 	} else {
 		if(!opts_v->args_count) {
 			fprintf(stderr, _("main(): No paths to search in.\n"));
@@ -137,6 +141,13 @@ int begin() {
 	}
 	if(opts_v->c) {
 		char **tags_c_tmp = (char**) malloc(sizeof(char*));
+		if(!tags_c_tmp) {
+			fprintf(
+				stderr,
+				_("begin(): malloc() failed: insufficient memory.\n")
+			);
+			return 0;
+		}
 		tags_c_tmp = strsplit(opts_v->c, "\\s*,\\s*", 0, 0, 8, &count);
 		if(count % 2) {
 			if(opts_v->g) {
@@ -157,10 +168,38 @@ int begin() {
 		}
 		tags->c_count = count / 2;
 		tags->c = (char***) malloc(sizeof(char**));
+		if(!tags->c) {
+			fprintf(
+				stderr,
+				_("begin(): malloc() failed: insufficient memory.\n")
+			);
+			return 0;
+		}
 		for(int i = 0; i < tags->c_count; i += 2) {
 			tags->c[i / 2] = (char**) malloc(sizeof(char*));
+			if(!tags->c[i / 2]) {
+				fprintf(
+					stderr,
+					_("begin(): malloc() failed: insufficient memory.\n")
+				);
+				return 0;
+			}
 			tags->c[i / 2][0] = (char*) malloc(strlen(tags_c_tmp[i]) + 1);
+			if(!tags->c[i / 2][0]) {
+				fprintf(
+					stderr,
+					_("begin(): malloc() failed: insufficient memory.\n")
+				);
+				return 0;
+			}
 			tags->c[i / 2][1] = (char*) malloc(strlen(tags_c_tmp[i + 1]) + 1);
+			if(!tags->c[i / 2][1]) {
+				fprintf(
+					stderr,
+					_("begin(): malloc() failed: insufficient memory.\n")
+				);
+				return 0;
+			}
 			*tags->c[i / 2][0] = '\0';
 			*tags->c[i / 2][1] = '\0';
 			strncat(
@@ -174,6 +213,7 @@ int begin() {
 				strlen(tags_c_tmp[i + 1])
 			);
 		}
+		for(int i = 0; i < count; i++) free(tags_c_tmp[i]);
 		free(tags_c_tmp);
 	}
 /* Генерация случайного имени каталога для сохранения ссылок */
@@ -196,6 +236,10 @@ int begin() {
 /* Анализ каждого файла */
 	unsigned int files_count = 0, reoffset = 0;
 	File **files = (File**) malloc(sizeof(File*));
+	if(!files) {
+		fprintf(stderr, _("begin(): malloc() failed: insufficient memory.\n"));
+		return 0;
+	}
 	char **filetags;
 	char *exiv_com, *exiv_out, *filename_qtd;
 	pcre *re_s = regexpcompile("^subject\\s*(?=\\S)(.+)$", PCRE_MULTILINE);
@@ -203,6 +247,10 @@ int begin() {
 	Reresult *reresult;
 	size_t filename_size_step = 256, filename_size = filename_size_step;
 	char *filename = (char*) malloc(filename_size);
+	if(!filename) {
+		fprintf(stderr, _("begin(): malloc() failed: insufficient memory.\n"));
+		return 0;
+	}
 	FILE *found = popen(command, "r");
 	if(!found) {
 		fprintf(stderr, _("begin(): Cannot into popen.\n"));
@@ -213,11 +261,25 @@ int begin() {
 		if(strlen(filename) > filename_size - 1) {
 			filename =
 				(char*) realloc(filename, filename_size += filename_size_step);
+			if(!filename) {
+				fprintf(
+					stderr,
+					_("begin(): realloc() failed: insufficient memory.\n")
+				);
+				return 0;
+			}
 		}
 		filename[strlen(filename) - 1] = '\0';
 		filename_qtd = strconcat("'", filename);
 		filename_qtd = strconcat(filename_qtd, "'");
 		filetags = (char**) malloc(sizeof(char*));
+		if(!filetags) {
+			fprintf(
+				stderr,
+				_("begin(): malloc() failed: insufficient memory.\n")
+			);
+			return 0;
+		}
 		/* Сбор тэгов в XMP-метаданных */
 		exiv_com = strconcat("exiv2 -PXnt ", filename_qtd);
 		exiv_out = command_output(exiv_com);
@@ -248,9 +310,25 @@ int begin() {
 					);
 					if(reresult->count < 2) break;
 					filetags = (char**) realloc(filetags, sizeof(char*) * (i + 1));
+					if(!filetags) {
+						fprintf(
+							stderr,
+							_("begin(): realloc() failed: "
+							"insufficient memory.\n")
+						);
+						return 0;
+					}
 					filetags[i] = (char*) malloc(
 						reresult->indexes[3] - reresult->indexes[2] + 1
 					);
+					if(!filetags[i]) {
+						fprintf(
+							stderr,
+							_("begin(): malloc() failed: "
+							"insufficient memory.\n")
+						);
+						return 0;
+					}
 					filetags[i][0] = '\0';
 					strncat(
 						filetags[i],
@@ -301,7 +379,21 @@ int begin() {
 				/* Создание массива отобранных файлов */
 				files_count++;
 				files = (File**) realloc(files, sizeof(File*) * files_count);
+				if(!files) {
+					fprintf(
+						stderr,
+						_("begin(): realloc() failed: insufficient memory.\n")
+					);
+					return 0;
+				}
 				files[files_count - 1] = (File*) malloc(sizeof(File));
+				if(!files[files_count - 1]) {
+					fprintf(
+						stderr,
+						_("begin(): malloc() failed: insufficient memory.\n")
+					);
+					return 0;
+				}
 				files[files_count - 1]->fullpath = strdup(filename);
 				files[files_count - 1]->fullname = strdup(filename);
 				files[files_count - 1]->path =
@@ -342,6 +434,13 @@ int begin() {
 				filename = (char*) malloc(
 					17 + reresult->indexes[1] - reresult->indexes[0]
 				);
+				if(!filename) {
+					fprintf(
+						stderr,
+						_("begin(): malloc() failed: insufficient memory.\n")
+					);
+					return 0;
+				}
 				filename[0] = '\0';
 				strncat(filename, filename_base, 16);
 				strncat(
@@ -361,9 +460,17 @@ int begin() {
 			fullname,
 			strlen(fullname) + strlen(file_separator) + strlen(filename) + 1
 		);
+		if(!fullname) {
+			fprintf(
+				stderr,
+				_("begin(): realloc() failed: insufficient memory.\n")
+			);
+			return 0;
+		}
 		strncat(fullname, file_separator, strlen(file_separator));
 		strncat(fullname, filename, strlen(filename));
 		symlink(files[i]->fullname, fullname);
+		free(fullname);
 	}
 	free(filename); filename = NULL;
 	/* Запуск указанной программы в каталоге с символическими ссылками */
@@ -445,7 +552,21 @@ int actions(
 		}
 		if(!exists) {
 			*t = (char**) realloc(*t, (++*tc) * sizeof(char*));
+			if(!t) {
+				fprintf(
+					stderr,
+					_("actions(): realloc() failed: insufficient memory.\n")
+				);
+				return 0;
+			}
 			(*t)[*tc - 1] = (char*) malloc(strlen(in[i]) + 1);
+			if(!(*t)[*tc - 1]) {
+				fprintf(
+					stderr,
+					_("actions(): malloc() failed: insufficient memory.\n")
+				);
+				return 0;
+			}
 			(*t)[*tc - 1][strlen(in[i])] = '\0';
 			strncpy((*t)[*tc - 1], in[i], strlen(in[i]));
 			changed++;
@@ -459,6 +580,13 @@ int actions(
 				free((*t)[y]);
 				for(int z = y; z < *tc - 1; z++) (*t)[z] = (*t)[z + 1];
 				*t = (char**) realloc(*t, (--*tc) * sizeof(char*));
+				if(!t) {
+					fprintf(
+						stderr,
+						_("actions(): realloc() failed: insufficient memory.\n")
+					);
+					return 0;
+				}
 				changed++;
 				y--;
 			}
@@ -469,6 +597,13 @@ int actions(
 		for(int y = 0; y < *tc; y++) {
 			if(strcmp((*t)[y], ch[i][0]) == 0) {
 				(*t)[y] = (char*) realloc((*t)[y], strlen(ch[i][1]) + 1);
+				if(!(*t)[y]) {
+					fprintf(
+						stderr,
+						_("actions(): realloc() failed: insufficient memory.\n")
+					);
+					return 0;
+				}
 				(*t)[y][strlen(ch[i][1])] = '\0';
 				strncpy((*t)[y], ch[i][1], strlen(ch[i][1]));
 				changed++;
