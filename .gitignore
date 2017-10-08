@@ -1,0 +1,5 @@
+*.geany
+*.mo
+*.o
+*.pot
+ds-findbytags

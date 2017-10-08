@@ -33,7 +33,6 @@
 #include "regexpmatch.h"
 #include "help.h"
 
-
 typedef struct Widget_aa {
 	GtkWidget *widget;
 	char *action;

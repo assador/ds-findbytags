@@ -11,6 +11,8 @@ LDLIBS += `pkg-config --libs gtk+-2.0 libpcre`
 LDLIBS += `xml2-config --libs`
 
 TARGET = ds-findbytags
+PREFIX = /usr/local
+LOCALE = /usr/share/locale
 SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
@@ -24,6 +26,7 @@ MOS := $(POS:$(POTDIR)/%.po=$(POTDIR)/%.mo)
 .PHONY: all clean install uninstall
 
 all: $(BINDIR)/$(TARGET) $(POTDIR)/ru/$(TARGET).mo
+
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(LDLIBS) $(OBJECTS) -o $@
 $(OBJECTS): $(OBJDIR)/%.o: $(SRCDIR)/%.c
@@ -37,3 +40,11 @@ $(POTDIR)/$(TARGET).pot: $(SOURCES)
 	--output $(POTDIR)/$(TARGET).pot $(SOURCES)
 clean:
 	rm -rf $(OBJDIR)/*.o $(BINDIR)/$(TARGET) $(POTDIR)/*.pot $(POTDIR)/*/*.mo
+install: all
+	mkdir -p $(PREFIX)/bin
+	install -m 755 $(BINDIR)/$(TARGET) $(PREFIX)/bin
+	mkdir -p $(LOCALE)/ru/LC_MESSAGES
+	install -m 644 $(POTDIR)/ru/$(TARGET).mo $(LOCALE)/ru/LC_MESSAGES
+uninstall:
+	rm $(PREFIX)/bin/$(TARGET)
+	rm $(LOCALE)/ru/LC_MESSAGES/$(TARGET).mo
