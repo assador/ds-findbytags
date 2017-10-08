@@ -20,13 +20,19 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
-#include <malloc.h>
+#include <libintl.h>
+#include <locale.h>
+#define _(String) gettext(String)
+#include <stdlib.h>
+#include <string.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include "gui.h"
 #include "common.h"
-#include "help.h"
+#include "structopts.h"
 #include "regexpmatch.h"
+#include "help.h"
+
 
 typedef struct Widget_aa {
 	GtkWidget *widget;

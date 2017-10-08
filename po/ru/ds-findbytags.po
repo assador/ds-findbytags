@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ds-findbytags, v2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-08 04:24+0300\n"
+"POT-Creation-Date: 2017-10-08 05:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Sokolov <dmitry@sokolov.website>\n"
 "Language-Team: Russian\n"
@@ -16,127 +16,127 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/structopts.c:31 src/structopts.c:88 src/structopts.c:107
+#: src/structopts.c:41 src/structopts.c:98 src/structopts.c:117
 #, c-format
 msgid "structopts(): malloc() failed: insufficient memory.\n"
 msgstr "structopts(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/structopts.c:71
+#: src/structopts.c:81
 #, c-format
 msgid "structopts(): Unknown option `-%c'.\n"
 msgstr "structopts(): Неизвестная опция `-%c'.\n"
 
-#: src/structopts.c:77
+#: src/structopts.c:87
 #, c-format
 msgid "structopts(): Unknown option character `\\x%x'.\n"
 msgstr "structopts(): Неизвестный символ опции `\\x%x'.\n"
 
-#: src/structopts.c:98
+#: src/structopts.c:108
 #, c-format
 msgid "structopts(): %s does not exist or is not a directory.\n"
 msgstr "structopts(): %s не существует, или не является каталогом.\n"
 
-#: src/regexpmatch.c:31 src/regexpmatch.c:41
+#: src/regexpmatch.c:36 src/regexpmatch.c:46
 #, c-format
 msgid "regexpmatch(): malloc() failed: insufficient memory.\n"
 msgstr "regexpmatch(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/regexpmatch.c:60 src/regexpmatch.c:68
+#: src/regexpmatch.c:65 src/regexpmatch.c:73
 #, c-format
 msgid "regexpmatch_compiled(): malloc() failed: insufficient memory.\n"
 msgstr "regexpmatch_compiled(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/regexpmatch.c:87 src/regexpmatch.c:99 src/regexpmatch.c:114
-#: src/regexpmatch.c:140
+#: src/regexpmatch.c:92 src/regexpmatch.c:104 src/regexpmatch.c:119
+#: src/regexpmatch.c:145
 #, c-format
 msgid "strsplit(): malloc() failed: insufficient memory.\n"
 msgstr "strsplit(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/regexpmatch.c:130
+#: src/regexpmatch.c:135
 #, c-format
 msgid "strsplit(): realloc() failed: insufficient memory.\n"
 msgstr "strsplit(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/regexpmatch.c:169
+#: src/regexpmatch.c:174
 #, c-format
 msgid "regexpcompile(): Regexp compile failed at offset %d: %s\n"
 msgstr ""
 "regexpcompile(): Компиляция регулярного выражения не удалась "
 "со смещением %d: %s\n"
 
-#: src/common.c:33
+#: src/common.c:39
 #, c-format
 msgid "strconcat(): malloc() failed: insufficient memory.\n"
 msgstr "strconcat(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/common.c:49
+#: src/common.c:55
 #, c-format
 msgid "random_name(): malloc() failed: insufficient memory.\n"
 msgstr "random_name(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/common.c:73
+#: src/common.c:79
 #, c-format
 msgid "command_output(): malloc() failed: insufficient memory.\n"
 msgstr "command_output(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/common.c:79
+#: src/common.c:85
 #, c-format
 msgid "command_output(): Cannot into popen.\n"
 msgstr "command_output(): popen(): не могу открыть поток.\n"
 
-#: src/common.c:88
+#: src/common.c:94
 #, c-format
 msgid "command_output(): realloc() failed: insufficient memory.\n"
 msgstr "command_output(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/common.c:97
+#: src/common.c:103
 #, c-format
 msgid "command_output(): Cannot into pclose.\n"
 msgstr "command_output(): pclose(): не могу закрыть поток.\n"
 
-#: src/common.c:108 src/common.c:117 src/common.c:152
+#: src/common.c:114 src/common.c:123 src/common.c:158
 #, c-format
 msgid "command_output_lines(): malloc() failed: insufficient memory.\n"
 msgstr "command_output_lines(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/common.c:123
+#: src/common.c:129
 #, c-format
 msgid "command_output_lines(): Cannot into popen.\n"
 msgstr "command_output_lines(): popen(): не могу открыть поток.\n"
 
-#: src/common.c:132 src/common.c:143
+#: src/common.c:138 src/common.c:149
 #, c-format
 msgid "command_output_lines(): realloc() failed: insufficient memory.\n"
 msgstr "command_output_lines(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/common.c:164
+#: src/common.c:170
 #, c-format
 msgid "command_output_lines(): Cannot into pclose.\n"
 msgstr "command_output_lines(): pclose(): не могу закрыть поток.\n"
 
-#: src/gui.c:112
+#: src/gui.c:118
 msgid "ds-findbytags — Search images by tags and modify tags of found images"
 msgstr ""
 "ds-findbytags — Поиск картинок по тэгам и операции с тэгами найденных "
 "картинок"
 
-#: src/gui.c:152
+#: src/gui.c:158
 msgid " Search in "
 msgstr " Искать в "
 
-#: src/gui.c:162
+#: src/gui.c:168
 msgid "Add new path to search"
 msgstr "Добавить новый путь для поиска"
 
-#: src/gui.c:172
+#: src/gui.c:178
 msgid " Search by tags "
 msgstr " Поиск по тэгам "
 
-#: src/gui.c:181
+#: src/gui.c:187
 msgid "Contain all of these tags:"
 msgstr "Присутствуют все тэги из:"
 
-#: src/gui.c:191
+#: src/gui.c:197
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN ALL\n"
@@ -146,11 +146,11 @@ msgstr ""
 "ПРИСУТСТВУЮТ ВСЕ\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:200
+#: src/gui.c:206
 msgid "Contain at least one of these tags:"
 msgstr "Присутствует хотя бы один тэг из:"
 
-#: src/gui.c:210
+#: src/gui.c:216
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN AT LEAST ONE\n"
@@ -160,11 +160,11 @@ msgstr ""
 "ПРИСУТСТВУЕТ ХОТЯ БЫ ОДИН\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:219
+#: src/gui.c:225
 msgid "Contain no one of these tags:"
 msgstr "Нет ни одного тэга из:"
 
-#: src/gui.c:229
+#: src/gui.c:235
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN NO ONE\n"
@@ -174,33 +174,33 @@ msgstr ""
 "НЕТ НИ ОДНОГО\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:238
+#: src/gui.c:244
 msgid " Actions with found "
 msgstr " Действия с найденным "
 
-#: src/gui.c:247
+#: src/gui.c:253
 msgid "Add these tags to found files:"
 msgstr "Добавить тэги в найденные файлы:"
 
-#: src/gui.c:257
+#: src/gui.c:263
 msgid "ADD these tags (separated by commas) to found files"
 msgstr ""
 "ДОБАВИТЬ в найденные файлы перечисленные здесь тэги (разделённые запятыми)"
 
-#: src/gui.c:265
+#: src/gui.c:271
 msgid "Delete these tags from found files:"
 msgstr "Удалить тэги из найденных файлов:"
 
-#: src/gui.c:275
+#: src/gui.c:281
 msgid "DELETE these tags (separated by commas) from found files"
 msgstr ""
 "УДАЛИТЬ из найденных файлов перечисленные здесь тэги (разделённые запятыми)"
 
-#: src/gui.c:283
+#: src/gui.c:289
 msgid "Replace tags in found files:"
 msgstr "Заменить тэги в найденных файлах:"
 
-#: src/gui.c:293
+#: src/gui.c:299
 msgid ""
 "REPLACE in found files some tags with others. Tags in this field are listed "
 "pairs with commas. For example, if you enter in this field [sushi, meat, "
@@ -212,11 +212,11 @@ msgstr ""
 "[овсянка, борщ, лада калина, мотоцикл], то в найденных файлах тэг «овсянка» "
 "заменится на «борщ», а тэг «лада калина» заменится на «мотоцикл»."
 
-#: src/gui.c:308
+#: src/gui.c:314
 msgid "Save symlinks to:"
 msgstr "Сохранять ссылки в:"
 
-#: src/gui.c:315
+#: src/gui.c:321
 msgid ""
 "If checked, symlinks to found files are saved to the directory, selected "
 "righter. It can be useful for albums compilation."
@@ -224,20 +224,20 @@ msgstr ""
 "Если отмечено, в выбранном правее каталоге сохраняются символические ссылки "
 "на найденные файлы. Это может быть удобно для составления альбомов."
 
-#: src/gui.c:321
+#: src/gui.c:327
 msgid "Save symlinks to…"
 msgstr "Сохранять ссылки в…"
 
-#: src/gui.c:328
+#: src/gui.c:334
 msgid "Directory in which the symlinks to found files are saved"
 msgstr ""
 "Каталог, в котором сохраняются символические ссылки на найденные файлы."
 
-#: src/gui.c:331
+#: src/gui.c:337
 msgid "Save names"
 msgstr "Сохранять имена"
 
-#: src/gui.c:334
+#: src/gui.c:340
 msgid ""
 "If checked, symlinks to found files are saved with names of files "
 "themselves. Otherwise symlinks get random names. Set this option only if you "
@@ -248,11 +248,11 @@ msgstr ""
 "эту галочку только если уверены, что все найденные файлы имеют уникальные "
 "имена."
 
-#: src/gui.c:344
+#: src/gui.c:350
 msgid "Start"
 msgstr "Начать"
 
-#: src/gui.c:347
+#: src/gui.c:353
 msgid ""
 "Start search (and operations with found files if they are specified). "
 "The search can take quite a long time, if there is a large number of files."
@@ -260,104 +260,104 @@ msgstr ""
 "Начать поиск (и операции с найденными файлами, если они заданы). Поиск может "
 "продолжаться довольно долго, если происходит по большому количеству файлов."
 
-#: src/gui.c:409 src/gui.c:422
+#: src/gui.c:415 src/gui.c:428
 #, c-format
 msgid "paths_from_buttons(): malloc() failed: insufficient memory.\n"
 msgstr "paths_from_buttons(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:484
+#: src/gui.c:490
 #, c-format
 msgid "tree(): Cannot open %s.\n"
 msgstr "tree(): Не могу открыть %s.\n"
 
-#: src/gui.c:492 src/gui.c:513
+#: src/gui.c:498 src/gui.c:519
 #, c-format
 msgid "tree(): malloc() failed: insufficient memory.\n"
 msgstr "tree(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:503
+#: src/gui.c:509
 #, c-format
 msgid "tree(): realloc() failed: insufficient memory.\n"
 msgstr "tree(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/gui.c:526
+#: src/gui.c:532
 #, c-format
 msgid "tree(): Cannot find tags tree in %s.\n"
 msgstr "tree(): Не могу найти дерево тэгов в %s.\n"
 
-#: src/gui.c:686
+#: src/gui.c:692
 msgid "Search in…"
 msgstr "Искать в…"
 
-#: src/gui.c:705
+#: src/gui.c:711
 msgid "This path is already added. Choose another."
 msgstr "Этот путь уже добавлен. Выберите другой."
 
-#: src/gui.c:737
+#: src/gui.c:743
 msgid "Change the path to search"
 msgstr "Изменить путь для поиска"
 
-#: src/gui.c:738
+#: src/gui.c:744
 msgid "Remove the path to search"
 msgstr "Удалить путь для поиска"
 
-#: src/gui.c:765
+#: src/gui.c:771
 #, c-format
 msgid "wdgt_push(): malloc() failed: insufficient memory.\n"
 msgstr "wdgt_push(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:96 src/main.c:105
+#: src/main.c:107 src/main.c:116
 #, c-format
 msgid "main(): malloc() failed: insufficient memory.\n"
 msgstr "main(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:112
+#: src/main.c:123
 #, c-format
 msgid "main(): No paths to search in.\n"
 msgstr "main(): Не выбраны пути для поиска.\n"
 
-#: src/main.c:147 src/main.c:174 src/main.c:183 src/main.c:191 src/main.c:199
-#: src/main.c:235 src/main.c:258 src/main.c:269 src/main.c:339 src/main.c:403
-#: src/main.c:450
+#: src/main.c:158 src/main.c:185 src/main.c:194 src/main.c:202 src/main.c:210
+#: src/main.c:246 src/main.c:269 src/main.c:280 src/main.c:350 src/main.c:414
+#: src/main.c:461
 #, c-format
 msgid "begin(): malloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:155
+#: src/main.c:166
 msgid "Odd number of tags to replace."
 msgstr "Нечётное количество тэгов для замены."
 
-#: src/main.c:162
+#: src/main.c:173
 #, c-format
 msgid "begin(): Odd number of elements in the value of key -c.\n"
 msgstr "begin(): Нечётное количество элементов в значении ключа -c.\n"
 
-#: src/main.c:274
+#: src/main.c:285
 #, c-format
 msgid "begin(): Cannot into popen.\n"
 msgstr "begin(): popen(): не могу открыть поток.\n"
 
-#: src/main.c:285 src/main.c:328 src/main.c:395 src/main.c:476
+#: src/main.c:296 src/main.c:339 src/main.c:406 src/main.c:487
 #, c-format
 msgid "begin(): realloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:422
+#: src/main.c:433
 #, c-format
 msgid "begin(): Cannot into pclose.\n"
 msgstr "begin(): pclose(): не могу закрыть поток.\n"
 
-#: src/main.c:432
+#: src/main.c:443
 #, c-format
 msgid "begin(): Cannot create %s.\n"
 msgstr "begin(): Не могу создать %s.\n"
 
-#: src/main.c:567 src/main.c:595 src/main.c:612
+#: src/main.c:578 src/main.c:606 src/main.c:623
 #, c-format
 msgid "actions(): realloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:575
+#: src/main.c:586
 #, c-format
 msgid "actions(): malloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка malloc(): недостаточно памяти.\n"

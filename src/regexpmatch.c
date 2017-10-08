@@ -18,6 +18,11 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
+#include <libintl.h>
+#include <locale.h>
+#define _(String) gettext(String)
+#include <stdio.h>
+#include <string.h>
 #include "regexpmatch.h"
 
 Reresult* regexpmatch(

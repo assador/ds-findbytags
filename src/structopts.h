@@ -1,10 +1,3 @@
-#include <libintl.h>
-#include <locale.h>
-#define _(String) gettext(String)
-#include <ctype.h>
-#include <unistd.h>
-#include <sys/stat.h>
-
 typedef struct Opts {
 	char** args;
 	int args_count;

@@ -18,6 +18,12 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
+#include <libintl.h>
+#include <locale.h>
+#define _(String) gettext(String)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "common.h"
 
 char* strconcat(const char *s[], const int count) {

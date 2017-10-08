@@ -20,8 +20,18 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
+#include <libintl.h>
+#include <locale.h>
+#define _(String) gettext(String)
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <ctype.h>
+#include <sys/stat.h>
 #include "structopts.h"
 #include "common.h"
+
 
 Opts* structopts(int argc, char **argv) {
 	Opts *opts = (Opts*) malloc(sizeof(Opts));

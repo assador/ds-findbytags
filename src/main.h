@@ -1,13 +1,3 @@
-#include <libintl.h>
-#include <locale.h>
-#define _(String) gettext(String)
-#include <libgen.h>
-#include <sys/stat.h>
-#include "common.h"
-#include "regexpmatch.h"
-#include "help.h"
-#include "gui.h"
-
 typedef struct Tags {
 	char** a; int a_count;
 	char** o; int o_count;

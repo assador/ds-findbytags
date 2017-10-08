@@ -69,7 +69,18 @@
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
 
+#include <libintl.h>
+#include <locale.h>
+#define _(String) gettext(String)
+#include <string.h>
+#include <libgen.h>
+#include <sys/stat.h>
 #include "main.h"
+#include "common.h"
+#include "structopts.h"
+#include "regexpmatch.h"
+#include "gui.h"
+#include "help.h"
 
 #define EXTS "gif|jpe?g|pdf|png|tiff?"
 const char *file_separator =
