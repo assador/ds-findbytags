@@ -20,10 +20,13 @@
 
 #include "common.h"
 
-char* strconcat(const char *s1, const char *s2) {
-	size_t len1 = strlen(s1);
-	size_t len2 = strlen(s2);
-	char *sr = malloc(len1 + len2 + 1);
+char* strconcat(const char *s[], const int count) {
+	size_t len = 0, offset = 0;
+	size_t lens[count];
+	for(int i = 0; i < count; i++) {
+		len += lens[i] = strlen(s[i]);
+	}
+	char *sr = malloc(len + 1);
 	if(!sr) {
 		fprintf(
 			stderr,
@@ -31,8 +34,10 @@ char* strconcat(const char *s1, const char *s2) {
 		);
 		return NULL;
 	}
-	memcpy(sr, s1, len1);
-	memcpy(sr + len1, s2, len2 + 1);
+	for(int i = 0; i < count; i++) {
+		memcpy(sr + offset, s[i], lens[i] + (i == count - 1 ? 1 : 0));
+		offset += lens[i];
+	}
 	return sr;
 }
 /* Генерация случайной строки с заданным количеством символов */

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ds-findbytags, v2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-07 09:42+0300\n"
+"POT-Creation-Date: 2017-10-08 03:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Sokolov <dmitry@sokolov.website>\n"
 "Language-Team: Russian\n"
@@ -16,22 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/structopts.c:31 src/structopts.c:82 src/structopts.c:101
+#: src/structopts.c:31 src/structopts.c:88 src/structopts.c:107
 #, c-format
 msgid "structopts(): malloc() failed: insufficient memory.\n"
 msgstr "structopts(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/structopts.c:65
+#: src/structopts.c:71
 #, c-format
 msgid "structopts(): Unknown option `-%c'.\n"
 msgstr "structopts(): Неизвестная опция `-%c'.\n"
 
-#: src/structopts.c:71
+#: src/structopts.c:77
 #, c-format
 msgid "structopts(): Unknown option character `\\x%x'.\n"
 msgstr "structopts(): Неизвестный символ опции `\\x%x'.\n"
 
-#: src/structopts.c:92
+#: src/structopts.c:98
 #, c-format
 msgid "structopts(): %s does not exist or is not a directory.\n"
 msgstr "structopts(): %s не существует, или не является каталогом.\n"
@@ -64,52 +64,52 @@ msgstr ""
 "regexpcompile(): Компиляция регулярного выражения не удалась "
 "со смещением %d: %s\n"
 
-#: src/common.c:30
+#: src/common.c:33
 #, c-format
 msgid "strconcat(): malloc() failed: insufficient memory.\n"
 msgstr "strconcat(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/common.c:44
+#: src/common.c:49
 #, c-format
 msgid "random_name(): malloc() failed: insufficient memory.\n"
 msgstr "random_name(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/common.c:68
+#: src/common.c:73
 #, c-format
 msgid "command_output(): malloc() failed: insufficient memory.\n"
 msgstr "command_output(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/common.c:74
+#: src/common.c:79
 #, c-format
 msgid "command_output(): Cannot into popen.\n"
 msgstr "command_output(): popen(): не могу открыть поток.\n"
 
-#: src/common.c:83
+#: src/common.c:88
 #, c-format
 msgid "command_output(): realloc() failed: insufficient memory.\n"
 msgstr "command_output(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/common.c:92
+#: src/common.c:97
 #, c-format
 msgid "command_output(): Cannot into pclose.\n"
 msgstr "command_output(): pclose(): не могу закрыть поток.\n"
 
-#: src/common.c:103 src/common.c:112 src/common.c:147
+#: src/common.c:108 src/common.c:117 src/common.c:152
 #, c-format
 msgid "command_output_lines(): malloc() failed: insufficient memory.\n"
 msgstr "command_output_lines(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/common.c:118
+#: src/common.c:123
 #, c-format
 msgid "command_output_lines(): Cannot into popen.\n"
 msgstr "command_output_lines(): popen(): не могу открыть поток.\n"
 
-#: src/common.c:127 src/common.c:138
+#: src/common.c:132 src/common.c:143
 #, c-format
 msgid "command_output_lines(): realloc() failed: insufficient memory.\n"
 msgstr "command_output_lines(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/common.c:159
+#: src/common.c:164
 #, c-format
 msgid "command_output_lines(): Cannot into pclose.\n"
 msgstr "command_output_lines(): pclose(): не могу закрыть поток.\n"
@@ -317,8 +317,8 @@ msgid "main(): No paths to search in.\n"
 msgstr "main(): Не выбраны пути для поиска.\n"
 
 #: src/main.c:147 src/main.c:174 src/main.c:183 src/main.c:191 src/main.c:199
-#: src/main.c:240 src/main.c:251 src/main.c:279 src/main.c:327 src/main.c:393
-#: src/main.c:440
+#: src/main.c:235 src/main.c:258 src/main.c:269 src/main.c:296 src/main.c:347
+#: src/main.c:411 src/main.c:458
 #, c-format
 msgid "begin(): malloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка malloc(): недостаточно памяти.\n"
@@ -332,32 +332,32 @@ msgstr "Нечётное количество тэгов для замены."
 msgid "begin(): Odd number of elements in the value of key -c.\n"
 msgstr "begin(): Нечётное количество элементов в значении ключа -c.\n"
 
-#: src/main.c:256
+#: src/main.c:274
 #, c-format
 msgid "begin(): Cannot into popen.\n"
 msgstr "begin(): popen(): не могу открыть поток.\n"
 
-#: src/main.c:267 src/main.c:316 src/main.c:385 src/main.c:466
+#: src/main.c:285 src/main.c:336 src/main.c:403 src/main.c:484
 #, c-format
 msgid "begin(): realloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:410
+#: src/main.c:430
 #, c-format
 msgid "begin(): Cannot into pclose.\n"
 msgstr "begin(): pclose(): не могу закрыть поток.\n"
 
-#: src/main.c:422
+#: src/main.c:440
 #, c-format
 msgid "begin(): Cannot create %s.\n"
 msgstr "begin(): Не могу создать %s.\n"
 
-#: src/main.c:558 src/main.c:586 src/main.c:603
+#: src/main.c:575 src/main.c:603 src/main.c:620
 #, c-format
 msgid "actions(): realloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:566
+#: src/main.c:583
 #, c-format
 msgid "actions(): malloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка malloc(): недостаточно памяти.\n"

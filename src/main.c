@@ -223,16 +223,34 @@ int begin() {
 		opts_v->s = random_name(16);
 	}
 /* Создание списка путей ко всем анализируемым файлам */
-	char *command = "";
+	size_t args_len = 0, args_offset = 0;
+	size_t args_lens[opts_v->args_count];
 	for(int i = 0; i < opts_v->args_count; i++) {
-		command = strconcat(command, " ");
-		command = strconcat(command, opts_v->args[i]);
+		args_len += args_lens[i] = strlen(opts_v->args[i]);
 	}
-	command = strconcat("find", command);
-	command = strconcat(command,
-		" -type f -regextype posix-extended -regex '.*\\.(");
-	command = strconcat(command, EXTS);
-	command = strconcat(command, ")$'");
+	char *argslist = malloc(args_len + 1);
+	if(!argslist) {
+		fprintf(
+			stderr,
+			_("begin(): malloc() failed: insufficient memory.\n")
+		);
+		return 0;
+	}
+	for(int i = 0; i < opts_v->args_count; i++) {
+		memcpy(
+			argslist + args_offset,
+			opts_v->args[i],
+			args_lens[i] + (i == opts_v->args_count - 1 ? 1 : 0)
+		);
+		args_offset += args_lens[i];
+	}
+	char *command = strconcat((const char*[]) {
+		"find ",
+		argslist,
+		" -type f -regextype posix-extended -regex '.*\\.(",
+		EXTS,
+		")$'"
+	}, 5);
 /* Анализ каждого файла */
 	unsigned int files_count = 0, reoffset = 0;
 	File **files = (File**) malloc(sizeof(File*));
@@ -270,8 +288,7 @@ int begin() {
 			}
 		}
 		filename[strlen(filename) - 1] = '\0';
-		filename_qtd = strconcat("'", filename);
-		filename_qtd = strconcat(filename_qtd, "'");
+		filename_qtd = strconcat((const char*[]) {"'", filename, "'"}, 3);
 		filetags = (char**) malloc(sizeof(char*));
 		if(!filetags) {
 			fprintf(
@@ -281,7 +298,7 @@ int begin() {
 			return 0;
 		}
 		/* Сбор тэгов в XMP-метаданных */
-		exiv_com = strconcat("exiv2 -PXnt ", filename_qtd);
+		exiv_com = strconcat((const char*[]) {"exiv2 -PXnt ", filename_qtd}, 2);
 		exiv_out = command_output(exiv_com);
 		if(exiv_out) {
 			reresult = regexpmatch_compiled(
@@ -299,7 +316,9 @@ int begin() {
 			filetags = strsplit(tmp, "\\s*,\\s*", 0, 0, 8, &count);
 		} else {
 			/* Сбор тэгов в IPTC-метаданных, если не оказалось в XMP */
-			exiv_com = strconcat("exiv2 -PInt ", filename_qtd);
+			exiv_com = strconcat(
+				(const char*[]) {"exiv2 -PInt ", filename_qtd}, 2
+			);
 			exiv_out = command_output(exiv_com);
 			if(exiv_out) {
 				reoffset = 0;
@@ -309,7 +328,8 @@ int begin() {
 						exiv_out + reoffset, re_k, 0, sizeof(reresult->indexes)
 					);
 					if(reresult->count < 2) break;
-					filetags = (char**) realloc(filetags, sizeof(char*) * (i + 1));
+					filetags =
+						(char**) realloc(filetags, sizeof(char*) * (i + 1));
 					if(!filetags) {
 						fprintf(
 							stderr,
@@ -354,27 +374,25 @@ int begin() {
 					&filetags, &count, tags->i, tags->i_count,
 					tags->d, tags->d_count, tags->c, tags->c_count
 				) > 0) {
-					char *tmp = strconcat(
+					char *tmp = strconcat((const char*[]) {
 						"exiv2 -M\"add Xmp.dc.subject\" "
 							"-M\"del Iptc.Application2.Keywords\" ",
 						filename_qtd
-					);
+					}, 2);
 					system(tmp);
-					for(int i = 0; i < count; i++) {
-						tmp = strconcat(
-							"exiv2 -M\"set Xmp.dc.subject XmpBag ",
-							filetags[i]
-						);
-						tmp = strconcat(
-							tmp,
-							"\" -M\"add Iptc.Application2.Keywords String "
-						);
-						tmp = strconcat(tmp, filetags[i]);
-						tmp = strconcat(tmp, "\" ");
-						tmp = strconcat(tmp, filename_qtd);
-						system(tmp);
-					}
 					free(tmp);
+					for(int i = 0; i < count; i++) {
+						tmp = strconcat((const char*[]) {
+							"exiv2 -M\"set Xmp.dc.subject XmpBag ",
+							filetags[i],
+							"\" -M\"add Iptc.Application2.Keywords String ",
+							filetags[i],
+							"\" ",
+							filename_qtd
+						}, 6);
+						system(tmp);
+						free(tmp);
+					}
 				}
 				/* Создание массива отобранных файлов */
 				files_count++;
@@ -404,6 +422,8 @@ int begin() {
 			for(int i = 0; i < count; i++) free(filetags[i]);
 		}
 		free(filetags);
+		free(filename); filename = NULL;
+		free(filename_qtd); filename_qtd = NULL;
 		free(exiv_com);
 	}
 	if(pclose(found) != 0) {
@@ -413,8 +433,6 @@ int begin() {
 	pcre_free((void*) re_s);
 	pcre_free((void*) re_k);
 	free(command);
-	free(filename); filename = NULL;
-	free(filename_qtd); filename_qtd = NULL;
 	/* Создание каталога, если его ещё нет, с указанным или случайным именем */
 	struct stat stat_buffer;
 	stat(opts_v->s, &stat_buffer);
@@ -475,14 +493,13 @@ int begin() {
 	free(filename); filename = NULL;
 	/* Запуск указанной программы в каталоге с символическими ссылками */
 	if(opts_v->l && strcmp(opts_v->l, "no") != 0) {
-		char *tmp = strconcat(opts_v->l, " ");
-		tmp = strconcat(tmp, opts_v->s);
+		char *tmp = strconcat((const char*[]) {opts_v->l, " ", opts_v->s}, 3);
 		system(tmp);
 		free(tmp);
 	}
 	/* Удаление временного каталога с символическими ссылками */
 	if(!tosave) {
-		char *tmp = strconcat("rm -rf ", opts_v->s);
+		char *tmp = strconcat((const char*[]) {"rm -rf ", opts_v->s}, 2);
 		system(tmp);
 		free(tmp);
 	}

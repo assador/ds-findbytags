@@ -34,7 +34,10 @@ Opts* structopts(int argc, char **argv) {
 	}
 	opts->e = "*";
 	opts->l = "geeqie";
-	opts->t = strconcat(getenv("HOME"), "/.config/geeqie/geeqierc.xml");
+	opts->t = strconcat((const char*[]) {
+		getenv("HOME"),
+		"/.config/geeqie/geeqierc.xml"
+	}, 2);
 	char *unistdopts = "gka:o:n:i:d:c:e:l:s:t:";
 	int opt;
 	while((opt = getopt(argc, argv, unistdopts)) != -1) {
@@ -55,7 +58,10 @@ Opts* structopts(int argc, char **argv) {
 				int i = 0;
 				while(opts->t[i] == ' ') i++;
 				if(opts->t[i] == '~') {
-					opts->t = strconcat(getenv("HOME"), opts->t + 1);
+					opts->t = strconcat((const char*[]) {
+						getenv("HOME"),
+						opts->t + 1
+					}, 2);
 				}
 				break;
 			case '?' :

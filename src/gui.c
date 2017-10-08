@@ -658,13 +658,13 @@ static void treeview_foreach_selected(
 			gchar *new;
 			if(d->append) {
 				new = entry_text(GTK_ENTRY(d->recipient));
-				new = new ? strconcat(new, ", ") : "";
+				new = new ? strconcat((const char*[]) {new, ", "}, 2) : "";
 			} else {
 				new = "";
 			}
 			gtk_entry_set_text(
 				GTK_ENTRY(d->recipient),
-				strconcat(new, tagname)
+				strconcat((const char*[]) {new, tagname}, 2)
 			);
 		}
 		free(tagname);
