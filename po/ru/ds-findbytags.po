@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ds-findbytags, v2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-08 12:25+0300\n"
+"POT-Creation-Date: 2017-10-08 18:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Sokolov <dmitry@sokolov.website>\n"
 "Language-Team: Russian\n"
@@ -113,6 +113,170 @@ msgstr "command_output_lines(): ошибка realloc(): недостаточно
 #, c-format
 msgid "command_output_lines(): Cannot into pclose.\n"
 msgstr "command_output_lines(): pclose(): не могу закрыть поток.\n"
+
+#: src/help.c:31
+msgid ""
+"\n"
+"At least one path or -g key must be specified (see below).\n"
+"\n"
+"ds-findbytags, v2.0.0, CLI / GTK+ 2\n"
+"Copyright © 2016-2017 Dmitry Sokolov\n"
+"\n"
+"This program is free software: you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation, either version 3 of the License, or\n"
+"(at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
+"\n"
+"C / GTK+ 2 program, that searches in the specified directories the images\n"
+"with keywords (tags) specified in XMP or IPTC metadata and satisfy\n"
+"the specified AND, OR, NOT conditions. Optionally the found images will "
+"open\n"
+"in the specified program. Along the way, you can massively add, remove\n"
+"or replace tags in the found images and to save symlinks to these images\n"
+"in the specified directory with original or random names.\n"
+"Read more: http://sokolov.website/programs/ds-utils/ds-findbytags\n"
+"\n"
+"Depends: exiv2, libxml2-dev\n"
+"Recommends: gtk2\n"
+"\n"
+"ds-findbytags [-g] [-k] [-t path_to_tags_file] [-e encoding]\n"
+"              [-a \"tag, tag, ...\"] [-o \"tag, tag, ...\"] [-n \"tag, "
+"tag, ...\"]\n"
+"              [-i \"tag, tag, ...\"] [-d \"tag, tag, ...\"]\n"
+"              [-c \"tag, tag, [tag, tag], ...\"] [-l viewer]\n"
+"              [-s path_the_symlinks_are_saved] path(s)_where_to_search\n"
+"\n"
+"-g  — (GUI)       — If the key is present, the program runs\n"
+"                    in the GTK interface instead of the CLI interface.\n"
+"-k  — (keep)      — If the key is present, the symlinks are named by\n"
+"                    the names of the files found. In the absence of the "
+"key,\n"
+"                    the symlinks are named by a random character set.\n"
+"-t  — (tags)      — Path to the XML file with the tags tree in the Geeqie\n"
+"                    format (by default — $HOME/.config/geeqie/geeqierc."
+"xml).\n"
+"                    Everything in this file, that is not belong to tags,\n"
+"                    is ignored. If the path is incorrect, the tags tree is\n"
+"                    not displayed. Tags from the tree are added by "
+"draggging\n"
+"                    to the required field, or — to the field “AND” —\n"
+"                    by double-click of the right mouse button.\n"
+"-e  — (encoding)  — Not implemented yet. Encoding of the Geeqie-formatted "
+"XML\n"
+"                    file with tags (by default — * — autodetect with enca).\n"
+"-a  — (and)       — File must contain all the tags specified in this key.\n"
+"-o  — (or)        — File must contain at least one of the specified tags.\n"
+"-n  — (not)       — File must not contain any of the specified tags.\n"
+"-i  — (insert)    — Add the tags specified in this key to the found files.\n"
+"-d  — (delete)    — Delete the specified tags from the found files.\n"
+"-c  — (change)    — Replace the specified tags in the found files, in "
+"pairs.\n"
+"-l  — (look)      — The program in which the directory with the found files\n"
+"                    is opened; the default is Geeqie. If you do not need\n"
+"                    to open it at all, the key value must be “no”.\n"
+"-s  — (save)      — The directory (absolute path), in which the symlinks to\n"
+"                    the found files are saved after the end of the program.\n"
+"                    If the key is not specified, a temporary directory\n"
+"                    is created at the location of the program start,\n"
+"                    which after the end of the program is deleted.\n"
+"\n"
+"Example: ds-findbytags -g -k -t \"~/.config/geeqie/geeqierc.xml\" \\\n"
+"                       -a \"sea, gloomy clouds, stones\" -o \"birds, dolphins"
+"\" \\\n"
+"                       -n \"sharks, bees\" -i \"wow\" -d \"sea\" -c \"birds, "
+"cats\" \\\n"
+"                       -l \"no\" -s \"~/chosen\" ~/photos1 ~/photos2\n"
+"\n"
+"Dmitry Sokolov <dmitry@sokolov.website>\n"
+msgstr ""
+"\n"
+"По крайней мере один путь или ключ -g должны быть заданы (см. ниже).\n"
+"\n"
+"ds-findbytags, v2.0.0, CLI / GTK+ 2\n"
+"Copyright © 2016-2017 Dmitry Sokolov\n"
+"\n"
+"This program is free software: you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation, either version 3 of the License, or\n"
+"(at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
+"\n"
+"Программа ищет в указанных каталогах изображения с ключевыми словами "
+"(тэгами),\n"
+"заданными в метаданных XMP или IPTC и удовлетворяющими заданным логическим\n"
+"условиям И, ИЛИ, НЕ. Опционально найденные изображения откроются в "
+"указанной\n"
+"программе. Попутно в найденных изображениях можно массово добавить, удалить\n"
+"или заменить тэги, сохранить ссылки на эти изображения в указанный каталог\n"
+"с оригинальными или случайными именами.\n"
+"Подробнее: http://sokolov.website/programs/ds-utils/ds-findbytags\n"
+"\n"
+"Зависимости: exiv2, libxml2-dev\n"
+"Рекомендуется: gtk2\n"
+"\n"
+"ds-findbytags [-g] [-k] [-t путь_к_файлу_тэгов] [-e кодировка]\n"
+"              [-a \"тэг, тэг, ...\"] [-o \"тэг, тэг, ...\"] [-n \"тэг, "
+"тэг, ...\"]\n"
+"              [-i \"тэг, тэг, ...\"] [-d \"тэг, тэг, ...\"]\n"
+"              [-c \"тэг, тэг, [тэг, тэг], ...\"] [-l просмотрщик]\n"
+"              [-s путь_к_сохраняемым_ссылкам] путь(-и)_где_искать\n"
+"\n"
+"-g  — от GUI       — При наличии ключа скрипт запускается в GTK-интерфейсе\n"
+"                     вместо CLI-интерфейса.\n"
+"-k  — от keep      — При наличии ключа ссылки именуются по именам найденных\n"
+"                     файлов, при отсутствии ключа ссылки именуются "
+"случайным\n"
+"                     набором символов.\n"
+"-t  — от tags      — Путь к XML-файлу с деревом тэгов в формате Geeqie\n"
+"                     (по умолчанию — $HOME/.config/geeqie/geeqierc.xml).\n"
+"                     Всё, не относящееся в этом файле к тэгам, "
+"игнорируется.\n"
+"                     Если неверен, дерево тэгов не показывается.\n"
+"                     Тэги из дерева добавляются перетаскиванием в нужное "
+"поле\n"
+"                     или, при двойном клике правой кнопкой мыши, в поле "
+"«И».\n"
+"-e  — от encoding  — Кодировка XML-файла тэгов в формате Geeqie\n"
+"                     (по умолчанию — * — автоопределение с помощью enca).\n"
+"-a  — от and       — При соответствии каждому из списка тэгов.\n"
+"-o  — от or        — При соответствии любому из списка тэгов.\n"
+"-n  — от not       — За исключением любого из списка тэгов.\n"
+"-i  — от insert    — Добавить тэги в найденные файлы.\n"
+"-d  — от delete    — Удалить тэги из найденных файлов.\n"
+"-c  — от change    — Заменить тэги в найденных файлах.\n"
+"-l  — от look      — Программа, в которой открывается каталог с найденными\n"
+"                     изображениями; по умолчанию — Geeqie. Если не нужно\n"
+"                     открывать его вообще, значение ключа должно быть no.\n"
+"-s  — от save      — Каталог (абсолютный путь), в котором сохраняются "
+"ссылки\n"
+"                     на найденное после окончания работы скрипта. Если ключ\n"
+"                     не указан, создаётся временный каталог по месту "
+"запуска\n"
+"                     скрипта, который после окончания его работы удаляется.\n"
+"\n"
+"Пример: ds-findbytags -g -k -t \"~/.config/geeqie/geeqierc.xml\" \\\n"
+"                      -a \"море, серые тучки, камни\" -o \"чайки, дельфины\" "
+"\\\n"
+"                      -n \"акулы, люди\" -i \"ах\" -d \"море\" -c \"чайки, "
+"птички\" \\\n"
+"                      -l \"no\" -s \"~/chosen\" ~/photos1 ~/photos2\n"
+"\n"
+"Dmitry Sokolov <dmitry@sokolov.website>\n"
 
 #: src/gui.c:117
 msgid "ds-findbytags — Search images by tags and modify tags of found images"
@@ -306,58 +470,58 @@ msgstr "Удалить путь для поиска"
 msgid "wdgt_push(): malloc() failed: insufficient memory.\n"
 msgstr "wdgt_push(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:107 src/main.c:116
+#: src/main.c:109 src/main.c:118
 #, c-format
 msgid "main(): malloc() failed: insufficient memory.\n"
 msgstr "main(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:123
+#: src/main.c:125
 #, c-format
 msgid "main(): No paths to search in.\n"
 msgstr "main(): Не выбраны пути для поиска.\n"
 
-#: src/main.c:158 src/main.c:185 src/main.c:194 src/main.c:202 src/main.c:210
-#: src/main.c:246 src/main.c:269 src/main.c:280 src/main.c:350 src/main.c:414
-#: src/main.c:461
+#: src/main.c:160 src/main.c:187 src/main.c:196 src/main.c:204 src/main.c:212
+#: src/main.c:248 src/main.c:271 src/main.c:282 src/main.c:352 src/main.c:416
+#: src/main.c:463
 #, c-format
 msgid "begin(): malloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:166
+#: src/main.c:168
 msgid "Odd number of tags to replace."
 msgstr "Нечётное количество тэгов для замены."
 
-#: src/main.c:173
+#: src/main.c:175
 #, c-format
 msgid "begin(): Odd number of elements in the value of key -c.\n"
 msgstr "begin(): Нечётное количество элементов в значении ключа -c.\n"
 
-#: src/main.c:285
+#: src/main.c:287
 #, c-format
 msgid "begin(): Cannot into popen.\n"
 msgstr "begin(): popen(): не могу открыть поток.\n"
 
-#: src/main.c:296 src/main.c:339 src/main.c:406 src/main.c:487
+#: src/main.c:298 src/main.c:341 src/main.c:408 src/main.c:489
 #, c-format
 msgid "begin(): realloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:433
+#: src/main.c:435
 #, c-format
 msgid "begin(): Cannot into pclose.\n"
 msgstr "begin(): pclose(): не могу закрыть поток.\n"
 
-#: src/main.c:443
+#: src/main.c:445
 #, c-format
 msgid "begin(): Cannot create %s.\n"
 msgstr "begin(): Не могу создать %s.\n"
 
-#: src/main.c:578 src/main.c:606 src/main.c:623
+#: src/main.c:580 src/main.c:608 src/main.c:625
 #, c-format
 msgid "actions(): realloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:586
+#: src/main.c:588
 #, c-format
 msgid "actions(): malloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка malloc(): недостаточно памяти.\n"

@@ -17,54 +17,56 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * Ищет в указанных каталогах изображения с ключевыми словами (тэгами),
- * заданными в метаданных XMP или IPTC и удовлетворяющими заданным логическим
- * условиям И, ИЛИ, НЕ. Опционально найденные изображения откроются в указанной
- * программе. Попутно в найденных изображениях можно массово добавить, удалить
- * или заменить тэги, сохранить ссылки на эти изображения в указанный каталог
- * с оригинальными или случайными именами.
- * Подробнее: http://sokolov.website/programs/ds-utils/ds-findbytags
+ * C / GTK+ 2 program, that searches in the specified directories the images
+ * with keywords (tags) specified in XMP or IPTC metadata and satisfy
+ * the specified AND, OR, NOT conditions. Optionally the found images will open
+ * in the specified program. Along the way, you can massively add, remove
+ * or replace tags in the found images and to save symlinks to these images
+ * in the specified directory with original or random names.
+ * Read more: http://sokolov.website/programs/ds-utils/ds-findbytags
  * 
- * Зависимости: exiv2
- * Рекомендуется: gtk2
+ * Depends: exiv2, libxml2-dev
+ * Recommends: gtk2
  * 
- * ds-findbytags [-g] [-k] [-t путь_к_файлу_тэгов] [-e кодировка]
- *               [-a "тэг, тэг, ..."] [-o "тэг, тэг, ..."] [-n "тэг, тэг, ..."]
- *               [-i "тэг, тэг, ..."] [-d "тэг, тэг, ..."]
- *               [-c "тэг, тэг, [тэг, тэг], ..."] [-l просмотрщик]
- *               [-s путь_к_сохраняемым_ссылкам] путь(-и)_где_искать
+ * ds-findbytags [-g] [-k] [-t path_to_tags_file] [-e encoding]
+ *               [-a "tag, tag, ..."] [-o "tag, tag, ..."] [-n "tag, tag, ..."]
+ *               [-i "tag, tag, ..."] [-d "tag, tag, ..."]
+ *               [-c "tag, tag, [tag, tag], ..."] [-l viewer]
+ *               [-s path_the_symlinks_are_saved] path(s)_where_to_search
  * 
- * -g  — от GUI       — При наличии ключа скрипт запускается в GTK-интерфейсе
- *                      вместо CLI-интерфейса.
- * -k  — от keep      — При наличии ключа ссылки именуются по именам найденных
- *                      файлов, при отсутствии ключа ссылки именуются случайным
- *                      набором символов.
- * -t  — от tags      — Путь к XML-файлу с деревом тэгов в формате Geeqie
- *                      (по умолчанию — $HOME/.config/geeqie/geeqierc.xml).
- *                      Всё, не относящееся в этом файле к тэгам, игнорируется.
- *                      Если неверен, дерево тэгов не показывается.
- *                      Тэги из дерева добавляются перетаскиванием в нужное поле
- *                      или, при двойным клике правой кнопкой мыши, в поле «И».
- * -e  — от encoding  — Кодировка XML-файла тэгов в формате Geeqie
- *                      (по умолчанию — * — автоопределение с помощью enca).
- * -a  — от and       — При соответствии каждому из списка тэгов.
- * -o  — от or        — При соответствии любому из списка тэгов.
- * -n  — от not       — За исключением любого из списка тэгов.
- * -i  — от insert    — Добавить тэги в найденные файлы.
- * -d  — от delete    — Удалить тэги из найденных файлов.
- * -c  — от change    — Заменить тэги в найденных файлах.
- * -l  — от look      — Программа, в которой открывается каталог с найденными
- *                      изображениями; по умолчанию — Geeqie. Если не нужно
- *                      открывать его вообще, значение ключа должно быть no.
- * -s  — от save      — Каталог (абсолютный путь), в котором сохраняются ссылки
- *                      на найденное после окончания работы скрипта. Если ключ
- *                      не указан, создаётся временный каталог по месту запуска
- *                      скрипта, который после окончания его работы удаляется.
+ * -g  — (GUI)       — If the key is present, the program runs
+ *                     in the GTK interface instead of the CLI interface.
+ * -k  — (keep)      — If the key is present, the symlinks are named by
+ *                     the names of the files found. In the absence of the key,
+ *                     the symlinks are named by a random character set.
+ * -t  — (tags)      — Path to the XML file with the tags tree in the Geeqie
+ *                     format (by default — $HOME/.config/geeqie/geeqierc.xml).
+ *                     Everything in this file, that is not belong to tags,
+ *                     is ignored. If the path is incorrect, the tags tree is
+ *                     not displayed. Tags from the tree are added by draggging
+ *                     to the required field, or — to the field “AND” —
+ *                     by double-click of the right mouse button.
+ * -e  — (encoding)  — Not implemented yet. Encoding of the Geeqie-formatted XML
+ *                     file with tags (by default — * — autodetect with enca).
+ * -a  — (and)       — File must contain all the tags specified in this key.
+ * -o  — (or)        — File must contain at least one of the specified tags.
+ * -n  — (not)       — File must not contain any of the specified tags.
+ * -i  — (insert)    — Add the tags specified in this key to the found files.
+ * -d  — (delete)    — Delete the specified tags from the found files.
+ * -c  — (change)    — Replace the specified tags in the found files, in pairs.
+ * -l  — (look)      — The program in which the directory with the found files
+ *                     is opened; the default is Geeqie. If you do not need
+ *                     to open it at all, the key value must be “no”.
+ * -s  — (save)      — The directory (absolute path), in which the symlinks to
+ *                     the found files are saved after the end of the program.
+ *                     If the key is not specified, a temporary directory
+ *                     is created at the location of the program start,
+ *                     which after the end of the program is deleted.
  * 
- * Пример: ds-findbytags -g -k -t "~/.config/geeqie/geeqierc.xml"
- *                       -a "море, серые тучки, камни" -o "чайки, дельфины" \
- *                       -n "акулы, люди" -i "ах" -d "море" -c "чайки, птички" \
- *                       -l "no" -s "~/chosen" ~/photos1 ~/photos2
+ * Example: ds-findbytags -g -k -t "~/.config/geeqie/geeqierc.xml" \
+ *                        -a "sea, gloomy clouds, stones" -o "birds, dolphins" \
+ *                        -n "sharks, bees" -i "wow" -d "sea" -c "birds, cats" \
+ *                        -l "no" -s "~/chosen" ~/photos1 ~/photos2
  * 
  * Dmitry Sokolov <dmitry@sokolov.website>
  **/
@@ -128,7 +130,7 @@ int main(int argc, char **argv) {
 	return 0;
 }
 int begin() {
-/* Приведение строк тэгов в массивы */
+/* Converting strings of comma separated tags to arrays */
 	int count;
 	if(opts_v->a) {
 		tags->a = strsplit(opts_v->a, "\\s*,\\s*", 0, 0, 8, &count);
@@ -227,13 +229,13 @@ int begin() {
 		for(int i = 0; i < count; i++) free(tags_c_tmp[i]);
 		free(tags_c_tmp);
 	}
-/* Генерация случайного имени каталога для сохранения ссылок */
+/* Generating a random name of directory where symlinks are saved */
 	int tosave = 1;
 	if(!opts_v->s) {
 		tosave = 0;
 		opts_v->s = random_name(16);
 	}
-/* Создание списка путей ко всем анализируемым файлам */
+/* Creating a list of paths to all the files to be analized */
 	size_t args_len = 0, args_offset = 0;
 	size_t args_lens[opts_v->args_count];
 	for(int i = 0; i < opts_v->args_count; i++) {
@@ -262,7 +264,7 @@ int begin() {
 		EXTS,
 		")$'"
 	}, 5);
-/* Анализ каждого файла */
+/* Analysis of each file */
 	unsigned int files_count = 0, reoffset = 0;
 	File **files = (File**) malloc(sizeof(File*));
 	if(!files) {
@@ -285,7 +287,7 @@ int begin() {
 		fprintf(stderr, _("begin(): Cannot into popen.\n"));
 		return 0;
 	}
-	/* Для каждого анализируемого файла */
+	/* For each file to be analized */
 	while(getline(&filename, &filename_size, found) != EOF) {
 		if(strlen(filename) > filename_size - 1) {
 			filename =
@@ -300,7 +302,7 @@ int begin() {
 		}
 		filename[strlen(filename) - 1] = '\0';
 		filename_qtd = strconcat((const char*[]) {"'", filename, "'"}, 3);
-		/* Сбор тэгов в XMP-метаданных */
+		/* Collecting tags in XMP metadata */
 		exiv_com = strconcat((const char*[]) {"exiv2 -PXnt ", filename_qtd}, 2);
 		exiv_out = command_output(exiv_com);
 		if(exiv_out) {
@@ -318,7 +320,7 @@ int begin() {
 			);
 			filetags = strsplit(tmp, "\\s*,\\s*", 0, 0, 8, &count);
 		} else {
-			/* Сбор тэгов в IPTC-метаданных, если не оказалось в XMP */
+			/* Collecting tags in IPTC metadata if there are no tags in XMP */
 			exiv_com = strconcat(
 				(const char*[]) {"exiv2 -PInt ", filename_qtd}, 2
 			);
@@ -367,12 +369,12 @@ int begin() {
 			free(reresult->indexes);
 			free(reresult);
 			free(exiv_out);
-			/* Проверка соответствия тэгов файла тэгам поиска */
+			/* Checking the conformity of file tags to search tags */
 			if(suitable(
 				filetags, count, tags->a, tags->a_count,
 				tags->o, tags->o_count, tags->n, tags->n_count
 			)) {
-				/* Действия над тэгами файла */
+				/* Actions on file tags */
 				if(actions(
 					&filetags, &count, tags->i, tags->i_count,
 					tags->d, tags->d_count, tags->c, tags->c_count
@@ -397,7 +399,7 @@ int begin() {
 						free(tmp);
 					}
 				}
-				/* Создание массива отобранных файлов */
+				/* Creating an array of selected files */
 				files_count++;
 				files = (File**) realloc(files, sizeof(File*) * files_count);
 				if(!files) {
@@ -436,13 +438,13 @@ int begin() {
 	pcre_free((void*) re_s);
 	pcre_free((void*) re_k);
 	free(command);
-	/* Создание каталога, если его ещё нет, с указанным или случайным именем */
+	/* Creating a directory, if not exist, with the specified or random name */
 	struct stat stat_buffer;
 	stat(opts_v->s, &stat_buffer);
 	if(!S_ISDIR(stat_buffer.st_mode) && mkdir(opts_v->s, 0755) == -1) {
 		fprintf(stderr, _("begin(): Cannot create %s.\n"), opts_v->s);
 	}
-	/* Создание символических ссылок отобранных файлов */
+	/* Creating symlinks of selected files */
 	for(int i = 0; i < files_count; i++) {
 		if(opts_v->k) {
 			filename = strdup(files[i]->name);
@@ -494,19 +496,19 @@ int begin() {
 		free(fullname);
 	}
 	free(filename); filename = NULL;
-	/* Запуск указанной программы в каталоге с символическими ссылками */
+	/* Running the specified program in the directory with symlinks */
 	if(opts_v->l && strcmp(opts_v->l, "no") != 0) {
 		char *tmp = strconcat((const char*[]) {opts_v->l, " ", opts_v->s}, 3);
 		system(tmp);
 		free(tmp);
 	}
-	/* Удаление временного каталога с символическими ссылками */
+	/* Deleting the temporary directory with symlinks */
 	if(!tosave) {
 		char *tmp = strconcat((const char*[]) {"rm -rf ", opts_v->s}, 2);
 		system(tmp);
 		free(tmp);
 	}
-	/* Очистка */
+	/* Cleaning */
 	for(int i = 0; i < files_count; i++) {
 		free(files[i]->fullpath);
 		free(files[i]->fullname);
@@ -529,12 +531,12 @@ int begin() {
 	tags->i_count = tags->d_count = tags->c_count = 0;
 	return 1;
 }
-/* Проверка соответствия тэгов файла тэгам поиска */
+/* Checking the conformity of file tags to search tags */
 int suitable(
 	char **t, int tc, char **a, int ac, char **o, int oc, char **n, int nc
 ) {
 	int s = 1;
-	/* Проверка соответствия тэгам И */
+	/* Checking the conformity to AND tags */
 	for(int i = 0; i < ac; i++) {
 		s = 0;
 		for(int y = 0; y < tc; y++) {
@@ -542,7 +544,7 @@ int suitable(
 		}
 		if(!s) return(0);
 	}
-	/* Проверка соответствия тэгам ИЛИ */
+	/* Checking the conformity to OR tags */
 	for(int i = 0; i < oc; i++) {
 		s = 0;
 		for(int y = 0; y < tc; y++) {
@@ -551,7 +553,7 @@ int suitable(
 		if(s) break;
 	}
 	if(!s) return(0);
-	/* Проверка соответствия тэгам НЕ */
+	/* Checking the conformity to NOT tags */
 	for(int i = 0; i < nc; i++) {
 		for(int y = 0; y < tc; y++) {
 			if(strcmp(n[i], t[y]) == 0) return(0);
@@ -559,13 +561,13 @@ int suitable(
 	}
 	return s;
 }
-/* Действия над тэгами файла */
+/* Actions on file tags */
 int actions(
 	char ***t, int *tc,
 	char **in, int inc, char **de, int dec, char ***ch, int chc
 ) {
 	int changed = 0, exists = 0;
-	/* Добавление новых тэгов */
+	/* Adding new tags */
 	for(int i = 0; i < inc; i++) {
 		for(int y = 0; y < *tc; y++) {
 			if(strcmp((*t)[y], in[i]) == 0) {exists = 1; break;}
@@ -593,7 +595,7 @@ int actions(
 		}
 		exists = 0;
 	}
-	/* Удаление существующих тэгов */
+	/* Deleting existing tags */
 	for(int i = 0; i < dec; i++) {
 		for(int y = 0; y < *tc; y++) {
 			if(strcmp((*t)[y], de[i]) == 0) {
@@ -612,7 +614,7 @@ int actions(
 			}
 		}
 	}
-	/* Замена существующих тэгов */
+	/* Replacing existing tags */
 	for(int i = 0; i < chc; i++) {
 		for(int y = 0; y < *tc; y++) {
 			if(strcmp((*t)[y], ch[i][0]) == 0) {

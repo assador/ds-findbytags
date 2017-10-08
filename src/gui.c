@@ -104,7 +104,7 @@ static GtkWidget
 
 void gui() {
 	gtk_init(NULL, NULL);
-/* Окно */
+/* Window */
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	g_signal_connect(
 		G_OBJECT(window),
@@ -119,14 +119,14 @@ void gui() {
 	);
 	gtk_window_set_default_size(GTK_WINDOW(window), 700, 100);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 5);
-/* Горизонтальный контейнер */
+/* Horizontal container */
 	hpaned = gtk_hpaned_new();
 	gtk_container_add(GTK_CONTAINER(window), hpaned);
-/* Левый контейнер */
+/* Left container */
 	vbox = gtk_vbox_new(FALSE, 5);
 	gtk_widget_set_size_request(vbox, 385, -1);
 	gtk_paned_pack1(GTK_PANED(hpaned), vbox, TRUE, FALSE);
-/* Правый контейнер */
+/* Right container */
 	treeview = build_tree(tree(opts_v->t, "keyword_tree"));
 	if(treeview) {
 		static GtkTargetEntry entries[] = {{"text/plain", 0, 0}};
@@ -153,16 +153,16 @@ void gui() {
 		gtk_container_add(GTK_CONTAINER(scrolledwindow), treeview);
 		gtk_paned_pack2(GTK_PANED(hpaned), scrolledwindow, TRUE, FALSE);
 	}
-/* Фрэйм «Искать в» */
+/* “Search in” frame */
 	findin_frame = gtk_frame_new(_(" Search in "));
 	gtk_box_pack_start(GTK_BOX(vbox), findin_frame, FALSE, TRUE, 0);
-/* Таблица с кнопками путей для поиска */
+/* Table with buttons of search paths */
 	findin_table = gtk_table_new(1, 3, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(findin_table), 5);
 	gtk_table_set_col_spacing(GTK_TABLE(findin_table), 0, 5);
 	gtk_table_set_col_spacing(GTK_TABLE(findin_table), 1, 5);
 	gtk_container_add(GTK_CONTAINER(findin_frame), findin_table);
-/* Кнопка добавления пути для поиска */
+/* Button to add a search path */
 	findin_p = gtk_button_new_with_label("+");
 	gtk_widget_set_tooltip_text(findin_p, _("Add new path to search"));
 	g_signal_connect(findin_p, "clicked", G_CALLBACK(findin_p_clicked), NULL);
@@ -173,16 +173,16 @@ void gui() {
 		GTK_SHRINK, GTK_FILL,
 		0, 0
 	);
-/* Поиск по тэгам */
+/* Search by tags */
 	search_frame = gtk_frame_new(_(" Search by tags "));
 	gtk_box_pack_start(GTK_BOX(vbox), search_frame, FALSE, TRUE, 0);
-/* Таблица с полями ввода тэгов для поиска */
+/* Table with entry fields for search tags */
 	search_table = gtk_table_new(3, 2, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(search_table), 5);
 	gtk_table_set_col_spacing(GTK_TABLE(search_table), 0, 5);
 	gtk_table_set_col_spacing(GTK_TABLE(search_table), 1, 5);
 	gtk_container_add(GTK_CONTAINER(search_frame), search_table);
-/* Строка ввода тэгов для поиска И */
+/* Entry field for AND search tags */
 	search_a_l = gtk_label_new(_("Contain all of these tags:"));
 	gtk_misc_set_alignment(GTK_MISC(search_a_l), 1, 0.5);
 	gtk_table_attach(
@@ -201,7 +201,7 @@ void gui() {
 		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_a, 1, 2, 0, 1);
-/* Строка ввода тэгов для поиска ИЛИ */
+/* Entry field for OR search tags */
 	search_o_l = gtk_label_new(_("Contain at least one of these tags:"));
 	gtk_misc_set_alignment(GTK_MISC(search_o_l), 1, 0.5);
 	gtk_table_attach(
@@ -220,7 +220,7 @@ void gui() {
 		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_o, 1, 2, 1, 2);
-/* Строка ввода тэгов для поиска НЕ */
+/* Entry field for NOT search tags */
 	search_n_l = gtk_label_new(_("Contain no one of these tags:"));
 	gtk_misc_set_alignment(GTK_MISC(search_n_l), 1, 0.5);
 	gtk_table_attach(
@@ -239,16 +239,16 @@ void gui() {
 		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(search_table), search_n, 1, 2, 2, 3);
-/* Действия с найденным */
+/* Actions with the found */
 	action_frame = gtk_frame_new(_(" Actions with found "));
 	gtk_box_pack_start(GTK_BOX(vbox), action_frame, FALSE, TRUE, 0);
-/* Таблица с полями ввода тэгов для поиска */
+/* Table with entry fields for action tags */
 	action_table = gtk_table_new(3, 2, FALSE);
 	gtk_container_set_border_width(GTK_CONTAINER(action_table), 5);
 	gtk_table_set_col_spacing(GTK_TABLE(action_table), 0, 5);
 	gtk_table_set_col_spacing(GTK_TABLE(action_table), 1, 5);
 	gtk_container_add(GTK_CONTAINER(action_frame), action_table);
-/* Строка ввода тэгов для добавления */
+/* Entry field for tags to add */
 	action_i_l = gtk_label_new(_("Add these tags to found files:"));
 	gtk_misc_set_alignment(GTK_MISC(action_i_l), 1, 0.5);
 	gtk_table_attach(
@@ -266,7 +266,7 @@ void gui() {
 		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(action_table), action_i, 1, 2, 0, 1);
-/* Строка ввода тэгов для удаления */
+/* Entry field for tags to delete */
 	action_d_l = gtk_label_new(_("Delete these tags from found files:"));
 	gtk_misc_set_alignment(GTK_MISC(action_d_l), 1, 0.5);
 	gtk_table_attach(
@@ -284,7 +284,7 @@ void gui() {
 		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(action_table), action_d, 1, 2, 1, 2);
-/* Строка ввода тэгов для замены */
+/* Entry field for tags to be replaced with tags to replace */
 	action_c_l = gtk_label_new(_("Replace tags in found files:"));
 	gtk_misc_set_alignment(GTK_MISC(action_c_l), 1, 0.5);
 	gtk_table_attach(
@@ -306,10 +306,10 @@ void gui() {
 		G_CALLBACK(entry_drag_data_received), NULL
 	);
 	gtk_table_attach_defaults(GTK_TABLE(action_table), action_c, 1, 2, 2, 3);
-/* Нижняя строка с флагами и пр. */
+/* Bottom line with flags etc */
 	hbox2 = gtk_hbox_new(FALSE, 5);
 	gtk_box_pack_end(GTK_BOX(vbox), hbox2, FALSE, TRUE, 0);
-/* Сохранять ссылки в (CheckButton) */
+/* Save symlinks to (CheckButton) */
 	begin_savecb = gtk_check_button_new_with_label(_("Save symlinks to:"));
 	g_signal_connect(
 		GTK_CHECK_BUTTON(begin_savecb), "toggled",
@@ -321,7 +321,7 @@ void gui() {
 		"selected righter. It can be useful for albums compilation.")
 	);
 	gtk_box_pack_start(GTK_BOX(hbox2), begin_savecb, FALSE, FALSE, 0);
-/* Сохранять ссылки в (FileChooserButton) */
+/* Save symlinks to (FileChooserButton) */
 	begin_savefc = gtk_file_chooser_button_new(
 		_("Save symlinks to…"),
 		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
@@ -332,7 +332,7 @@ void gui() {
 		begin_savefc,
 		_("Directory in which the symlinks to found files are saved")
 	);
-/* Сохранять имена (CheckButton) */
+/* Save names (CheckButton) */
 	begin_keepcb = gtk_check_button_new_with_label(_("Save names"));
 	gtk_widget_set_tooltip_text(
 		begin_keepcb,
@@ -345,7 +345,7 @@ void gui() {
 	}
 	gtk_widget_set_sensitive(begin_keepcb, FALSE);
 	gtk_box_pack_start(GTK_BOX(hbox2), begin_keepcb, FALSE, FALSE, 0);
-/* Кнопка «Начать» */
+/* “Start” button */
 	begin_button = gtk_button_new_with_label(_("Start"));
 	gtk_widget_set_tooltip_text(
 		begin_button,
@@ -357,7 +357,7 @@ void gui() {
 		begin_button, "clicked", G_CALLBACK(gtk_begin), NULL
 	);
 	gtk_box_pack_end(GTK_BOX(hbox2), begin_button, FALSE, FALSE, 0);
-/* Создание кнопок путей по аргументам */
+/* Creating the buttons of search paths */
 	for(int i = 0; i < opts_v->args_count; i++) {
 		add_path(opts_v->args[i]);
 	}
@@ -367,7 +367,7 @@ void gui() {
 			GTK_FILE_CHOOSER(begin_savefc), opts_v->s
 		);
 	}
-/* Запустить всю эту петрушку */
+/* Run all this parsley */
 	gtk_widget_show_all(window);
 	gtk_main();
 }

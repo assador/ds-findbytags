@@ -46,7 +46,7 @@ char* strconcat(const char *s[], const int count) {
 	}
 	return sr;
 }
-/* Генерация случайной строки с заданным количеством символов */
+/* Generating a random string with a specified number of characters */
 char* random_name(unsigned int len) {
 	char *str = (char*) malloc(len + 1);
 	if(!str) {
