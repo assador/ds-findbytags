@@ -289,14 +289,6 @@ int begin() {
 		}
 		filename[strlen(filename) - 1] = '\0';
 		filename_qtd = strconcat((const char*[]) {"'", filename, "'"}, 3);
-		filetags = (char**) malloc(sizeof(char*));
-		if(!filetags) {
-			fprintf(
-				stderr,
-				_("begin(): malloc() failed: insufficient memory.\n")
-			);
-			return 0;
-		}
 		/* Сбор тэгов в XMP-метаданных */
 		exiv_com = strconcat((const char*[]) {"exiv2 -PXnt ", filename_qtd}, 2);
 		exiv_out = command_output(exiv_com);

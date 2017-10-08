@@ -656,16 +656,16 @@ static void treeview_foreach_selected(
 		gtk_tree_model_get(model, iter, 0, &tagname, 1, &involved, -1);
 		if(strcmp(involved, "true") == 0) {
 			gchar *new;
+			int allocated = 0;
 			if(d->append) {
 				new = entry_text(GTK_ENTRY(d->recipient));
-				new = new ? strconcat((const char*[]) {new, ", "}, 2) : "";
-			} else {
-				new = "";
-			}
-			gtk_entry_set_text(
-				GTK_ENTRY(d->recipient),
-				strconcat((const char*[]) {new, tagname}, 2)
-			);
+				if(new) {
+					new = strconcat((const char*[]) {new, ", ", tagname}, 3);
+					allocated = 1;
+				} else new = tagname;
+			} else new = tagname;
+			gtk_entry_set_text(GTK_ENTRY(d->recipient), new);
+			if(allocated) free(new);
 		}
 		free(tagname);
 		free(involved);

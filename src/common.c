@@ -65,7 +65,7 @@ char* random_name(unsigned int len) {
 	return(str);
 }
 char* command_output(const char *command) {
-	int idxc = 0, bufsize_step = 256, bufsize = bufsize_step;
+	int idxc = 0, bufsize_step = 4096, bufsize = bufsize_step;
 	char *buffer = (char*) malloc(bufsize);
 	if(!buffer) {
 		fprintf(
