@@ -273,8 +273,8 @@ int begin() {
 	}
 	char **filetags;
 	char *exiv_com, *exiv_out, *filename_qtd;
-	pcre *re_s = regexpcompile("^subject\\s*(?=\\S)(.+)$", PCRE_MULTILINE);
-	pcre *re_k = regexpcompile("^Keywords\\s*(?=\\S)(.+)$", PCRE_MULTILINE);
+	pcre *re_s = regexpcompile("^subject\\s+(?=\\S)(.+)$", PCRE_MULTILINE);
+	pcre *re_k = regexpcompile("^Keywords\\s+(?=\\S)(.+)$", PCRE_MULTILINE);
 	Reresult *reresult;
 	size_t filename_size_step = 256, filename_size = filename_size_step;
 	char *filename = (char*) malloc(filename_size);
