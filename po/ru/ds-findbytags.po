@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ds-findbytags, v2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-15 20:10+0300\n"
+"POT-Creation-Date: 2017-10-15 23:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Sokolov <dmitry@sokolov.website>\n"
 "Language-Team: Russian\n"
@@ -468,7 +468,7 @@ msgstr "Удалить путь для поиска"
 msgid "wdgt_push(): malloc() failed: insufficient memory.\n"
 msgstr "wdgt_push(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:106
+#: src/main.c:107
 #, c-format
 msgid ""
 "\n"
@@ -477,58 +477,58 @@ msgstr ""
 "\n"
 "По крайней мере один путь или ключ -g должны быть заданы (см. ниже).\n"
 
-#: src/main.c:113 src/main.c:122
+#: src/main.c:114 src/main.c:123
 #, c-format
 msgid "main(): malloc() failed: insufficient memory.\n"
 msgstr "main(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:133
+#: src/main.c:134
 #, c-format
 msgid "main(): No paths to search in.\n"
 msgstr "main(): Не выбраны пути для поиска.\n"
 
-#: src/main.c:168 src/main.c:195 src/main.c:204 src/main.c:212 src/main.c:220
-#: src/main.c:256 src/main.c:279 src/main.c:290 src/main.c:360 src/main.c:424
-#: src/main.c:471
+#: src/main.c:169 src/main.c:196 src/main.c:205 src/main.c:213 src/main.c:221
+#: src/main.c:259 src/main.c:282 src/main.c:293 src/main.c:363 src/main.c:427
+#: src/main.c:474
 #, c-format
 msgid "begin(): malloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:176
+#: src/main.c:177
 msgid "Odd number of tags to replace."
 msgstr "Нечётное количество тэгов для замены."
 
-#: src/main.c:183
+#: src/main.c:184
 #, c-format
 msgid "begin(): Odd number of elements in the value of key -c.\n"
 msgstr "begin(): Нечётное количество элементов в значении ключа -c.\n"
 
-#: src/main.c:295
+#: src/main.c:298
 #, c-format
 msgid "begin(): Cannot into popen.\n"
 msgstr "begin(): popen(): не могу открыть поток.\n"
 
-#: src/main.c:306 src/main.c:349 src/main.c:416 src/main.c:497
+#: src/main.c:309 src/main.c:352 src/main.c:419 src/main.c:500
 #, c-format
 msgid "begin(): realloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:443
+#: src/main.c:446
 #, c-format
 msgid "begin(): Cannot into pclose.\n"
 msgstr "begin(): pclose(): не могу закрыть поток.\n"
 
-#: src/main.c:453
+#: src/main.c:456
 #, c-format
 msgid "begin(): Cannot create %s.\n"
 msgstr "begin(): Не могу создать %s.\n"
 
-#: src/main.c:588 src/main.c:616 src/main.c:633
+#: src/main.c:591 src/main.c:619 src/main.c:636
 #, c-format
 msgid "actions(): realloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:596
+#: src/main.c:599
 #, c-format
 msgid "actions(): malloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка malloc(): недостаточно памяти.\n"

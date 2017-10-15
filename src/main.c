@@ -86,12 +86,13 @@
 #include "help.h"
 
 #define EXTS "gif|jpe?g|pdf|png|tiff?"
-const char *file_separator =
-	#ifdef _WIN32
-		"\\";
-	#else
-		"/";
-	#endif
+#ifdef _WIN32
+	#define TMP "C:\\WINDOWS\\Temp"
+	#define FILE_SEPARATOR "\\"
+#else
+	#define TMP "/tmp"
+	#define FILE_SEPARATOR "/"
+#endif
 Opts *opts, *opts_v;
 Tags *tags;
 
@@ -241,7 +242,9 @@ int begin() {
 	int tosave = 1;
 	if(!opts_v->s) {
 		tosave = 0;
-		opts_v->s = random_name(16);
+		char *tmp = random_name(16);
+		opts_v->s = strconcat((const char*[]) {TMP, FILE_SEPARATOR, tmp}, 3);
+		free(tmp);
 	}
 /* Creating a list of paths to all the files to be analized */
 	size_t args_len = 0, args_offset = 0;
@@ -268,7 +271,7 @@ int begin() {
 	char *command = strconcat((const char*[]) {
 		"find ",
 		argslist,
-		" -type f -regextype posix-extended -regex '.*\\.(",
+		" -type f -regextype posix-extended -iregex '.*\\.(",
 		EXTS,
 		")$'"
 	}, 5);
@@ -489,7 +492,7 @@ int begin() {
 		char *fullname = strdup(opts_v->s);
 		fullname = (char*) realloc(
 			fullname,
-			strlen(fullname) + strlen(file_separator) + strlen(filename) + 1
+			strlen(fullname) + strlen(FILE_SEPARATOR) + strlen(filename) + 1
 		);
 		if(!fullname) {
 			fprintf(
@@ -498,7 +501,7 @@ int begin() {
 			);
 			return 0;
 		}
-		strncat(fullname, file_separator, strlen(file_separator));
+		strncat(fullname, FILE_SEPARATOR, strlen(FILE_SEPARATOR));
 		strncat(fullname, filename, strlen(filename));
 		symlink(files[i]->fullname, fullname);
 		free(fullname);
