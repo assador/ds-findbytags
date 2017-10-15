@@ -1,6 +1,7 @@
 typedef struct Opts {
 	char** args;
 	int args_count;
+	int h;
 	int g;
 	int k;
 	char* a;

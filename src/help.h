@@ -1,1 +1,1 @@
-void help(int gui);
+void help();

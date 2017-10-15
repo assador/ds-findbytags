@@ -1,5 +1,5 @@
 /**
- * ds-findbytags, v2.0.0, CLI / GTK+ 2
+ * ds-findbytags, v2.0.1, CLI / GTK+ 2
  * Copyright © 2017 Dmitry Sokolov
  * 
  * This file is part of ds-findbytags.
@@ -48,10 +48,11 @@ Opts* structopts(int argc, char **argv) {
 		getenv("HOME"),
 		"/.config/geeqie/geeqierc.xml"
 	}, 2);
-	char *unistdopts = "gka:o:n:i:d:c:e:l:s:t:";
+	char *unistdopts = "hgka:o:n:i:d:c:e:l:s:t:";
 	int opt;
 	while((opt = getopt(argc, argv, unistdopts)) != -1) {
 		switch(opt) {
+			case 'h' : opts->h = 1; break;
 			case 'g' : opts->g = 1; break;
 			case 'k' : opts->k = 1; break;
 			case 'a' : opts->a = optarg; break;

@@ -1,5 +1,5 @@
 /**
- * ds-findbytags, v2.0.0, CLI / GTK+ 2
+ * ds-findbytags, v2.0.1, CLI / GTK+ 2
  * Copyright © 2016-2017 Dmitry Sokolov
  * 
  * This file is part of ds-findbytags.
@@ -26,12 +26,10 @@
 #include <stdio.h>
 #include "help.h"
 
-void help(int gui) {
+void help() {
 	char *help_text = _(
 		"\n"
-		"At least one path or -g key must be specified (see below).\n"
-		"\n"
-		"ds-findbytags, v2.0.0, CLI / GTK+ 2\n"
+		"ds-findbytags, v2.0.1, CLI / GTK+ 2\n"
 		"Copyright © 2016-2017 Dmitry Sokolov\n"
 		"\n"
 		"This program is free software: you can redistribute it and/or modify\n"
@@ -58,12 +56,13 @@ void help(int gui) {
 		"Depends: exiv2, libxml2-dev\n"
 		"Recommends: gtk2\n"
 		"\n"
-		"ds-findbytags [-g] [-k] [-t path_to_tags_file] [-e encoding]\n"
+		"ds-findbytags [-h] [-g] [-k] [-t path_to_tags_file] [-e encoding]\n"
 		"              [-a \"tag, tag, ...\"] [-o \"tag, tag, ...\"] [-n \"tag, tag, ...\"]\n"
 		"              [-i \"tag, tag, ...\"] [-d \"tag, tag, ...\"]\n"
 		"              [-c \"tag, tag, [tag, tag], ...\"] [-l viewer]\n"
 		"              [-s path_the_symlinks_are_saved] path(s)_where_to_search\n"
 		"\n"
+		"-h  — (help)      — Show help and synopsis information and exit the program.\n"
 		"-g  — (GUI)       — If the key is present, the program runs\n"
 		"                    in the GTK interface instead of the CLI interface.\n"
 		"-k  — (keep)      — If the key is present, the symlinks are named by\n"
@@ -100,7 +99,5 @@ void help(int gui) {
 		"\n"
 		"Dmitry Sokolov <dmitry@sokolov.website>\n"
 	);
-	if(!gui) {
-		printf("%s\n", help_text);
-	}
+	printf("%s\n", help_text);
 }

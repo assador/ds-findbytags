@@ -1,5 +1,5 @@
 /**
- * ds-findbytags, v2.0.0, CLI / GTK+ 2
+ * ds-findbytags, v2.0.1, CLI / GTK+ 2
  * Copyright © 2016-2017 Dmitry Sokolov
  * 
  * This file is part of ds-findbytags.
@@ -34,6 +34,7 @@
  *               [-c "tag, tag, [tag, tag], ..."] [-l viewer]
  *               [-s path_the_symlinks_are_saved] path(s)_where_to_search
  * 
+ * -h  — (help)      — Show help and synopsis information and exit the program.
  * -g  — (GUI)       — If the key is present, the program runs
  *                     in the GTK interface instead of the CLI interface.
  * -k  — (keep)      — If the key is present, the symlinks are named by
@@ -101,8 +102,11 @@ int main(int argc, char **argv) {
 	srand(time(NULL));
 	opts = structopts(argc, argv);
 	if(argc == 1) {
-		help(0);
-		return 0;
+		printf(
+			_("\nAt least one path or -g key must be specified (see below).\n")
+		);
+		help();
+		exit(EXIT_SUCCESS);
 	}
 	opts_v = (Opts*) malloc(sizeof(Opts));
 	if(!opts_v) {
@@ -118,6 +122,10 @@ int main(int argc, char **argv) {
 		fprintf(stderr, _("main(): malloc() failed: insufficient memory.\n"));
 		exit(EXIT_FAILURE);
 	}
+	if(opts_v->h) {
+		help();
+		exit(EXIT_SUCCESS);
+	}
 	if(opts_v->g) {
 		gui();
 	} else {
@@ -127,7 +135,7 @@ int main(int argc, char **argv) {
 		}
 		begin();
 	}
-	return 0;
+	exit(EXIT_SUCCESS);
 }
 int begin() {
 /* Converting strings of comma separated tags to arrays */

@@ -5,9 +5,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ds-findbytags, v2.0.0\n"
+"Project-Id-Version: ds-findbytags, v2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-10 10:36+0300\n"
+"POT-Creation-Date: 2017-10-15 17:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Sokolov <dmitry@sokolov.website>\n"
 "Language-Team: Russian\n"
@@ -16,22 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/structopts.c:41 src/structopts.c:98 src/structopts.c:117
+#: src/structopts.c:41 src/structopts.c:99 src/structopts.c:118
 #, c-format
 msgid "structopts(): malloc() failed: insufficient memory.\n"
 msgstr "structopts(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/structopts.c:81
+#: src/structopts.c:82
 #, c-format
 msgid "structopts(): Unknown option `-%c'.\n"
 msgstr "structopts(): Неизвестная опция `-%c'.\n"
 
-#: src/structopts.c:87
+#: src/structopts.c:88
 #, c-format
 msgid "structopts(): Unknown option character `\\x%x'.\n"
 msgstr "structopts(): Неизвестный символ опции `\\x%x'.\n"
 
-#: src/structopts.c:108
+#: src/structopts.c:109
 #, c-format
 msgid "structopts(): %s does not exist or is not a directory.\n"
 msgstr "structopts(): %s не существует, или не является каталогом.\n"
@@ -117,9 +117,7 @@ msgstr "command_output_lines(): pclose(): не могу закрыть пото
 #: src/help.c:31
 msgid ""
 "\n"
-"At least one path or -g key must be specified (see below).\n"
-"\n"
-"ds-findbytags, v2.0.0, CLI / GTK+ 2\n"
+"ds-findbytags, v2.0.1, CLI / GTK+ 2\n"
 "Copyright © 2016-2017 Dmitry Sokolov\n"
 "\n"
 "This program is free software: you can redistribute it and/or modify\n"
@@ -147,13 +145,15 @@ msgid ""
 "Depends: exiv2, libxml2-dev\n"
 "Recommends: gtk2\n"
 "\n"
-"ds-findbytags [-g] [-k] [-t path_to_tags_file] [-e encoding]\n"
+"ds-findbytags [-h] [-g] [-k] [-t path_to_tags_file] [-e encoding]\n"
 "              [-a \"tag, tag, ...\"] [-o \"tag, tag, ...\"] [-n \"tag, "
 "tag, ...\"]\n"
 "              [-i \"tag, tag, ...\"] [-d \"tag, tag, ...\"]\n"
 "              [-c \"tag, tag, [tag, tag], ...\"] [-l viewer]\n"
 "              [-s path_the_symlinks_are_saved] path(s)_where_to_search\n"
 "\n"
+"-h  — (help)      — Show help and synopsis information and exit "
+"the program.\n"
 "-g  — (GUI)       — If the key is present, the program runs\n"
 "                    in the GTK interface instead of the CLI interface.\n"
 "-k  — (keep)      — If the key is present, the symlinks are named by\n"
@@ -198,9 +198,7 @@ msgid ""
 "Dmitry Sokolov <dmitry@sokolov.website>\n"
 msgstr ""
 "\n"
-"По крайней мере один путь или ключ -g должны быть заданы (см. ниже).\n"
-"\n"
-"ds-findbytags, v2.0.0, CLI / GTK+ 2\n"
+"ds-findbytags, v2.0.1, CLI / GTK+ 2\n"
 "Copyright © 2016-2017 Dmitry Sokolov\n"
 "\n"
 "This program is free software: you can redistribute it and/or modify\n"
@@ -229,13 +227,15 @@ msgstr ""
 "Зависимости: exiv2, libxml2-dev\n"
 "Рекомендуется: gtk2\n"
 "\n"
-"ds-findbytags [-g] [-k] [-t путь_к_файлу_тэгов] [-e кодировка]\n"
+"ds-findbytags [-h] [-g] [-k] [-t путь_к_файлу_тэгов] [-e кодировка]\n"
 "              [-a \"тэг, тэг, ...\"] [-o \"тэг, тэг, ...\"] [-n \"тэг, "
 "тэг, ...\"]\n"
 "              [-i \"тэг, тэг, ...\"] [-d \"тэг, тэг, ...\"]\n"
 "              [-c \"тэг, тэг, [тэг, тэг], ...\"] [-l просмотрщик]\n"
 "              [-s путь_к_сохраняемым_ссылкам] путь(-и)_где_искать\n"
 "\n"
+"-h  — от help      — Показать информацию о программе и синтаксисе её "
+"запуска                      и выйти из неё.\n"
 "-g  — от GUI       — При наличии ключа скрипт запускается в GTK-интерфейсе\n"
 "                     вместо CLI-интерфейса.\n"
 "-k  — от keep      — При наличии ключа ссылки именуются по именам найденных\n"
@@ -276,31 +276,76 @@ msgstr ""
 "птички\" \\\n"
 "                      -l \"no\" -s \"~/chosen\" ~/photos1 ~/photos2\n"
 "\n"
-"Dmitry Sokolov <dmitry@sokolov.website>\n"
+"Дмитрий Соколов <dmitry@sokolov.website>\n"
 
-#: src/gui.c:117
-msgid "ds-findbytags — Search images by tags and modify tags of found images"
+#: src/gui.c:38
+msgid "Dmitry Sokolov <dmitry@sokolov.website>"
+msgstr "Дмитрий Соколов <dmitry@sokolov.website>"
+
+#: src/gui.c:41
+msgid ""
+"This program is free software: you can redistribute it and/or modify it\n"
+"under the terms of the GNU General Public License as published\n"
+"by the Free Software Foundation, either version 3 of the License,\n"
+"or (at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty\n"
+"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+"See the GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program. If not, see <http://www.gnu.org/licenses/>"
 msgstr ""
-"ds-findbytags — Поиск картинок по тэгам и операции с тэгами найденных "
-"картинок"
 
-#: src/gui.c:157
+#: src/gui.c:52
+msgid ""
+"C / GTK+ 2 program, that searches in the specified directories the images "
+"with keywords (tags) specified in XMP or IPTC metadata and satisfy "
+"the specified AND, OR, NOT conditions. Optionally the found images will open "
+"in the specified program. Along the way, you can massively add, remove "
+"or replace tags in the found images and to save symlinks to these images "
+"in the specified directory with original or random names.\n"
+"\n"
+"Depends: exiv2, libxml2-dev. Recommends: gtk2.\n"
+"\n"
+"For more information run the script without any keys or arguments, or with -"
+"h key."
+msgstr ""
+"Программа (C / GTK+ 2) ищет в указанных каталогах изображения с ключевыми "
+"словами (тэгами), заданными в метаданных XMP или IPTC и удовлетворяющими "
+"заданным логическим условиям И, ИЛИ, НЕ. Опционально найденные изображения "
+"откроются в указанной программе. Попутно в найденных изображениях можно "
+"массово добавить, удалить или заменить тэги, сохранить ссылки "
+"на эти изображения в указанный каталог с оригинальными или случайными "
+"именами.\n"
+"\n"
+"Зависимости: exiv2, libxml2-dev. Рекомендуется: gtk2.\n"
+"\n"
+"Для получения более подробной информации запустите программу без ключей "
+"и аргументов или с ключом -h."
+
+#: src/gui.c:153
+msgid " — Search images by tags and modify tags of found images"
+msgstr " — Поиск картинок по тэгам и операции с тэгами найденных картинок"
+
+#: src/gui.c:194
 msgid " Search in "
 msgstr " Искать в "
 
-#: src/gui.c:167
+#: src/gui.c:204
 msgid "Add new path to search"
 msgstr "Добавить новый путь для поиска"
 
-#: src/gui.c:177
+#: src/gui.c:214
 msgid " Search by tags "
 msgstr " Поиск по тэгам "
 
-#: src/gui.c:186
+#: src/gui.c:223
 msgid "Contain all of these tags:"
 msgstr "Присутствуют все тэги из:"
 
-#: src/gui.c:196
+#: src/gui.c:233
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN ALL\n"
@@ -310,11 +355,11 @@ msgstr ""
 "ПРИСУТСТВУЮТ ВСЕ\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:205
+#: src/gui.c:242
 msgid "Contain at least one of these tags:"
 msgstr "Присутствует хотя бы один тэг из:"
 
-#: src/gui.c:215
+#: src/gui.c:252
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN AT LEAST ONE\n"
@@ -324,11 +369,11 @@ msgstr ""
 "ПРИСУТСТВУЕТ ХОТЯ БЫ ОДИН\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:224
+#: src/gui.c:261
 msgid "Contain no one of these tags:"
 msgstr "Нет ни одного тэга из:"
 
-#: src/gui.c:234
+#: src/gui.c:271
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN NO ONE\n"
@@ -338,33 +383,33 @@ msgstr ""
 "НЕТ НИ ОДНОГО\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:243
+#: src/gui.c:280
 msgid " Actions with found "
 msgstr " Действия с найденным "
 
-#: src/gui.c:252
+#: src/gui.c:289
 msgid "Add these tags to found files:"
 msgstr "Добавить тэги в найденные файлы:"
 
-#: src/gui.c:262
+#: src/gui.c:299
 msgid "ADD these tags (separated by commas) to found files"
 msgstr ""
 "ДОБАВИТЬ в найденные файлы перечисленные здесь тэги (разделённые запятыми)"
 
-#: src/gui.c:270
+#: src/gui.c:307
 msgid "Delete these tags from found files:"
 msgstr "Удалить тэги из найденных файлов:"
 
-#: src/gui.c:280
+#: src/gui.c:317
 msgid "DELETE these tags (separated by commas) from found files"
 msgstr ""
 "УДАЛИТЬ из найденных файлов перечисленные здесь тэги (разделённые запятыми)"
 
-#: src/gui.c:288
+#: src/gui.c:325
 msgid "Replace tags in found files:"
 msgstr "Заменить тэги в найденных файлах:"
 
-#: src/gui.c:298
+#: src/gui.c:335
 msgid ""
 "REPLACE in found files some tags with others. Tags in this field are listed "
 "pairs with commas. For example, if you enter in this field [sushi, meat, "
@@ -376,11 +421,11 @@ msgstr ""
 "[овсянка, борщ, лада калина, мотоцикл], то в найденных файлах тэг «овсянка» "
 "заменится на «борщ», а тэг «лада калина» заменится на «мотоцикл»."
 
-#: src/gui.c:313
+#: src/gui.c:350
 msgid "Save symlinks to:"
 msgstr "Сохранять ссылки в:"
 
-#: src/gui.c:320
+#: src/gui.c:357
 msgid ""
 "If checked, symlinks to found files are saved to the directory, selected "
 "righter. It can be useful for albums compilation."
@@ -388,20 +433,20 @@ msgstr ""
 "Если отмечено, в выбранном правее каталоге сохраняются символические ссылки "
 "на найденные файлы. Это может быть удобно для составления альбомов."
 
-#: src/gui.c:326
+#: src/gui.c:363
 msgid "Save symlinks to…"
 msgstr "Сохранять ссылки в…"
 
-#: src/gui.c:333
+#: src/gui.c:370
 msgid "Directory in which the symlinks to found files are saved"
 msgstr ""
 "Каталог, в котором сохраняются символические ссылки на найденные файлы."
 
-#: src/gui.c:336
+#: src/gui.c:373
 msgid "Save names"
 msgstr "Сохранять имена"
 
-#: src/gui.c:339
+#: src/gui.c:376
 msgid ""
 "If checked, symlinks to found files are saved with names of files "
 "themselves. Otherwise symlinks get random names. Set this option only if you "
@@ -412,11 +457,11 @@ msgstr ""
 "эту галочку только если уверены, что все найденные файлы имеют уникальные "
 "имена."
 
-#: src/gui.c:349
+#: src/gui.c:386
 msgid "Start"
 msgstr "Начать"
 
-#: src/gui.c:352
+#: src/gui.c:389
 msgid ""
 "Start search (and operations with found files if they are specified). "
 "The search can take quite a long time, if there is a large number of files."
@@ -424,104 +469,113 @@ msgstr ""
 "Начать поиск (и операции с найденными файлами, если они заданы). Поиск может "
 "продолжаться довольно долго, если происходит по большому количеству файлов."
 
-#: src/gui.c:414 src/gui.c:427
+#: src/gui.c:451 src/gui.c:464
 #, c-format
 msgid "paths_from_buttons(): malloc() failed: insufficient memory.\n"
 msgstr "paths_from_buttons(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:489
+#: src/gui.c:526
 #, c-format
 msgid "tree(): Cannot open %s.\n"
 msgstr "tree(): Не могу открыть %s.\n"
 
-#: src/gui.c:497 src/gui.c:518
+#: src/gui.c:534 src/gui.c:555
 #, c-format
 msgid "tree(): malloc() failed: insufficient memory.\n"
 msgstr "tree(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:508
+#: src/gui.c:545
 #, c-format
 msgid "tree(): realloc() failed: insufficient memory.\n"
 msgstr "tree(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/gui.c:531
+#: src/gui.c:568
 #, c-format
 msgid "tree(): Cannot find tags tree in %s.\n"
 msgstr "tree(): Не могу найти дерево тэгов в %s.\n"
 
-#: src/gui.c:691
+#: src/gui.c:728
 msgid "Search in…"
 msgstr "Искать в…"
 
-#: src/gui.c:710
+#: src/gui.c:747
 msgid "This path is already added. Choose another."
 msgstr "Этот путь уже добавлен. Выберите другой."
 
-#: src/gui.c:742
+#: src/gui.c:779
 msgid "Change the path to search"
 msgstr "Изменить путь для поиска"
 
-#: src/gui.c:743
+#: src/gui.c:780
 msgid "Remove the path to search"
 msgstr "Удалить путь для поиска"
 
-#: src/gui.c:770
+#: src/gui.c:824
 #, c-format
 msgid "wdgt_push(): malloc() failed: insufficient memory.\n"
 msgstr "wdgt_push(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:109 src/main.c:118
+#: src/main.c:106
+#, c-format
+msgid ""
+"\n"
+"At least one path or -g key must be specified (see below).\n"
+msgstr ""
+"\n"
+"По крайней мере один путь или ключ -g должны быть заданы (см. ниже).\n"
+
+#: src/main.c:113 src/main.c:122
 #, c-format
 msgid "main(): malloc() failed: insufficient memory.\n"
 msgstr "main(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:125
+#: src/main.c:133
 #, c-format
 msgid "main(): No paths to search in.\n"
 msgstr "main(): Не выбраны пути для поиска.\n"
 
-#: src/main.c:160 src/main.c:187 src/main.c:196 src/main.c:204 src/main.c:212
-#: src/main.c:248 src/main.c:271 src/main.c:282 src/main.c:352 src/main.c:416
-#: src/main.c:463
+#: src/main.c:168 src/main.c:195 src/main.c:204 src/main.c:212 src/main.c:220
+#: src/main.c:256 src/main.c:279 src/main.c:290 src/main.c:360 src/main.c:424
+#: src/main.c:471
 #, c-format
 msgid "begin(): malloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/main.c:168
+#: src/main.c:176
 msgid "Odd number of tags to replace."
 msgstr "Нечётное количество тэгов для замены."
 
-#: src/main.c:175
+#: src/main.c:183
 #, c-format
 msgid "begin(): Odd number of elements in the value of key -c.\n"
 msgstr "begin(): Нечётное количество элементов в значении ключа -c.\n"
 
-#: src/main.c:287
+#: src/main.c:295
 #, c-format
 msgid "begin(): Cannot into popen.\n"
 msgstr "begin(): popen(): не могу открыть поток.\n"
 
-#: src/main.c:298 src/main.c:341 src/main.c:408 src/main.c:489
+#: src/main.c:306 src/main.c:349 src/main.c:416 src/main.c:497
 #, c-format
 msgid "begin(): realloc() failed: insufficient memory.\n"
 msgstr "begin(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:435
+#: src/main.c:443
 #, c-format
 msgid "begin(): Cannot into pclose.\n"
 msgstr "begin(): pclose(): не могу закрыть поток.\n"
 
-#: src/main.c:445
+#: src/main.c:453
 #, c-format
 msgid "begin(): Cannot create %s.\n"
 msgstr "begin(): Не могу создать %s.\n"
 
-#: src/main.c:580 src/main.c:608 src/main.c:625
+#: src/main.c:588 src/main.c:616 src/main.c:633
 #, c-format
 msgid "actions(): realloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/main.c:588
+#: src/main.c:596
 #, c-format
 msgid "actions(): malloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка malloc(): недостаточно памяти.\n"

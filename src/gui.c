@@ -1,5 +1,5 @@
 /**
- * ds-findbytags, v2.0.0, CLI / GTK+ 2
+ * ds-findbytags, v2.0.1, CLI / GTK+ 2
  * Copyright © 2016-2017 Dmitry Sokolov
  * 
  * This file is part of ds-findbytags.
@@ -33,6 +33,33 @@
 #include "regexpmatch.h"
 #include "help.h"
 
+#define VERSION "v2.0.1"
+#define COPYRIGHT "Copyright © 2016-2017"
+#define AUTHOR _("Dmitry Sokolov <dmitry@sokolov.website>")
+#define WEBSITE "http://sokolov.website/programs/ds-utils/ds-findbytags"
+#define LICENSE \
+	_("This program is free software: you can redistribute it and/or modify it" \
+	"\nunder the terms of the GNU General Public License as published\n" \
+	"by the Free Software Foundation, either version 3 of the License,\n" \
+	"or (at your option) any later version.\n\n" \
+	"This program is distributed in the hope that it will be useful,\n" \
+	"but WITHOUT ANY WARRANTY; without even the implied warranty\n" \
+	"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n" \
+	"See the GNU General Public License for more details.\n\n" \
+	"You should have received a copy of the GNU General Public License\n" \
+	"along with this program. If not, see <http://www.gnu.org/licenses/>")
+#define COMMENTS \
+	_("C / GTK+ 2 program, that searches in the specified directories " \
+	"the images with keywords (tags) specified in XMP or IPTC metadata " \
+	"and satisfy the specified AND, OR, NOT conditions. Optionally the found " \
+	"images will open in the specified program. Along the way, you can " \
+	"massively add, remove or replace tags in the found images and to save " \
+	"symlinks to these images in the specified directory with original " \
+	"or random names.\n\n" \
+	"Depends: exiv2, libxml2-dev. Recommends: gtk2.\n\n" \
+	"For more information run the script without any keys or arguments, " \
+	"or with -h key.")
+
 typedef struct Widget_aa {
 	GtkWidget *widget;
 	char *action;
@@ -45,6 +72,7 @@ static int wdgt_remove_by_widget(Wdgt **head, GtkWidget *widget);
 static Wdgt* wdgt_get_by_n(Wdgt *head, int n);
 static Wdgt* wdgt_get_by_widget(Wdgt *head, GtkWidget *widget);
 
+static void show_about();
 static char* entry_text(GtkEntry *entry);
 static void findin_p_clicked(void);
 static void findin_b_clicked(GtkWidget *b);
@@ -54,6 +82,7 @@ static void add_path(gchar *path);
 static Wdgt* was_path(Wdgt *head, gchar *path);
 static xmlDoc* tree(char *path, char *root);
 static GtkWidget* build_tree(xmlDoc* tree);
+static void key_released(GtkWidget *widget, GdkEventKey *event);
 static int treeview_clicked(GtkWidget *widget, GdkEventButton *event);
 static void append_children(
 	GtkTreeModel *model,
@@ -112,11 +141,19 @@ void gui() {
 		G_CALLBACK(gtk_main_quit),
 		NULL
 	);
-	gtk_window_set_title(
-		GTK_WINDOW(window),
-		_("ds-findbytags — "
-		"Search images by tags and modify tags of found images")
+	g_signal_connect(
+		G_OBJECT(window),
+		"key-release-event",
+		G_CALLBACK(key_released),
+		NULL
 	);
+	char *windowtitle = strconcat((const char*[]) {
+		"ds-findbytags ",
+		VERSION,
+		_(" — Search images by tags and modify tags of found images")
+	}, 3);
+	gtk_window_set_title(GTK_WINDOW(window), windowtitle);
+	free(windowtitle);
 	gtk_window_set_default_size(GTK_WINDOW(window), 700, 100);
 	gtk_container_set_border_width(GTK_CONTAINER(window), 5);
 /* Horizontal container */
@@ -761,6 +798,23 @@ void show_message(GtkMessageType type, gchar *message) {
 	);
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
+}
+static void key_released(GtkWidget *widget, GdkEventKey *event) {
+	if(event->hardware_keycode == 67) {
+		show_about();
+	};
+}
+static void show_about() {
+	GtkWidget *dialog = gtk_about_dialog_new();
+	gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), VERSION);
+	gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog), COPYRIGHT);
+	const gchar *authors[] = {AUTHOR, NULL};
+	gtk_about_dialog_set_authors(GTK_ABOUT_DIALOG(dialog), authors);
+	gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), WEBSITE);
+	gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), LICENSE);
+	gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), COMMENTS);
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(GTK_WIDGET(dialog));
 }
 static Wdgt* wdgt_push(Wdgt **head, GtkWidget *widget, gchar* string) {
 	Wdgt *tmp = (Wdgt*) malloc(sizeof(Wdgt));
