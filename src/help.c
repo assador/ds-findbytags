@@ -24,14 +24,20 @@
 #include <locale.h>
 #define _(String) gettext(String)
 #include <stdio.h>
+#include <stdlib.h>
 #include "help.h"
+#include "constants.h"
+#include "common.h"
 
 void help() {
-	char *help_text = _(
-		"\n"
-		"ds-findbytags, v2.0.1, CLI / GTK+ 2\n"
-		"Copyright © 2016-2017 Dmitry Sokolov\n"
-		"\n"
+	char *help_text = strconcat((const char*[]) {
+		"\n",
+		NAME,
+		", ",
+		VERSION,
+		", CLI / GTK+ 2\n",
+		COPYRIGHT,
+		_("\n\n"
 		"This program is free software: you can redistribute it and/or modify\n"
 		"it under the terms of the GNU General Public License as published by\n"
 		"the Free Software Foundation, either version 3 of the License, or\n"
@@ -51,8 +57,9 @@ void help() {
 		"in the specified program. Along the way, you can massively add, remove\n"
 		"or replace tags in the found images and to save symlinks to these images\n"
 		"in the specified directory with original or random names.\n"
-		"Read more: http://sokolov.website/programs/ds-utils/ds-findbytags\n"
-		"\n"
+		"Read more: "),
+		WEBSITE,
+		_("\n\n"
 		"Depends: exiv2, libxml2-dev\n"
 		"Recommends: gtk2\n"
 		"\n"
@@ -96,8 +103,10 @@ void help() {
 		"                       -a \"sea, gloomy clouds, stones\" -o \"birds, dolphins\" \\\n"
 		"                       -n \"sharks, bees\" -i \"wow\" -d \"sea\" -c \"birds, cats\" \\\n"
 		"                       -l \"no\" -s \"~/chosen\" ~/photos1 ~/photos2\n"
+		"\n"),
+		AUTHOR,
 		"\n"
-		"Dmitry Sokolov <dmitry@sokolov.website>\n"
-	);
+	}, 11);
 	printf("%s\n", help_text);
+	free(help_text);
 }

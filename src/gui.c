@@ -28,37 +28,11 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include "gui.h"
+#include "constants.h"
 #include "common.h"
 #include "structopts.h"
 #include "regexpmatch.h"
 #include "help.h"
-
-#define VERSION "v2.0.1"
-#define COPYRIGHT "Copyright © 2016-2017"
-#define AUTHOR _("Dmitry Sokolov <dmitry@sokolov.website>")
-#define WEBSITE "http://sokolov.website/programs/ds-utils/ds-findbytags"
-#define LICENSE \
-	_("This program is free software: you can redistribute it and/or modify it" \
-	"\nunder the terms of the GNU General Public License as published\n" \
-	"by the Free Software Foundation, either version 3 of the License,\n" \
-	"or (at your option) any later version.\n\n" \
-	"This program is distributed in the hope that it will be useful,\n" \
-	"but WITHOUT ANY WARRANTY; without even the implied warranty\n" \
-	"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n" \
-	"See the GNU General Public License for more details.\n\n" \
-	"You should have received a copy of the GNU General Public License\n" \
-	"along with this program. If not, see <http://www.gnu.org/licenses/>")
-#define COMMENTS \
-	_("C / GTK+ 2 program, that searches in the specified directories " \
-	"the images with keywords (tags) specified in XMP or IPTC metadata " \
-	"and satisfy the specified AND, OR, NOT conditions. Optionally the found " \
-	"images will open in the specified program. Along the way, you can " \
-	"massively add, remove or replace tags in the found images and to save " \
-	"symlinks to these images in the specified directory with original " \
-	"or random names.\n\n" \
-	"Depends: exiv2, libxml2-dev. Recommends: gtk2.\n\n" \
-	"For more information run the script without any keys or arguments, " \
-	"or with -h key.")
 
 typedef struct Widget_aa {
 	GtkWidget *widget;
@@ -148,10 +122,11 @@ void gui() {
 		NULL
 	);
 	char *windowtitle = strconcat((const char*[]) {
-		"ds-findbytags ",
+		NAME,
+		" ",
 		VERSION,
 		_(" — Search images by tags and modify tags of found images")
-	}, 3);
+	}, 4);
 	gtk_window_set_title(GTK_WINDOW(window), windowtitle);
 	free(windowtitle);
 	gtk_window_set_default_size(GTK_WINDOW(window), 700, 100);

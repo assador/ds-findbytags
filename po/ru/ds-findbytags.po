@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ds-findbytags, v2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-15 17:51+0300\n"
+"POT-Creation-Date: 2017-10-15 20:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Sokolov <dmitry@sokolov.website>\n"
 "Language-Team: Russian\n"
@@ -114,11 +114,9 @@ msgstr "command_output_lines(): ошибка realloc(): недостаточно
 msgid "command_output_lines(): Cannot into pclose.\n"
 msgstr "command_output_lines(): pclose(): не могу закрыть поток.\n"
 
-#: src/help.c:31
+#: src/help.c:40
 msgid ""
 "\n"
-"ds-findbytags, v2.0.1, CLI / GTK+ 2\n"
-"Copyright © 2016-2017 Dmitry Sokolov\n"
 "\n"
 "This program is free software: you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as published by\n"
@@ -140,7 +138,36 @@ msgid ""
 "in the specified program. Along the way, you can massively add, remove\n"
 "or replace tags in the found images and to save symlinks to these images\n"
 "in the specified directory with original or random names.\n"
-"Read more: http://sokolov.website/programs/ds-utils/ds-findbytags\n"
+"Read more: "
+msgstr ""
+"\n"
+"\n"
+"This program is free software: you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation, either version 3 of the License, or\n"
+"(at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
+"\n"
+"Программа ищет в указанных каталогах изображения с ключевыми словами "
+"(тэгами),\n"
+"заданными в метаданных XMP или IPTC и удовлетворяющими заданным логическим\n"
+"условиям И, ИЛИ, НЕ. Опционально найденные изображения откроются в "
+"указанной\n"
+"программе. Попутно в найденных изображениях можно массово добавить, удалить\n"
+"или заменить тэги, сохранить ссылки на эти изображения в указанный каталог\n"
+"с оригинальными или случайными именами.\n"
+"Подробнее: "
+
+#: src/help.c:62
+msgid ""
+"\n"
 "\n"
 "Depends: exiv2, libxml2-dev\n"
 "Recommends: gtk2\n"
@@ -195,34 +222,8 @@ msgid ""
 "cats\" \\\n"
 "                       -l \"no\" -s \"~/chosen\" ~/photos1 ~/photos2\n"
 "\n"
-"Dmitry Sokolov <dmitry@sokolov.website>\n"
 msgstr ""
 "\n"
-"ds-findbytags, v2.0.1, CLI / GTK+ 2\n"
-"Copyright © 2016-2017 Dmitry Sokolov\n"
-"\n"
-"This program is free software: you can redistribute it and/or modify\n"
-"it under the terms of the GNU General Public License as published by\n"
-"the Free Software Foundation, either version 3 of the License, or\n"
-"(at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-"GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
-"\n"
-"Программа ищет в указанных каталогах изображения с ключевыми словами "
-"(тэгами),\n"
-"заданными в метаданных XMP или IPTC и удовлетворяющими заданным логическим\n"
-"условиям И, ИЛИ, НЕ. Опционально найденные изображения откроются в "
-"указанной\n"
-"программе. Попутно в найденных изображениях можно массово добавить, удалить\n"
-"или заменить тэги, сохранить ссылки на эти изображения в указанный каталог\n"
-"с оригинальными или случайными именами.\n"
-"Подробнее: http://sokolov.website/programs/ds-utils/ds-findbytags\n"
 "\n"
 "Зависимости: exiv2, libxml2-dev\n"
 "Рекомендуется: gtk2\n"
@@ -234,8 +235,8 @@ msgstr ""
 "              [-c \"тэг, тэг, [тэг, тэг], ...\"] [-l просмотрщик]\n"
 "              [-s путь_к_сохраняемым_ссылкам] путь(-и)_где_искать\n"
 "\n"
-"-h  — от help      — Показать информацию о программе и синтаксисе её "
-"запуска                      и выйти из неё.\n"
+"-h  — от help      — Показать информацию о программе и синтаксисе её запуска "
+"и выйти из неё.\n"
 "-g  — от GUI       — При наличии ключа скрипт запускается в GTK-интерфейсе\n"
 "                     вместо CLI-интерфейса.\n"
 "-k  — от keep      — При наличии ключа ссылки именуются по именам найденных\n"
@@ -276,76 +277,28 @@ msgstr ""
 "птички\" \\\n"
 "                      -l \"no\" -s \"~/chosen\" ~/photos1 ~/photos2\n"
 "\n"
-"Дмитрий Соколов <dmitry@sokolov.website>\n"
 
-#: src/gui.c:38
-msgid "Dmitry Sokolov <dmitry@sokolov.website>"
-msgstr "Дмитрий Соколов <dmitry@sokolov.website>"
-
-#: src/gui.c:41
-msgid ""
-"This program is free software: you can redistribute it and/or modify it\n"
-"under the terms of the GNU General Public License as published\n"
-"by the Free Software Foundation, either version 3 of the License,\n"
-"or (at your option) any later version.\n"
-"\n"
-"This program is distributed in the hope that it will be useful,\n"
-"but WITHOUT ANY WARRANTY; without even the implied warranty\n"
-"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-"See the GNU General Public License for more details.\n"
-"\n"
-"You should have received a copy of the GNU General Public License\n"
-"along with this program. If not, see <http://www.gnu.org/licenses/>"
-msgstr ""
-
-#: src/gui.c:52
-msgid ""
-"C / GTK+ 2 program, that searches in the specified directories the images "
-"with keywords (tags) specified in XMP or IPTC metadata and satisfy "
-"the specified AND, OR, NOT conditions. Optionally the found images will open "
-"in the specified program. Along the way, you can massively add, remove "
-"or replace tags in the found images and to save symlinks to these images "
-"in the specified directory with original or random names.\n"
-"\n"
-"Depends: exiv2, libxml2-dev. Recommends: gtk2.\n"
-"\n"
-"For more information run the script without any keys or arguments, or with -"
-"h key."
-msgstr ""
-"Программа (C / GTK+ 2) ищет в указанных каталогах изображения с ключевыми "
-"словами (тэгами), заданными в метаданных XMP или IPTC и удовлетворяющими "
-"заданным логическим условиям И, ИЛИ, НЕ. Опционально найденные изображения "
-"откроются в указанной программе. Попутно в найденных изображениях можно "
-"массово добавить, удалить или заменить тэги, сохранить ссылки "
-"на эти изображения в указанный каталог с оригинальными или случайными "
-"именами.\n"
-"\n"
-"Зависимости: exiv2, libxml2-dev. Рекомендуется: gtk2.\n"
-"\n"
-"Для получения более подробной информации запустите программу без ключей "
-"и аргументов или с ключом -h."
-
-#: src/gui.c:153
+#: src/gui.c:128
 msgid " — Search images by tags and modify tags of found images"
 msgstr " — Поиск картинок по тэгам и операции с тэгами найденных картинок"
 
-#: src/gui.c:194
+#: src/gui.c:169
 msgid " Search in "
 msgstr " Искать в "
 
-#: src/gui.c:204
+#: src/gui.c:179
 msgid "Add new path to search"
 msgstr "Добавить новый путь для поиска"
 
-#: src/gui.c:214
+#: src/gui.c:189
 msgid " Search by tags "
 msgstr " Поиск по тэгам "
 
-#: src/gui.c:223
+#: src/gui.c:198
 msgid "Contain all of these tags:"
 msgstr "Присутствуют все тэги из:"
 
-#: src/gui.c:233
+#: src/gui.c:208
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN ALL\n"
@@ -355,11 +308,11 @@ msgstr ""
 "ПРИСУТСТВУЮТ ВСЕ\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:242
+#: src/gui.c:217
 msgid "Contain at least one of these tags:"
 msgstr "Присутствует хотя бы один тэг из:"
 
-#: src/gui.c:252
+#: src/gui.c:227
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN AT LEAST ONE\n"
@@ -369,11 +322,11 @@ msgstr ""
 "ПРИСУТСТВУЕТ ХОТЯ БЫ ОДИН\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:261
+#: src/gui.c:236
 msgid "Contain no one of these tags:"
 msgstr "Нет ни одного тэга из:"
 
-#: src/gui.c:271
+#: src/gui.c:246
 msgid ""
 "The search is performed for files, which\n"
 "CONTAIN NO ONE\n"
@@ -383,33 +336,33 @@ msgstr ""
 "НЕТ НИ ОДНОГО\n"
 "из перечисленных здесь тэгов (разделённых запятыми)"
 
-#: src/gui.c:280
+#: src/gui.c:255
 msgid " Actions with found "
 msgstr " Действия с найденным "
 
-#: src/gui.c:289
+#: src/gui.c:264
 msgid "Add these tags to found files:"
 msgstr "Добавить тэги в найденные файлы:"
 
-#: src/gui.c:299
+#: src/gui.c:274
 msgid "ADD these tags (separated by commas) to found files"
 msgstr ""
 "ДОБАВИТЬ в найденные файлы перечисленные здесь тэги (разделённые запятыми)"
 
-#: src/gui.c:307
+#: src/gui.c:282
 msgid "Delete these tags from found files:"
 msgstr "Удалить тэги из найденных файлов:"
 
-#: src/gui.c:317
+#: src/gui.c:292
 msgid "DELETE these tags (separated by commas) from found files"
 msgstr ""
 "УДАЛИТЬ из найденных файлов перечисленные здесь тэги (разделённые запятыми)"
 
-#: src/gui.c:325
+#: src/gui.c:300
 msgid "Replace tags in found files:"
 msgstr "Заменить тэги в найденных файлах:"
 
-#: src/gui.c:335
+#: src/gui.c:310
 msgid ""
 "REPLACE in found files some tags with others. Tags in this field are listed "
 "pairs with commas. For example, if you enter in this field [sushi, meat, "
@@ -421,11 +374,11 @@ msgstr ""
 "[овсянка, борщ, лада калина, мотоцикл], то в найденных файлах тэг «овсянка» "
 "заменится на «борщ», а тэг «лада калина» заменится на «мотоцикл»."
 
-#: src/gui.c:350
+#: src/gui.c:325
 msgid "Save symlinks to:"
 msgstr "Сохранять ссылки в:"
 
-#: src/gui.c:357
+#: src/gui.c:332
 msgid ""
 "If checked, symlinks to found files are saved to the directory, selected "
 "righter. It can be useful for albums compilation."
@@ -433,20 +386,20 @@ msgstr ""
 "Если отмечено, в выбранном правее каталоге сохраняются символические ссылки "
 "на найденные файлы. Это может быть удобно для составления альбомов."
 
-#: src/gui.c:363
+#: src/gui.c:338
 msgid "Save symlinks to…"
 msgstr "Сохранять ссылки в…"
 
-#: src/gui.c:370
+#: src/gui.c:345
 msgid "Directory in which the symlinks to found files are saved"
 msgstr ""
 "Каталог, в котором сохраняются символические ссылки на найденные файлы."
 
-#: src/gui.c:373
+#: src/gui.c:348
 msgid "Save names"
 msgstr "Сохранять имена"
 
-#: src/gui.c:376
+#: src/gui.c:351
 msgid ""
 "If checked, symlinks to found files are saved with names of files "
 "themselves. Otherwise symlinks get random names. Set this option only if you "
@@ -457,11 +410,11 @@ msgstr ""
 "эту галочку только если уверены, что все найденные файлы имеют уникальные "
 "имена."
 
-#: src/gui.c:386
+#: src/gui.c:361
 msgid "Start"
 msgstr "Начать"
 
-#: src/gui.c:389
+#: src/gui.c:364
 msgid ""
 "Start search (and operations with found files if they are specified). "
 "The search can take quite a long time, if there is a large number of files."
@@ -469,48 +422,48 @@ msgstr ""
 "Начать поиск (и операции с найденными файлами, если они заданы). Поиск может "
 "продолжаться довольно долго, если происходит по большому количеству файлов."
 
-#: src/gui.c:451 src/gui.c:464
+#: src/gui.c:426 src/gui.c:439
 #, c-format
 msgid "paths_from_buttons(): malloc() failed: insufficient memory.\n"
 msgstr "paths_from_buttons(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:526
+#: src/gui.c:501
 #, c-format
 msgid "tree(): Cannot open %s.\n"
 msgstr "tree(): Не могу открыть %s.\n"
 
-#: src/gui.c:534 src/gui.c:555
+#: src/gui.c:509 src/gui.c:530
 #, c-format
 msgid "tree(): malloc() failed: insufficient memory.\n"
 msgstr "tree(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:545
+#: src/gui.c:520
 #, c-format
 msgid "tree(): realloc() failed: insufficient memory.\n"
 msgstr "tree(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/gui.c:568
+#: src/gui.c:543
 #, c-format
 msgid "tree(): Cannot find tags tree in %s.\n"
 msgstr "tree(): Не могу найти дерево тэгов в %s.\n"
 
-#: src/gui.c:728
+#: src/gui.c:703
 msgid "Search in…"
 msgstr "Искать в…"
 
-#: src/gui.c:747
+#: src/gui.c:722
 msgid "This path is already added. Choose another."
 msgstr "Этот путь уже добавлен. Выберите другой."
 
-#: src/gui.c:779
+#: src/gui.c:754
 msgid "Change the path to search"
 msgstr "Изменить путь для поиска"
 
-#: src/gui.c:780
+#: src/gui.c:755
 msgid "Remove the path to search"
 msgstr "Удалить путь для поиска"
 
-#: src/gui.c:824
+#: src/gui.c:799
 #, c-format
 msgid "wdgt_push(): malloc() failed: insufficient memory.\n"
 msgstr "wdgt_push(): ошибка malloc(): недостаточно памяти.\n"
@@ -579,3 +532,50 @@ msgstr "actions(): ошибка realloc(): недостаточно памяти
 #, c-format
 msgid "actions(): malloc() failed: insufficient memory.\n"
 msgstr "actions(): ошибка malloc(): недостаточно памяти.\n"
+
+#: src/constants.h:4
+msgid "Dmitry Sokolov <dmitry@sokolov.website>"
+msgstr "Дмитрий Соколов <dmitry@sokolov.website>"
+
+#: src/constants.h:7
+msgid ""
+"This program is free software: you can redistribute it and/or modify it\n"
+"under the terms of the GNU General Public License as published\n"
+"by the Free Software Foundation, either version 3 of the License,\n"
+"or (at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty\n"
+"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+"See the GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program. If not, see <http://www.gnu.org/licenses/>"
+msgstr ""
+
+#: src/constants.h:18
+msgid ""
+"C / GTK+ 2 program, that searches in the specified directories the images "
+"with keywords (tags) specified in XMP or IPTC metadata and satisfy "
+"the specified AND, OR, NOT conditions. Optionally the found images will open "
+"in the specified program. Along the way, you can massively add, remove "
+"or replace tags in the found images and to save symlinks to these images "
+"in the specified directory with original or random names.\n"
+"\n"
+"Depends: exiv2, libxml2-dev. Recommends: gtk2.\n"
+"\n"
+"For more information run the script without any keys or arguments, or with -"
+"h key."
+msgstr ""
+"Программа (C / GTK+ 2) ищет в указанных каталогах изображения с ключевыми "
+"словами (тэгами), заданными в метаданных XMP или IPTC и удовлетворяющими "
+"заданным логическим условиям И, ИЛИ, НЕ. Опционально найденные изображения "
+"откроются в указанной программе. Попутно в найденных изображениях можно "
+"массово добавить, удалить или заменить тэги, сохранить ссылки "
+"на эти изображения в указанный каталог с оригинальными или случайными "
+"именами.\n"
+"\n"
+"Зависимости: exiv2, libxml2-dev. Рекомендуется: gtk2.\n"
+"\n"
+"Для получения более подробной информации запустите программу без ключей "
+"и аргументов или с ключом -h."

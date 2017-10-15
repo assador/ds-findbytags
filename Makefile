@@ -37,7 +37,7 @@ $(POTDIR)/ru/$(TARGET).po: $(POTDIR)/$(TARGET).pot
 	msgmerge --output-file=$@ $@ $<
 $(POTDIR)/$(TARGET).pot: $(SOURCES)
 	xgettext --keyword=_ --language=C --from-code=UTF-8 \
-	--output $(POTDIR)/$(TARGET).pot $(SOURCES)
+	--output $(POTDIR)/$(TARGET).pot $(SOURCES) $(SRCDIR)/constants.h
 clean:
 	rm -rf $(OBJDIR)/*.o $(BINDIR)/$(TARGET) $(POTDIR)/*.pot $(POTDIR)/*/*.mo
 install: all
