@@ -1,6 +1,6 @@
 /**
- * ds-findbytags, v2.0.1, CLI / GTK+ 2
- * Copyright © 2016-2017 Dmitry Sokolov
+ * ds-findbytags, v2.0.3, CLI / GTK+ 2
+ * Copyright © 2018 Dmitry Sokolov
  * 
  * This file is part of ds-findbytags.
  * 
@@ -250,9 +250,9 @@ int begin() {
 	size_t args_len = 0, args_offset = 0;
 	size_t args_lens[opts_v->args_count];
 	for(int i = 0; i < opts_v->args_count; i++) {
-		args_len += args_lens[i] = strlen(opts_v->args[i]);
+		args_len += (args_lens[i] = strlen(opts_v->args[i])) + 1;
 	}
-	char *argslist = malloc(args_len + 1);
+	char *argslist = malloc(args_len);
 	if(!argslist) {
 		fprintf(
 			stderr,
@@ -263,10 +263,13 @@ int begin() {
 	for(int i = 0; i < opts_v->args_count; i++) {
 		memcpy(
 			argslist + args_offset,
-			opts_v->args[i],
-			args_lens[i] + (i == opts_v->args_count - 1 ? 1 : 0)
+			i == opts_v->args_count - 1
+				? opts_v->args[i]
+				: strconcat((const char*[]) {opts_v->args[i], " "}, 2)
+			,
+			args_lens[i] + 1
 		);
-		args_offset += args_lens[i];
+		args_offset += args_lens[i] + (i == opts_v->args_count - 1 ? 0 : 1);
 	}
 	char *command = strconcat((const char*[]) {
 		"find ",
