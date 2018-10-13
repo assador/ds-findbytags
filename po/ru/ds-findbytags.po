@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ds-findbytags, v2.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-15 23:54+0300\n"
+"POT-Creation-Date: 2018-10-13 07:34+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Dmitry Sokolov <dmitry@sokolov.website>\n"
 "Language-Team: Russian\n"
@@ -427,43 +427,43 @@ msgstr ""
 msgid "paths_from_buttons(): malloc() failed: insufficient memory.\n"
 msgstr "paths_from_buttons(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:501
+#: src/gui.c:506
 #, c-format
 msgid "tree(): Cannot open %s.\n"
 msgstr "tree(): Не могу открыть %s.\n"
 
-#: src/gui.c:509 src/gui.c:530
+#: src/gui.c:514 src/gui.c:535
 #, c-format
 msgid "tree(): malloc() failed: insufficient memory.\n"
 msgstr "tree(): ошибка malloc(): недостаточно памяти.\n"
 
-#: src/gui.c:520
+#: src/gui.c:525
 #, c-format
 msgid "tree(): realloc() failed: insufficient memory.\n"
 msgstr "tree(): ошибка realloc(): недостаточно памяти.\n"
 
-#: src/gui.c:543
+#: src/gui.c:548
 #, c-format
 msgid "tree(): Cannot find tags tree in %s.\n"
 msgstr "tree(): Не могу найти дерево тэгов в %s.\n"
 
-#: src/gui.c:703
+#: src/gui.c:708
 msgid "Search in…"
 msgstr "Искать в…"
 
-#: src/gui.c:722
+#: src/gui.c:727
 msgid "This path is already added. Choose another."
 msgstr "Этот путь уже добавлен. Выберите другой."
 
-#: src/gui.c:754
+#: src/gui.c:759
 msgid "Change the path to search"
 msgstr "Изменить путь для поиска"
 
-#: src/gui.c:755
+#: src/gui.c:760
 msgid "Remove the path to search"
 msgstr "Удалить путь для поиска"
 
-#: src/gui.c:799
+#: src/gui.c:804
 #, c-format
 msgid "wdgt_push(): malloc() failed: insufficient memory.\n"
 msgstr "wdgt_push(): ошибка malloc(): недостаточно памяти.\n"

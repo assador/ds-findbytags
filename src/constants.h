@@ -1,6 +1,6 @@
 #define NAME "ds-findbytags"
-#define VERSION "v2.0.2"
-#define COPYRIGHT "Copyright © 2016-2017"
+#define VERSION "v2.0.3"
+#define COPYRIGHT "Copyright © 2018"
 #define AUTHOR _("Dmitry Sokolov <dmitry@sokolov.website>")
 #define WEBSITE "http://sokolov.website/programs/ds-utils/ds-findbytags"
 #define LICENSE \

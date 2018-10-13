@@ -1,6 +1,6 @@
 /**
- * ds-findbytags, v2.0.1, CLI / GTK+ 2
- * Copyright © 2016-2017 Dmitry Sokolov
+ * ds-findbytags, v2.0.3, CLI / GTK+ 2
+ * Copyright © 2018 Dmitry Sokolov
  * 
  * This file is part of ds-findbytags.
  * 
@@ -441,7 +441,12 @@ static void paths_from_buttons(Opts *o) {
 			);
 			exit(EXIT_FAILURE);
 		}
-		strcpy(o->args[i], path);
+		strcpy(
+			o->args[i],
+			i == findin_b_count - 1
+				? path
+				: strconcat((const char*[]) {path, " "}, 2)
+		);
 		o->args_count++;
 	}
 }

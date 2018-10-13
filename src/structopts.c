@@ -1,6 +1,6 @@
 /**
- * ds-findbytags, v2.0.1, CLI / GTK+ 2
- * Copyright © 2017 Dmitry Sokolov
+ * ds-findbytags, v2.0.3, CLI / GTK+ 2
+ * Copyright © 2018 Dmitry Sokolov
  * 
  * This file is part of ds-findbytags.
  * 
